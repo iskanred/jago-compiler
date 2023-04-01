@@ -1,8 +1,13 @@
 package inno.jago.lexer
 
-class Pos (
-    val line: Long = 0,
-    val symbol: Int = 0
+import org.antlr.v4.runtime.Token
+
+data class Pos (
+    val line: Int,
+    val startIndex: Int,
+    val stopIndex: Int
 ) {
-    fun report() = print("$line:$symbol")
+    constructor(token: Token) : this(token.line, token.startIndex, token.stopIndex)
+    constructor(tokenStart: Token, tokenStop: Token) :
+            this(tokenStart.line, tokenStart.startIndex, tokenStop.stopIndex)
 }
