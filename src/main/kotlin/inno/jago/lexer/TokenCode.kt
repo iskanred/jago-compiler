@@ -1,4 +1,4 @@
-package lexer
+package inno.jago.lexer
 
 enum class TokenCode(
     val value: Int

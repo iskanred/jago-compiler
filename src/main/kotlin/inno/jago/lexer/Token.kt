@@ -1,4 +1,4 @@
-package lexer
+package inno.jago.lexer
 
 class Token(
     var code: TokenCode,

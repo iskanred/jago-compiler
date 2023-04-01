@@ -1,4 +1,4 @@
-package lexer
+package inno.jago.lexer
 
 class Span(
     var begin: Pos,

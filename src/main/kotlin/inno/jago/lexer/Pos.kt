@@ -1,4 +1,4 @@
-package lexer
+package inno.jago.lexer
 
 class Pos (
     val line: Long = 0,
