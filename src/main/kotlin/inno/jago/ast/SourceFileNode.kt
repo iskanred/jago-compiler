@@ -9,4 +9,4 @@ class SourceFileNode(
     val packageName: PackageNode,
     val importNodes: List<ImportNode>,
     val topLevelDecls: List<TopLevelDecl>
-) : Entity(pos)
+) : Entity(pos = pos)

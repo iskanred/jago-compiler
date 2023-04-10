@@ -8,4 +8,4 @@ class ImportNode(
     val path: String,
     val alias: String,
     val importAll: Boolean
-) : Entity(pos)
+) : Entity(pos = pos)
