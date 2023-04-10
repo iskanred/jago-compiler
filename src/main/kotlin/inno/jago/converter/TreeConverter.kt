@@ -1,11 +1,17 @@
 package inno.jago.converter
 
 import GoParser
+import inno.jago.ConversionException
+import inno.jago.EntityNotSupported
+import inno.jago.UnreachableCodeException
 import inno.jago.ast.ImportNode
 import inno.jago.ast.PackageNode
 import inno.jago.ast.SourceFileNode
+import inno.jago.ast.decl.DeclarationNode
+import inno.jago.ast.decl.FunctionDeclarationNode
 import inno.jago.ast.decl.TopLevelDeclNode
 import inno.jago.lexer.Pos
+import javax.naming.OperationNotSupportedException
 
 fun GoParser.SourceFileContext.toSourceFile(): SourceFileNode {
     return SourceFileNode(
@@ -37,5 +43,34 @@ private fun List<GoParser.TopLevelDeclContext>.toTopLevelDeclarations(): List<To
 }
 
 private fun GoParser.TopLevelDeclContext.toTopLevelDeclaration(): List<TopLevelDeclNode> {
-    TODO()
+    declaration()?.let {
+        return it.toDeclarationNodes()
+    }
+    functionDecl()?.let {
+        return listOf(it.toFunctionDeclarationNode())
+    }
+    methodDecl()?.let {
+        throw EntityNotSupported("Methods")
+    }
+    throw UnreachableCodeException()
 }
+
+private fun GoParser.DeclarationContext.toDeclarationNodes(): List<DeclarationNode> {
+    constDecl()?.let {
+        return TODO()
+    }
+    varDecl()?.let {
+        return TODO()
+    }
+    typeDecl()?.let {
+        throw EntityNotSupported("Types")
+    }
+    throw UnreachableCodeException()
+}
+
+private fun GoParser.FunctionDeclContext.toFunctionDeclarationNode() = FunctionDeclarationNode(
+    pos = Pos(tokenStart = start, tokenStop = stop),
+    functionName = functionName()?.IDENTIFIER()?.text ?: throw NullPointerException("functionName cannot be null"),
+    signature = TODO(),
+    functionBody = TODO()
+)
