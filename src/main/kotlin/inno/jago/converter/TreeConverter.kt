@@ -1,4 +1,4 @@
-package inno.jago.visitor
+package inno.jago.converter
 
 import GoParser
 import inno.jago.ast.ImportNode
