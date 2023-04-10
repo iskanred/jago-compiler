@@ -2,7 +2,7 @@ package inno.jago.ast.expression.unary_expression.primary_expression.operand.lit
 
 import inno.jago.ast.type.TypeNode
 
-sealed class LiteralTypeNode()
+sealed class LiteralTypeNode
 
 class ArrayTypeNodeNode(
     val length: Int,
