@@ -1,4 +1,9 @@
 package inno.jago.ast.type
 
-class TypeNode(
-)
+
+import inno.jago.lexer.Pos
+
+sealed class TypeNode(
+    pos: Pos,
+    val typeName: String
+): Entity(pos = pos)
