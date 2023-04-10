@@ -4,9 +4,12 @@ import inno.jago.lexer.Pos
 import inno.jago.ast.type.TypeNode
 import inno.jago.ast.expression.ExpressionNode
 
-open class DeclarationNode(
+class FunctionDeclarationNode (
     pos: Pos,
-    val identifier: String,
-    val type: TypeNode,
-    val expression: ExpressionNode
+    functionName : String,
+    signature : SignatureNode,
+    functionBody : BlockStatementNode
 ) : TopLevelDeclNode(pos = pos)
+
+
+
