@@ -21,7 +21,7 @@ fun GoParser.DeclarationContext.toDeclarationNodes(): List<DeclarationNode> {
 
 fun GoParser.FunctionDeclContext.toFunctionDeclarationNode() = FunctionDeclarationNode(
     pos = Pos(tokenStart = start, tokenStop = stop),
-    functionName = functionName()?.IDENTIFIER()?.text ?: throw NullPointerException("functionName cannot be null"),
+    functionName = functionName().IDENTIFIER().text,
     signature = TODO(),
     functionBody = TODO()
 )
