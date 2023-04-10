@@ -11,23 +11,24 @@ class IncDecStatementNode (
     pos: Pos,
     val expression: ExpressionNode,
     val type: IncDec
-) : SimpleStatementNode(pos = pos)
+) : SimpleStatementNode(pos = pos) {
 
-enum class IncDec {
-    INC,
-    DEC
+    enum class IncDec {
+        INC,
+        DEC
+    }
 }
 
 class AssignmentNode (
     pos: Pos,
-    val left: ExpressionNode,
-    val right: ExpressionNode,
+    val leftExpression: ExpressionNode,
+    val rightExpression: ExpressionNode,
 ) : SimpleStatementNode(pos = pos)
 
 class ShortVarDeclNode (
     pos: Pos,
-    val left: ExpressionNode,
-    val right: ExpressionNode,
+    val leftExpression: ExpressionNode,
+    val rightExpression: ExpressionNode,
 ) : SimpleStatementNode(pos = pos)
 
 class ExpressionStatementNode (
