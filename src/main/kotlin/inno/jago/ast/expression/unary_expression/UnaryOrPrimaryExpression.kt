@@ -3,6 +3,7 @@ package inno.jago.ast.expression.unary_expression
 import inno.jago.ast.expression.ExpressionNode
 import inno.jago.lexer.Pos
 import inno.jago.ast.type.TypeNode
+import inno.jago.entity.Entity
 
 sealed class UnaryOrPrimaryExpression(
     pos: Pos
@@ -22,26 +23,35 @@ open class PrimaryExpressionNode(
 // Primary expressions:
 open class ConversionNode(
     pos: Pos,
-    type: TypeNode,
-    expression: ExpressionNode
-): PrimaryExpressionNode(pos)
+    val type: TypeNode,
+    val expression: ExpressionNode
+) : PrimaryExpressionNode(pos)
 
 open class IndexExpressionNode(
     pos: Pos,
-    primaryExpression: PrimaryExpressionNode,
-    expression: ExpressionNode,
-): PrimaryExpressionNode(pos)
+    val primaryExpression: PrimaryExpressionNode,
+    val expression: ExpressionNode,
+) : PrimaryExpressionNode(pos)
 
 open class MethodExpressionNode(
     pos: Pos,
-    methodName: String,
-    receiverType: TypeNode,
-): PrimaryExpressionNode(pos)
+    val methodName: String,
+    val receiverType: TypeNode,
+) : PrimaryExpressionNode(pos)
 
 open class SelectorExpressionNode(
     pos: Pos,
-    primaryExpression: PrimaryExpressionNode,
-    Selector: String,
-): PrimaryExpressionNode(pos)
+    val primaryExpression: PrimaryExpressionNode,
+    val selector: String,
+) : PrimaryExpressionNode(pos)
 
+
+open class UnaryOperatorNode(
+    pos: Pos,
+    val operator: UnaryOperators
+) : Entity(pos)
+
+enum class UnaryOperators {
+    PLUS, MINUS, EXCLAMATION, CARET, ASTERISK, AMPERSAND, RECEIVE
+}
 

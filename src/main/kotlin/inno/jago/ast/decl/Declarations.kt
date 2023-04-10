@@ -13,7 +13,7 @@ sealed class TopLevelDeclNode(pos: Pos)
 class FunctionDeclarationNode (
     pos: Pos,
     val functionName : String,
-    val signature : SignatureNode,
+    val signature : SignatureNode<>,
     val functionBody : BlockStatementNode
 ) : TopLevelDeclNode(pos = pos)
 
