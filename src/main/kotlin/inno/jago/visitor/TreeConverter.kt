@@ -4,7 +4,7 @@ import GoParser
 import inno.jago.ast.ImportNode
 import inno.jago.ast.PackageNode
 import inno.jago.ast.SourceFileNode
-import inno.jago.ast.decl.TopLevelDecl
+import inno.jago.ast.decl.TopLevelDeclNode
 import inno.jago.lexer.Pos
 
 fun GoParser.SourceFileContext.toSourceFile(): SourceFileNode {
@@ -25,10 +25,10 @@ private fun List<GoParser.ImportDeclContext>.toImportDeclNodes(): List<ImportNod
     TODO()
 }
 
-private fun List<GoParser.TopLevelDeclContext>.toTopLevelDeclarations(): List<TopLevelDecl> = flatMap {
+private fun List<GoParser.TopLevelDeclContext>.toTopLevelDeclarations(): List<TopLevelDeclNode> = flatMap {
     it.toTopLevelDeclaration()
 }
 
-private fun GoParser.TopLevelDeclContext.toTopLevelDeclaration(): List<TopLevelDecl> {
+private fun GoParser.TopLevelDeclContext.toTopLevelDeclaration(): List<TopLevelDeclNode> {
     TODO()
 }

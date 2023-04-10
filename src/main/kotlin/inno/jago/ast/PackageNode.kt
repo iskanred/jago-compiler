@@ -5,5 +5,5 @@ import inno.jago.lexer.Pos
 
 class PackageNode(
     pos: Pos,
-    name: String
+    val name: String
 ) : Entity(pos = pos)
