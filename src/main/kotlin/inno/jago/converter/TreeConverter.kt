@@ -1,17 +1,13 @@
 package inno.jago.converter
 
 import GoParser
-import inno.jago.ConversionException
 import inno.jago.EntityNotSupported
 import inno.jago.UnreachableCodeException
 import inno.jago.ast.ImportNode
 import inno.jago.ast.PackageNode
 import inno.jago.ast.SourceFileNode
-import inno.jago.ast.decl.DeclarationNode
-import inno.jago.ast.decl.FunctionDeclarationNode
 import inno.jago.ast.decl.TopLevelDeclNode
 import inno.jago.lexer.Pos
-import javax.naming.OperationNotSupportedException
 
 fun GoParser.SourceFileContext.toSourceFile(): SourceFileNode {
     return SourceFileNode(
@@ -22,12 +18,12 @@ fun GoParser.SourceFileContext.toSourceFile(): SourceFileNode {
     )
 }
 
-private fun GoParser.PackageClauseContext.toPackageNode(): PackageNode = PackageNode(
+fun GoParser.PackageClauseContext.toPackageNode(): PackageNode = PackageNode(
     pos = Pos(tokenStart = start, tokenStop = stop),
     name = packageName().text
 )
 
-private fun List<GoParser.ImportDeclContext>.toImportDeclNodes(): List<ImportNode> = flatMap { importDeclContext ->
+fun List<GoParser.ImportDeclContext>.toImportDeclNodes(): List<ImportNode> = flatMap { importDeclContext ->
     importDeclContext.importSpec().map {
         ImportNode(
             pos = Pos(tokenStart = it.start, tokenStop = it.stop),
@@ -38,11 +34,11 @@ private fun List<GoParser.ImportDeclContext>.toImportDeclNodes(): List<ImportNod
     }
 }
 
-private fun List<GoParser.TopLevelDeclContext>.toTopLevelDeclarations(): List<TopLevelDeclNode> = flatMap {
+fun List<GoParser.TopLevelDeclContext>.toTopLevelDeclarations(): List<TopLevelDeclNode> = flatMap {
     it.toTopLevelDeclaration()
 }
 
-private fun GoParser.TopLevelDeclContext.toTopLevelDeclaration(): List<TopLevelDeclNode> {
+fun GoParser.TopLevelDeclContext.toTopLevelDeclaration(): List<TopLevelDeclNode> {
     declaration()?.let {
         return it.toDeclarationNodes()
     }
@@ -55,22 +51,4 @@ private fun GoParser.TopLevelDeclContext.toTopLevelDeclaration(): List<TopLevelD
     throw UnreachableCodeException()
 }
 
-private fun GoParser.DeclarationContext.toDeclarationNodes(): List<DeclarationNode> {
-    constDecl()?.let {
-        return TODO()
-    }
-    varDecl()?.let {
-        return TODO()
-    }
-    typeDecl()?.let {
-        throw EntityNotSupported("Types")
-    }
-    throw UnreachableCodeException()
-}
 
-private fun GoParser.FunctionDeclContext.toFunctionDeclarationNode() = FunctionDeclarationNode(
-    pos = Pos(tokenStart = start, tokenStop = stop),
-    functionName = functionName()?.IDENTIFIER()?.text ?: throw NullPointerException("functionName cannot be null"),
-    signature = TODO(),
-    functionBody = TODO()
-)
