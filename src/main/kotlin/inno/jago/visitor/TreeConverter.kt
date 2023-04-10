@@ -22,7 +22,19 @@ private fun GoParser.PackageClauseContext.toPackageNode(): PackageNode = Package
 )
 
 private fun List<GoParser.ImportDeclContext>.toImportDeclNodes(): List<ImportNode> = flatMap { importDeclContext ->
-    TODO()
+    var result = mutableListOf<ImportNode>()
+    importDeclContext.importSpec().forEach {
+        result.add(
+            ImportNode(
+                pos = Pos(tokenStart = it.start, tokenStop = it.stop),
+                alias = it.packageName().text,
+                path = it.importPath().text,
+                importAll = (it.DOT() != null)
+            )
+        )
+    }
+
+    return@flatMap result
 }
 
 private fun List<GoParser.TopLevelDeclContext>.toTopLevelDeclarations(): List<TopLevelDeclNode> = flatMap {
