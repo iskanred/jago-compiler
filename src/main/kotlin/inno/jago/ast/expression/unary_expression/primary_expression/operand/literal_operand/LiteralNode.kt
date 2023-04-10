@@ -17,7 +17,7 @@ class BasicLiteralNode(
 class CompositeLiteralNode(
     pos: Pos,
     val literal: LiteralTypeNode,
-    val literalValue: LiteralValue
+    val literalValue: LiteralValueNode
 ) : LiteralNode(pos = pos)
 
 class FunctionLiteralNode(
