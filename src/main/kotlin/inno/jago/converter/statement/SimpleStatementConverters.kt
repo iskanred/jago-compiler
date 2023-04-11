@@ -33,25 +33,35 @@ fun GoParser.SimpleStmtContext.toSimpleStatementNode(): SimpleStatementNode {
     throw UnreachableCodeException()
 }
 
-fun GoParser.IncDecStmtContext.toIncDecStatementNode(): IncDecStatementNode = IncDecStatementNode(
-    toPos(),
-    expression().toExpressionNode(),
-    if (PLUS_PLUS() == null) IncDecStatementNode.IncDec.INC else IncDecStatementNode.IncDec.DEC
-)
+fun GoParser.IncDecStmtContext.toIncDecStatementNode(): IncDecStatementNode {
+    val incDec = PLUS_PLUS()?.let {
+        IncDecStatementNode.IncDec.INC
+    } ?:
+    MINUS_MINUS()?.let {
+        IncDecStatementNode.IncDec.DEC
+    } ?:
+    throw UnreachableCodeException()
+
+    return IncDecStatementNode(
+        pos = toPos(),
+        expression = expression().toExpressionNode(),
+        type = incDec
+    )
+}
 
 fun GoParser.AssignmentContext.toAssignmentNode(): AssignmentNode = AssignmentNode(
-    toPos(),
-    expressionList()[0].expression().map { it.toExpressionNode() },
-    expressionList()[1].expression().map { it.toExpressionNode() }
+    pos = toPos(),
+    leftExpressions = expressionList()[0].expression().map { it.toExpressionNode() },
+    rightExpressions = expressionList()[1].expression().map { it.toExpressionNode() }
 )
 
 fun GoParser.ShortVarDeclContext.toShortVarDeclNode(): ShortVarDeclNode = ShortVarDeclNode(
-    toPos(),
-    identifierList().IDENTIFIER().map { it.text },
-    expressionList().expression().map { it.toExpressionNode() }
+    pos = toPos(),
+    identifierList = identifierList().IDENTIFIER().map { it.text },
+    expression = expressionList().expression().map { it.toExpressionNode() }
 )
 
 fun GoParser.ExpressionStmtContext.toExpressionStatementNode(): ExpressionStatementNode = ExpressionStatementNode(
-    toPos(),
-    expression().toExpressionNode()
+    pos = toPos(),
+    expression = expression().toExpressionNode()
 )
