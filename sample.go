@@ -1,7 +1,13 @@
-package jago
+// The code snippet is obtained from "https://gobyexample.com"
 
-import alias "../fmt"
-import . "fmt"
+package main
+
+import "fmt"
+
+func vals() (int, int) {
+	return 3, 7
+}
 
 func main() {
+	a, b := vals()
 }

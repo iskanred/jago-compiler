@@ -53,7 +53,7 @@ fun GoParser.ResultContext.toResultNode(): List<TypeNode> {
 
     parameters()?.parameterList()?.let { params ->
         return@let params.parameterDecl().map { paramDecl ->
-            if (paramDecl.identifierList() != null || paramDecl.identifierList().IDENTIFIER().isNotEmpty()) {
+            if (paramDecl.identifierList() != null && paramDecl.identifierList().IDENTIFIER().isNotEmpty()) {
                 throw EntityNotSupported("Identifiers in result parameters")
             }
             return@map paramDecl.type().toTypeNode()
