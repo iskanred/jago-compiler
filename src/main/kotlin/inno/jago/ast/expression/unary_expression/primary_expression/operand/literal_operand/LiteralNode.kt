@@ -40,7 +40,7 @@ class StringLiteralNode(
 class CompositeLiteralNode(
     pos: Pos,
     val literal: ArrayTypeNode,
-    val literalValue: LiteralValueNode
+    val literalValue: LiteralValueElementNode
 ) : LiteralNode(pos = pos)
 
 class FunctionLiteralNode(

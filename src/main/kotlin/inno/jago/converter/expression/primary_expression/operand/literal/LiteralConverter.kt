@@ -58,9 +58,9 @@ fun GoParser.FunctionLitContext.toFunctionLiteralNode(): FunctionLiteralNode {
 
 
 fun GoParser.CompositeLitContext.toCompositeLiteralNode() = CompositeLiteralNode(
-    toPos(),
+    pos = toPos(),
     literal = literalType().toArrayTypeNode(),
-    literalValue = literalValue().toLiteralValueNode()
+    literalValue = literalValue().toLiteralValueElementNode()
 )
 
 fun GoParser.LiteralTypeContext.toArrayTypeNode(): ArrayTypeNode {
@@ -78,9 +78,9 @@ fun GoParser.LiteralTypeContext.toArrayTypeNode(): ArrayTypeNode {
     throw UnreachableCodeException()
 }
 
-fun GoParser.LiteralValueContext.toLiteralValueNode() = LiteralValueElementNode(
-        pos = toPos(),
-        elements = elementList().keyedElement().map { it.element().toElementNode() }
+fun GoParser.LiteralValueContext.toLiteralValueElementNode() = LiteralValueElementNode(
+    pos = toPos(),
+    elements = elementList().keyedElement().map { it.element().toElementNode() }
 )
 
 fun GoParser.ElementContext.toElementNode(): ElementNode {
@@ -92,7 +92,7 @@ fun GoParser.ElementContext.toElementNode(): ElementNode {
     }
 
     literalValue()?.let {
-        return it.toLiteralValueNode()
+        return it.toLiteralValueElementNode()
     }
 
     throw UnreachableCodeException()

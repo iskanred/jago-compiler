@@ -9,7 +9,6 @@ import inno.jago.converter.common.toPos
 import inno.jago.converter.expression.toExpressionNode
 import inno.jago.converter.expression.primary_expression.operand.toOperandNode
 
-
 fun GoParser.PrimaryExprContext.toPrimaryExpressionNode(): PrimaryExpressionNode {
     operand()?.let {
         return it.toOperandNode()
