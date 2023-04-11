@@ -11,11 +11,11 @@ fun GoParser.PrimaryExprContext.toPrimaryExpressionNode(): PrimaryExpressionNode
     }
 
     conversion()?.let {
-
+        return it.toConversionNode()
     }
 
     methodExpr()?.let {
-
+        throw EntityNotSupported("MethodExpression")
     }
 
     selector()?.let {
