@@ -40,7 +40,9 @@ class VarDeclarationNode(
     pos: Pos,
     identifier: String,
     type: TypeNode?,
-    expression: ExpressionNode?
+    expression: ExpressionNode?,
+    // Позиция переменной в строке для определения ее типа на этапе проверки типов
+    val positionInRow: Int
 ) : DeclarationNode(
     pos = pos,
     identifier = identifier,
