@@ -5,10 +5,10 @@ import inno.jago.lexer.Pos
 
 class IfStatementNode(
     pos: Pos,
-    var simpleStatement: SimpleStatementNode,
+    var simpleStatement: SimpleStatementNode?,
     var expression: ExpressionNode,
     var block: BlockStatementNode,
-    var elseBranch: ElseStatementNode
+    var elseBranch: ElseStatementNode?
 ) : StatementNode(pos = pos)
 
 sealed class ElseStatementNode (
