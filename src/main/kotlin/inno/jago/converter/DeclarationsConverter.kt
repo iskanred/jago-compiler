@@ -6,7 +6,6 @@ import inno.jago.ast.decl.ConstDeclarationNode
 import inno.jago.ast.decl.DeclarationNode
 import inno.jago.ast.decl.FunctionDeclarationNode
 import inno.jago.ast.decl.VarDeclarationNode
-import inno.jago.ast.type.TypeNode
 import inno.jago.lexer.Pos
 import org.antlr.v4.runtime.ParserRuleContext
 
