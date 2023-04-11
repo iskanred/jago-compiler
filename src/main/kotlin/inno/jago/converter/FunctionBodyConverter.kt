@@ -15,6 +15,7 @@ import inno.jago.converter.statement.toDeclarationStatementNode
 import inno.jago.converter.statement.toBlockStatementNode
 import inno.jago.converter.statement.toBreakStatementNode
 import inno.jago.converter.statement.toContinueStatementNode
+import inno.jago.converter.statement.toForStatementNode
 import kotlin.math.exp
 
 fun GoParser.FunctionBodyContext.toBlockStatementNode(): BlockStatementNode {
@@ -43,7 +44,7 @@ fun GoParser.FunctionBodyContext.toBlockStatementNode(): BlockStatementNode {
                 statementNodes.add(it.toIfStatementNode())
             }
             forStmt()?.let {
-                TODO()
+                statementNodes.add(it.toForStatementNode())
             }
         }
     }
