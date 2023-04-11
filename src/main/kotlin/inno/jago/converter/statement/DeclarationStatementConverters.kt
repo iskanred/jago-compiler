@@ -8,6 +8,6 @@ import inno.jago.lexer.Pos
 fun GoParser.DeclarationContext.toDeclarationStatementNode(): DeclarationStatementNode{
     return DeclarationStatementNode(
         pos = toPos(),
-        declaration = toDeclarationNodes()[0]
+        declaration = toDeclarationNodes().first()
     )
 }
