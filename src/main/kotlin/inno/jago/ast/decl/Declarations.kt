@@ -24,7 +24,6 @@ sealed class DeclarationNode(
     val expression: ExpressionNode?
 ) : TopLevelDeclNode(pos = pos)
 
-
 class ConstDeclarationNode(
     pos: Pos,
     identifier: String,
