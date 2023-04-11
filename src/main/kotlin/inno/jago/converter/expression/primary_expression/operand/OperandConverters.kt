@@ -2,9 +2,11 @@ package inno.jago.converter.expression.primary_expression.operand
 
 import inno.jago.UnreachableCodeException
 import inno.jago.ast.expression.unary_expression.primary_expression.operand.ExpressionOperandNode
+import inno.jago.ast.expression.unary_expression.primary_expression.operand.OperandIdentifierNode
 import inno.jago.ast.expression.unary_expression.primary_expression.operand.OperandNameNode
 import inno.jago.ast.expression.unary_expression.primary_expression.operand.OperandNode
 import inno.jago.ast.expression.unary_expression.primary_expression.operand.QualifiedIdentifierNode
+import inno.jago.ast.expression.unary_expression.primary_expression.operand.SimpleOperandIdentifierNode
 import inno.jago.converter.common.toPos
 import inno.jago.converter.expression.toExpressionNode
 
@@ -14,7 +16,7 @@ fun GoParser.OperandContext.toOperandNode(): OperandNode {
     }
 
     operandName()?.let {
-
+        return it.toOperandNameNode()
     }
 
     expression()?.let {
@@ -30,15 +32,22 @@ fun GoParser.OperandContext.toOperandNode(): OperandNode {
 
 fun GoParser.OperandNameContext.toOperandNameNode(): OperandNameNode {
     return OperandNameNode(
-        toPos(),
-
+        pos = toPos(),
+        identifier = qualifiedIdent().toOperandIdentifierNode()
     )
 }
 
-fun GoParser.QualifiedIdentContext.toQualifiedIdentNode(): QualifiedIdentifierNode {
+fun GoParser.QualifiedIdentContext.toOperandIdentifierNode(): OperandIdentifierNode {
     packageName()?.let {
-
+        return QualifiedIdentifierNode(
+            pos = toPos(),
+            packageName =  it.IDENTIFIER().text,
+            identifier = IDENTIFIER().text
+        )
     }
 
-
+    return SimpleOperandIdentifierNode(
+        pos = toPos(),
+        identifier = IDENTIFIER().text
+    )
 }
