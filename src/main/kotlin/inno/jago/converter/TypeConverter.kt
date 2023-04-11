@@ -2,7 +2,6 @@ package inno.jago.converter
 
 import GoParser
 import inno.jago.ast.type.DoubleTypeNode
-import inno.jago.ast.type.FunctionType
 import inno.jago.ast.type.IntegerTypeNode
 import inno.jago.ast.type.StringTypeNode
 import inno.jago.ast.type.TypeNode
@@ -12,10 +11,7 @@ fun GoParser.TypeContext.toTypeNode(): TypeNode {
     typeName()?.IDENTIFIER()?.text.toTypeNode(pos = toPos())
         ?: typeLit()
 
-    return TypeNode(
-        pos = toPos(),
-        name = typeName().IDENTIFIER().text
-    )
+    return TODO()
 }
 
 fun String?.toTypeNode(pos: Pos): TypeNode? = when {
@@ -38,4 +34,4 @@ fun GoParser.TypeLitContext?.toTypeNode(): TypeNode? = this?.let {
     TODO()
 }
 
-fun GoParser.ArrayTypeContext()
+fun GoParser.ArrayTypeContext(): ArrayTypeNodeNode

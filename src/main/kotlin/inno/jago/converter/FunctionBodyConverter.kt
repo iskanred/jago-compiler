@@ -2,7 +2,6 @@ package inno.jago.converter
 
 import GoParser
 import inno.jago.ast.statement.BlockStatementNode
-import inno.jago.ast.statement.SimpleStatementNode
 import inno.jago.ast.statement.StatementNode
 import inno.jago.converter.statement.simple_statement.toSimpleStatementNode
 
