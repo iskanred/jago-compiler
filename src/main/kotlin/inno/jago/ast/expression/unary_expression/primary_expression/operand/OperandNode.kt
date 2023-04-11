@@ -5,21 +5,21 @@ import inno.jago.ast.expression.unary_expression.PrimaryExpressionNode
 import inno.jago.ast.expression.unary_expression.primary_expression.operand.literal_operand.LiteralNode
 import inno.jago.lexer.Pos
 
-sealed class Operand(
+sealed class OperandNode(
     pos: Pos,
 ) : PrimaryExpressionNode(pos)
 
-class LiteralOperand(
+class LiteralOperandNode(
     pos: Pos,
     val literalNode: LiteralNode
-) : Operand(pos)
+) : OperandNode(pos)
 
-class OperandName(
+class OperandNameNode(
     pos: Pos,
     val identifier: OperandIdentifierNode
-): Operand(pos)
+): OperandNode(pos)
 
-class ExpressionOperand(
+class ExpressionOperandNode(
     pos: Pos,
     val expressionNode: ExpressionNode
-): Operand(pos)
+): OperandNode(pos)
