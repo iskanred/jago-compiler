@@ -6,17 +6,18 @@ import inno.jago.UnreachableCodeException
 import inno.jago.ast.expression.ExpressionNode
 import inno.jago.ast.type.ArrayTypeNode
 import inno.jago.ast.type.DoubleTypeNode
+import inno.jago.ast.type.FunctionTypeNode
 import inno.jago.ast.type.IntegerTypeNode
+import inno.jago.ast.type.PointerTypeNode
 import inno.jago.ast.type.StringTypeNode
 import inno.jago.ast.type.TypeNode
+import inno.jago.converter.expression.toExpressionNode
 import inno.jago.lexer.Pos
 
-fun GoParser.TypeContext.toTypeNode(): TypeNode {
+fun GoParser.TypeContext.toTypeNode(): TypeNode =
     typeName()?.IDENTIFIER()?.text.toTypeNode(pos = toPos())
-        ?: typeLit()
-
-    return TODO()
-}
+        ?: typeLit().toTypeNode()
+        ?: throw UnreachableCodeException()
 
 fun String?.toTypeNode(pos: Pos): TypeNode? = when {
     this == IntegerTypeNode.typeName -> IntegerTypeNode(pos = pos)
@@ -25,29 +26,29 @@ fun String?.toTypeNode(pos: Pos): TypeNode? = when {
     else -> null
 }
 
-fun GoParser.TypeLitContext?.toTypeNode(): TypeNode? = this?.let {
-    it.arrayType()?.let { arrayTypeContext ->
-
+fun GoParser.TypeLitContext?.toTypeNode(): TypeNode? = this?.let { typeLitContext ->
+    typeLitContext.arrayType()?.let { arrayTypeContext ->
+        return arrayTypeContext.toArrayTypeNode()
     }
-    it.pointerType()?.let  { pointerTypeContext ->
-
+    typeLitContext.pointerType()?.let  { pointerTypeContext ->
+        return pointerTypeContext.toPointerTypeNode()
     }
-    it.functionType()?.let { functionTypeContext ->
-
+    typeLitContext.functionType()?.let { functionTypeContext ->
+        return functionTypeContext.toFunctionTypeNode()
     }
-    it.structType()?.let {
+    typeLitContext.structType()?.let {
         throw EntityNotSupported("Structures")
     }
-    it.interfaceType()?.let {
+    typeLitContext.interfaceType()?.let {
         throw EntityNotSupported("Interfaces")
     }
-    it.mapType()?.let {
+    typeLitContext.mapType()?.let {
         throw EntityNotSupported("Maps")
     }
-    it.channelType()?.let {
+    typeLitContext.channelType()?.let {
         throw EntityNotSupported("Channels")
     }
-    it.sliceType()?.let {
+    typeLitContext.sliceType()?.let {
         throw EntityNotSupported("Slices")
     }
     throw UnreachableCodeException()
@@ -55,6 +56,16 @@ fun GoParser.TypeLitContext?.toTypeNode(): TypeNode? = this?.let {
 
 fun GoParser.ArrayTypeContext.toArrayTypeNode() = ArrayTypeNode(
     pos = toPos(),
-    length = arrayLength().expression(),
+    length = arrayLength().expression().toExpressionNode(),
     elementType = elementType().type().toTypeNode()
+)
+
+fun GoParser.PointerTypeContext.toPointerTypeNode() = PointerTypeNode(
+    pos = toPos(),
+    baseType = baseType().type().toTypeNode()
+)
+
+fun GoParser.FunctionTypeContext.toFunctionTypeNode() = FunctionTypeNode(
+    pos = toPos(),
+    elementType = signature().toSignatureNode()
 )
