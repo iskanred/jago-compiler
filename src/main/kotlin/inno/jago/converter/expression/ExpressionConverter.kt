@@ -8,7 +8,7 @@ import inno.jago.converter.toPos
 
 fun GoParser.ExpressionContext.toExpressionNode(): ExpressionNode {
     unaryExpr()?.let {
-        TODO()
+        return it.toUnaryOrPrimaryExpression()
     }
 
     binary_op()?.let {
