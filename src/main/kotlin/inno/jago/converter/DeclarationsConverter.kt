@@ -32,12 +32,6 @@ fun GoParser.VarSpecContext.toVarDeclarationNodes(): List<VarDeclarationNode> {
 
 }
 
-fun GoParser.TypeContext.toTypeNode(): TypeNode {
-    return TypeNode(
-        pos = toPos(),
-        name = typeName().IDENTIFIER().text
-    )
-}
 
 fun GoParser.FunctionDeclContext.toFunctionDeclarationNode(): FunctionDeclarationNode {
     return FunctionDeclarationNode(

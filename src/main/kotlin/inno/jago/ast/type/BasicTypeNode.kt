@@ -14,19 +14,31 @@ class IntegerTypeNode(
     pos: Pos,
 ) : BasicTypeNode(
     pos = pos,
-    name = "int"
-)
+    name = typeName
+) {
+    companion object {
+        const val typeName = "int"
+    }
+}
 
 class DoubleTypeNode(
     pos: Pos,
 ) : BasicTypeNode(
     pos = pos,
-    name = "float64"
-)
+    name = typeName
+) {
+    companion object {
+        const val typeName = "float64"
+    }
+}
 
-class StringTypeNode<T>(
+class StringTypeNode(
     pos: Pos,
 ) : BasicTypeNode(
     pos = pos,
     name = "string"
-)
+) {
+    companion object {
+        const val typeName = "string"
+    }
+}
