@@ -6,6 +6,8 @@ import inno.jago.ast.statement.StatementNode
 import inno.jago.converter.statement.simple_statement.toSimpleStatementNode
 import inno.jago.converter.statement.toDeclarationStatementNode
 import inno.jago.converter.statement.toBlockStatementNode
+import inno.jago.converter.statement.toBreakStatementNode
+import inno.jago.converter.statement.toContinueStatementNode
 
 fun GoParser.FunctionBodyContext.toBlockStatementNode(): BlockStatementNode {
     val statementNodes = mutableListOf<StatementNode>()
@@ -18,18 +20,16 @@ fun GoParser.FunctionBodyContext.toBlockStatementNode(): BlockStatementNode {
                 statementNodes.add(it.toBlockStatementNode())
             }
             declaration()?.let {
-                it.toDeclarationStatementNode().let { declarationStatementNode ->
-                    statementNodes.add(declarationStatementNode)
-                }
+                statementNodes.add(it.toDeclarationStatementNode())
             }
             returnStmt()?.let {
                 TODO()
             }
             breakStmt()?.let {
-                TODO()
+                statementNodes.add(it.toBreakStatementNode())
             }
             continueStmt()?.let {
-                TODO()
+                statementNodes.add(it.toContinueStatementNode())
             }
             ifStmt()?.let {
                 TODO()
