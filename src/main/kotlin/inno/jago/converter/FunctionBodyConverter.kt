@@ -2,32 +2,40 @@ package inno.jago.converter
 
 import GoParser
 import inno.jago.ast.statement.BlockStatementNode
+import inno.jago.ast.statement.SimpleStatementNode
+import inno.jago.ast.statement.StatementNode
+import inno.jago.converter.statement.simple_statement.toSimpleStatementNode
 
 fun GoParser.FunctionBodyContext.toBlockStatementNode(): BlockStatementNode {
-    block().statementList().statement().forEach {
-        it.simpleStmt()?.let {
-            TODO()
-        }
-        it.block()?.let {
-            TODO()
-        }
-        it.declaration()?.let {
-            TODO()
-        }
-        it.returnStmt()?.let {
-            TODO()
-        }
-        it.breakStmt()?.let {
-            TODO()
-        }
-        it.continueStmt()?.let {
-            TODO()
-        }
-        it.ifStmt()?.let {
-            TODO()
-        }
-        it.forStmt().let {
-            TODO()
+    val statementNodes = mutableListOf<StatementNode>()
+    block().statementList().statement().forEach { statement ->
+        with(statement) {
+            simpleStmt()?.let {
+                statementNodes.add(it.toSimpleStatementNode())
+            }
+            block()?.let {
+                TODO()
+            }
+            declaration()?.let {
+                TODO()
+            }
+            returnStmt()?.let {
+                TODO()
+            }
+            breakStmt()?.let {
+                TODO()
+            }
+            continueStmt()?.let {
+                TODO()
+            }
+            ifStmt()?.let {
+                TODO()
+            }
+            forStmt()?.let {
+                TODO()
+            }
         }
     }
+    return BlockStatementNode(toPos(), statementNodes)
 }
+
