@@ -12,35 +12,23 @@ sealed class TopLevelDeclNode(pos: Pos)
 
 class FunctionDeclarationNode (
     pos: Pos,
-    val functionName : String,
-    val signature : SignatureNode,
-    val functionBody : BlockStatementNode
+    val functionName: String,
+    val signature: SignatureNode,
+    val functionBody: BlockStatementNode
 ) : TopLevelDeclNode(pos = pos)
 
 sealed class DeclarationNode(
     pos: Pos,
     val identifier: String,
-    val type: TypeNode,
-    val expression: ExpressionNode
+    val type: TypeNode?,
+    val expression: ExpressionNode?
 ) : TopLevelDeclNode(pos = pos)
 
 
 class ConstDeclarationNode(
     pos: Pos,
     identifier: String,
-    type: TypeNode,
-    expression: ExpressionNode
-) : DeclarationNode(
-    pos = pos,
-    identifier = identifier,
-    type = type,
-    expression = expression
-)
-
-class TypeDeclarationNode(
-    pos: Pos,
-    identifier: String,
-    type: TypeNode,
+    type: TypeNode?,
     expression: ExpressionNode
 ) : DeclarationNode(
     pos = pos,
@@ -52,8 +40,8 @@ class TypeDeclarationNode(
 class VarDeclarationNode(
     pos: Pos,
     identifier: String,
-    type: TypeNode,
-    expression: ExpressionNode
+    type: TypeNode?,
+    expression: ExpressionNode?
 ) : DeclarationNode(
     pos = pos,
     identifier = identifier,
