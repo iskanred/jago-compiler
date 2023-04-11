@@ -1,63 +1,26 @@
 package inno.jago.converter
 
 import GoParser
+import inno.jago.UnreachableCodeException
 import inno.jago.ast.expression.ExpressionNode
 import inno.jago.ast.statement.BlockStatementNode
 import inno.jago.ast.statement.ElseIfStatementNode
 import inno.jago.ast.statement.IfStatementNode
 import inno.jago.ast.statement.ReturnStatementNode
 import inno.jago.ast.statement.SimpleElseStatementNode
-import inno.jago.ast.statement.StatementNode
 import inno.jago.converter.common.toPos
 import inno.jago.converter.expression.toExpressionNode
 import inno.jago.converter.statement.toSimpleStatementNode
-import inno.jago.converter.statement.toDeclarationStatementNodes
 import inno.jago.converter.statement.toBlockStatementNode
-import inno.jago.converter.statement.toBreakStatementNode
-import inno.jago.converter.statement.toContinueStatementNode
-import inno.jago.converter.statement.toForStatementNode
 
-fun GoParser.FunctionBodyContext.toBlockStatementNode(): BlockStatementNode {
-    val statementNodes = mutableListOf<StatementNode>()
-
-    block().statementList().statement().forEach { statement ->
-        with(statement) {
-            simpleStmt()?.let {
-                statementNodes.add(it.toSimpleStatementNode())
-            }
-            block()?.let {
-                statementNodes.add(it.toBlockStatementNode())
-            }
-            declaration()?.let {
-                statementNodes.addAll(it.toDeclarationStatementNodes())
-            }
-            returnStmt()?.let {
-                statementNodes.add(it.toReturnStatementNode())
-            }
-            breakStmt()?.let {
-                statementNodes.add(it.toBreakStatementNode())
-            }
-            continueStmt()?.let {
-                statementNodes.add(it.toContinueStatementNode())
-            }
-            ifStmt()?.let {
-                statementNodes.add(it.toIfStatementNode())
-            }
-            forStmt()?.let {
-                statementNodes.add(it.toForStatementNode())
-            }
-        }
-    }
-
-    return BlockStatementNode(pos = toPos(), block = statementNodes)
-}
+fun GoParser.FunctionBodyContext.toBlockStatementNode(): BlockStatementNode =
+    block()?.toBlockStatementNode()
+        ?: throw UnreachableCodeException()
 
 fun GoParser.ReturnStmtContext.toReturnStatementNode(): ReturnStatementNode {
-    val expressionNodes = mutableListOf<ExpressionNode>()
-
-    expressionList()?.expression()?.forEach {
-        expressionNodes.add(it.toExpressionNode())
-    }
+    val expressionNodes = expressionList()?.expression()?.map {
+        it.toExpressionNode()
+    } ?: throw UnreachableCodeException()
 
     return ReturnStatementNode(pos = toPos(), expressions = expressionNodes)
 }

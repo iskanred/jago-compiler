@@ -1,6 +1,7 @@
 package inno.jago.ast.expression.unary_expression.primary_expression.operand.literal_operand
 
 import inno.jago.ast.signature.SignatureNode
+import inno.jago.ast.statement.BlockStatementNode
 import inno.jago.ast.statement.StatementNode
 import inno.jago.ast.type.ArrayTypeNode
 import inno.jago.ast.type.TypeNode
@@ -9,11 +10,34 @@ import inno.jago.lexer.Pos
 
 sealed class LiteralNode(pos: Pos) : Entity(pos = pos)
 
-class BasicLiteralNode(
+sealed class BasicLiteralNode(
     pos: Pos,
     val value: String,
-    val type: TypeNode
 ) : LiteralNode(pos = pos)
+
+class IntegerLiteralNode(
+    pos: Pos,
+    value: String
+) : BasicLiteralNode(
+    pos = pos,
+    value = value
+)
+
+class DoubleLiteralNode(
+    pos: Pos,
+    value: String
+) : BasicLiteralNode(
+    pos = pos,
+    value = value
+)
+
+class StringLiteralNode(
+    pos: Pos,
+    value: String
+) : BasicLiteralNode(
+    pos = pos,
+    value = value
+)
 
 class CompositeLiteralNode(
     pos: Pos,
@@ -24,5 +48,5 @@ class CompositeLiteralNode(
 class FunctionLiteralNode(
     pos: Pos,
     val signature: SignatureNode,
-    val functionBody: List<StatementNode>
+    val functionBody: BlockStatementNode
 ) : LiteralNode(pos = pos)
