@@ -14,7 +14,7 @@ fun GoParser.UnaryExprContext.toUnaryOrPrimaryExpression(): UnaryOrPrimaryExpres
     unaryExpr()?.let {
         return UnaryExpressionNode(
             toPos(),
-            it.unary_op().toUnaryOperatorNode(),
+            it.unary_op().toUnaryOperator(),
             it.toUnaryOrPrimaryExpression()
         )
     }
