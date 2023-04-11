@@ -51,6 +51,14 @@ open class UnaryOperatorNode(
     val operator: UnaryOperators
 ) : Entity(pos)
 
+
+class ArgumentsExpressionNode(
+    pos: Pos,
+    val expressionList: List<ExpressionNode>
+) : PrimaryExpressionNode(
+    pos = pos,
+)
+
 enum class UnaryOperators {
     PLUS, MINUS, EXCLAMATION, CARET, ASTERISK, AMPERSAND, RECEIVE
 }
