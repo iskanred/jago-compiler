@@ -3,7 +3,6 @@ package inno.jago.converter
 import GoParser
 import inno.jago.ast.signature.ParameterNode
 import inno.jago.ast.signature.SignatureNode
-import inno.jago.ast.type.TypeNode
 
 
 fun GoParser.SignatureContext.toSignatureNode() = SignatureNode(
