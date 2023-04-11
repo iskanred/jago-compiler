@@ -21,5 +21,5 @@ class OperandNameNode(
 
 class ExpressionOperandNode(
     pos: Pos,
-    val expressionNode: ExpressionNode
+    val expression: ExpressionNode
 ): OperandNode(pos)

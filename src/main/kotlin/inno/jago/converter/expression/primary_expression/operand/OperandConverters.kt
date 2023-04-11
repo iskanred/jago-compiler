@@ -2,7 +2,6 @@ package inno.jago.converter.expression.primary_expression.operand
 
 import inno.jago.UnreachableCodeException
 import inno.jago.ast.expression.unary_expression.primary_expression.operand.ExpressionOperandNode
-import inno.jago.ast.expression.unary_expression.primary_expression.operand.OperandIdentifierNode
 import inno.jago.ast.expression.unary_expression.primary_expression.operand.OperandNameNode
 import inno.jago.ast.expression.unary_expression.primary_expression.operand.OperandNode
 import inno.jago.ast.expression.unary_expression.primary_expression.operand.QualifiedIdentifierNode
@@ -20,8 +19,8 @@ fun GoParser.OperandContext.toOperandNode(): OperandNode {
 
     expression()?.let {
         return ExpressionOperandNode(
-            toPos(),
-            expression().toExpressionNode()
+            pos = toPos(),
+            expression = expression().toExpressionNode()
         )
     }
 
