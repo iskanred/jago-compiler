@@ -7,11 +7,10 @@ import inno.jago.ast.ImportNode
 import inno.jago.ast.PackageNode
 import inno.jago.ast.SourceFileNode
 import inno.jago.ast.decl.TopLevelDeclNode
-import inno.jago.lexer.Pos
 
 fun GoParser.SourceFileContext.toSourceFile(): SourceFileNode {
     return SourceFileNode(
-        pos = Pos(tokenStart = start, tokenStop = stop),
+        pos = toPos(),
         packageName = packageClause().toPackageNode(),
         importNodes = importDecl().toImportDeclNodes(),
         topLevelDecls = topLevelDecl().toTopLevelDeclarations()
@@ -19,14 +18,14 @@ fun GoParser.SourceFileContext.toSourceFile(): SourceFileNode {
 }
 
 fun GoParser.PackageClauseContext.toPackageNode(): PackageNode = PackageNode(
-    pos = Pos(tokenStart = start, tokenStop = stop),
+    pos = toPos(),
     name = packageName().text
 )
 
 fun List<GoParser.ImportDeclContext>.toImportDeclNodes(): List<ImportNode> = flatMap { importDeclContext ->
     importDeclContext.importSpec().map {
         ImportNode(
-            pos = Pos(tokenStart = it.start, tokenStop = it.stop),
+            pos = it.toPos(),
             alias = it.packageName().text,
             path = it.importPath().text,
             importAll = (it.DOT() != null)
