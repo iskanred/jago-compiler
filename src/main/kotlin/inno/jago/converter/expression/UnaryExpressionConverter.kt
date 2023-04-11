@@ -4,7 +4,7 @@ import inno.jago.UnreachableCodeException
 import inno.jago.ast.expression.unary_expression.UnaryExpressionNode
 import inno.jago.ast.expression.unary_expression.UnaryOrPrimaryExpression
 import inno.jago.converter.expression.primary_expression.toPrimaryExpressionNode
-import inno.jago.converter.toPos
+import inno.jago.converter.common.toPos
 
 fun GoParser.UnaryExprContext.toUnaryOrPrimaryExpression(): UnaryOrPrimaryExpression {
     primaryExpr()?.let {
@@ -13,9 +13,9 @@ fun GoParser.UnaryExprContext.toUnaryOrPrimaryExpression(): UnaryOrPrimaryExpres
 
     unaryExpr()?.let {
         return UnaryExpressionNode(
-            toPos(),
-            it.unary_op().toUnaryOperator(),
-            it.toUnaryOrPrimaryExpression()
+            pos = toPos(),
+            operator = it.unary_op().toUnaryOperator(),
+            unaryOrPrimaryExpression = it.toUnaryOrPrimaryExpression()
         )
     }
 

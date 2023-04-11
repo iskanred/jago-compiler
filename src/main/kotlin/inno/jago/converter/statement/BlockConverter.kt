@@ -3,8 +3,8 @@ package inno.jago.converter.statement
 import GoParser
 import inno.jago.ast.statement.BlockStatementNode
 import inno.jago.ast.statement.StatementNode
-import inno.jago.converter.toDeclarationNodes
-import inno.jago.converter.toPos
+import inno.jago.converter.toIfStatementNode
+import inno.jago.converter.common.toPos
 import inno.jago.converter.toReturnStatementNode
 
 fun GoParser.BlockContext.toBlockStatementNode() = BlockStatementNode(
@@ -13,34 +13,36 @@ fun GoParser.BlockContext.toBlockStatementNode() = BlockStatementNode(
 )
 
 fun GoParser.StatementContext.toStatementNode(): StatementNode {
-    val statementNodes = block().statementList().statement().map { statementContext ->
-        statementContext.apply {
+    val statementNodes = mutableListOf<StatementNode>()
+
+    block().statementList().statement().forEach { statementContext ->
+        with(statementContext) {
             simpleStmt()?.let { simpleStmtContext ->
-                return@map simpleStmtContext.toSimpleStatementNode()
+                statementNodes.add(simpleStmtContext.toSimpleStatementNode())
             }
             block()?.let { blockContext ->
-                return@map blockContext.toBlockStatementNode()
+                statementNodes.add(blockContext.toBlockStatementNode())
             }
             declaration()?.let { declarationContext ->
-                return@map declarationContext.toDeclarationNodes()
+                statementNodes.addAll(declarationContext.toDeclarationStatementNodes())
             }
             returnStmt()?.let { returnStmt ->
-                return@map returnStmt.toReturnStatementNode()
+                statementNodes.add(returnStmt.toReturnStatementNode())
             }
             breakStmt()?.let { breakStmtContext ->
-                return@map breakStmtContext.toBreakStatementNode()
+                statementNodes.add(breakStmtContext.toBreakStatementNode())
             }
             continueStmt()?.let { continueStmtContext ->
-                return@map continueStmtContext.toContinueStatementNode()
+                statementNodes.add(continueStmtContext.toContinueStatementNode())
             }
             ifStmt()?.let { ifStmtContext ->
-                return@map TODO()
+                statementNodes.add(ifStmtContext.toIfStatementNode())
             }
             forStmt()?.let { forStmtContext ->
-                return@map TODO()
+                statementNodes.add(forStmtContext.toForStatementNode())
             }
         }
     }
 
-    return BlockStatementNode(toPos(), statementNodes)
+    return BlockStatementNode(pos = toPos(), block = statementNodes)
 }

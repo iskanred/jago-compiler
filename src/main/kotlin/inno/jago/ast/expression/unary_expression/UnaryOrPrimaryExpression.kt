@@ -11,8 +11,8 @@ sealed class UnaryOrPrimaryExpression(
 
 class UnaryExpressionNode(
     pos: Pos,
-    val operatorNode: UnaryOperatorNode?,
-    val unaryOrPrimaryExpressionNode: UnaryOrPrimaryExpression
+    val operator: UnaryOperatorNode?,
+    val unaryOrPrimaryExpression: UnaryOrPrimaryExpression
 ) : UnaryOrPrimaryExpression(pos)
 
 open class PrimaryExpressionNode(

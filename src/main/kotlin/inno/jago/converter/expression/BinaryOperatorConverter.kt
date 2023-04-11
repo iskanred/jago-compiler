@@ -10,7 +10,7 @@ import inno.jago.ast.expression.binary_expression.MulOperator
 import inno.jago.ast.expression.binary_expression.MulOperators
 import inno.jago.ast.expression.binary_expression.RelationOperator
 import inno.jago.ast.expression.binary_expression.RelationOperators
-import inno.jago.converter.toPos
+import inno.jago.converter.common.toPos
 
 fun GoParser.Binary_opContext.toBinaryOperator(): BinaryOperator {
     LOGICAL_OR()?.let {

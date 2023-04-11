@@ -1,4 +1,4 @@
-package inno.jago.converter
+package inno.jago.converter.common
 
 import inno.jago.lexer.Pos
 import org.antlr.v4.runtime.ParserRuleContext

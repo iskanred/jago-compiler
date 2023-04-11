@@ -1,16 +1,18 @@
 package inno.jago.converter.statement
 
 import inno.jago.EntityNotSupported
+import inno.jago.UnreachableCodeException
 import inno.jago.ast.statement.BlockStatementNode
 import inno.jago.ast.statement.ConditionalForStatementNode
 import inno.jago.ast.statement.ForClauseStatementNode
 import inno.jago.ast.statement.ForStatementNode
 import inno.jago.ast.statement.SimpleStatementNode
 import inno.jago.converter.expression.toExpressionNode
-import inno.jago.converter.toPos
+import inno.jago.converter.common.toPos
 
 fun GoParser.ForStmtContext.toForStatementNode(): ForStatementNode {
-    // return ConditionalForStatementNode or ForClauseStatementNode, if we get RangeClause, then return EntityNotSupported
+    // return ConditionalForStatementNode or ForClauseStatementNode,
+    // if we get RangeClause, then return EntityNotSupported
     forClause()?.let {
         return ForClauseStatementNode(
             pos = toPos(),
@@ -30,13 +32,11 @@ fun GoParser.ForStmtContext.toForStatementNode(): ForStatementNode {
     throw EntityNotSupported("RangeClause")
 }
 
-private fun GoParser.InitStmtContext.toBlockStatementNode(): BlockStatementNode {
-    return BlockStatementNode(
-        pos = toPos(),
-        block = listOf(simpleStmt().toSimpleStatementNode())
-    )
-}
+private fun GoParser.InitStmtContext.toBlockStatementNode() = BlockStatementNode(
+    pos = toPos(),
+    block = listOf(simpleStmt().toSimpleStatementNode())
+)
 
-private fun GoParser.PostStmtContext.toSimpleStatementNode(): SimpleStatementNode {
-    return simpleStmt().toSimpleStatementNode()
-}
+private fun GoParser.PostStmtContext.toSimpleStatementNode(): SimpleStatementNode =
+    simpleStmt()?.toSimpleStatementNode()
+        ?: throw UnreachableCodeException()

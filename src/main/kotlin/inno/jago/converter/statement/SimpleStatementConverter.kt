@@ -9,7 +9,7 @@ import inno.jago.ast.statement.IncDecStatementNode
 import inno.jago.ast.statement.ShortVarDeclNode
 import inno.jago.ast.statement.SimpleStatementNode
 import inno.jago.converter.expression.toExpressionNode
-import inno.jago.converter.toPos
+import inno.jago.converter.common.toPos
 
 fun GoParser.SimpleStmtContext.toSimpleStatementNode(): SimpleStatementNode {
     incDecStmt()?.let {

@@ -4,22 +4,22 @@ import GoParser
 import inno.jago.ast.expression.ExpressionNode
 import inno.jago.ast.statement.BlockStatementNode
 import inno.jago.ast.statement.ElseIfStatementNode
-import inno.jago.ast.statement.ElseStatementNode
 import inno.jago.ast.statement.IfStatementNode
 import inno.jago.ast.statement.ReturnStatementNode
 import inno.jago.ast.statement.SimpleElseStatementNode
 import inno.jago.ast.statement.StatementNode
+import inno.jago.converter.common.toPos
 import inno.jago.converter.expression.toExpressionNode
 import inno.jago.converter.statement.toSimpleStatementNode
-import inno.jago.converter.statement.toDeclarationStatementNode
+import inno.jago.converter.statement.toDeclarationStatementNodes
 import inno.jago.converter.statement.toBlockStatementNode
 import inno.jago.converter.statement.toBreakStatementNode
 import inno.jago.converter.statement.toContinueStatementNode
 import inno.jago.converter.statement.toForStatementNode
-import kotlin.math.exp
 
 fun GoParser.FunctionBodyContext.toBlockStatementNode(): BlockStatementNode {
     val statementNodes = mutableListOf<StatementNode>()
+
     block().statementList().statement().forEach { statement ->
         with(statement) {
             simpleStmt()?.let {
@@ -29,7 +29,7 @@ fun GoParser.FunctionBodyContext.toBlockStatementNode(): BlockStatementNode {
                 statementNodes.add(it.toBlockStatementNode())
             }
             declaration()?.let {
-                statementNodes.add(it.toDeclarationStatementNode())
+                statementNodes.addAll(it.toDeclarationStatementNodes())
             }
             returnStmt()?.let {
                 statementNodes.add(it.toReturnStatementNode())
@@ -48,7 +48,8 @@ fun GoParser.FunctionBodyContext.toBlockStatementNode(): BlockStatementNode {
             }
         }
     }
-    return BlockStatementNode(toPos(), statementNodes)
+
+    return BlockStatementNode(pos = toPos(), block = statementNodes)
 }
 
 fun GoParser.ReturnStmtContext.toReturnStatementNode(): ReturnStatementNode {
@@ -58,7 +59,7 @@ fun GoParser.ReturnStmtContext.toReturnStatementNode(): ReturnStatementNode {
         expressionNodes.add(it.toExpressionNode())
     }
 
-    return ReturnStatementNode(toPos(), expressionNodes)
+    return ReturnStatementNode(pos = toPos(), expressions = expressionNodes)
 }
 
 fun GoParser.IfStmtContext.toIfStatementNode(): IfStatementNode {
@@ -74,5 +75,11 @@ fun GoParser.IfStmtContext.toIfStatementNode(): IfStatementNode {
         SimpleElseStatementNode(pos = toPos(), block = it)
     }
 
-    return IfStatementNode(toPos(), simpleStatement, expression, block, elseBranch)
+    return IfStatementNode(
+        pos = toPos(),
+        simpleStatement = simpleStatement,
+        expression = expression,
+        block = block,
+        elseBranch = elseBranch
+    )
 }

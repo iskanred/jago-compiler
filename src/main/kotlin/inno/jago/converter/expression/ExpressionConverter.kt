@@ -4,7 +4,7 @@ import inno.jago.UnreachableCodeException
 import inno.jago.WrongBinaryExpressionNumber
 import inno.jago.ast.expression.ExpressionNode
 import inno.jago.ast.expression.binary_expression.BinaryExpression
-import inno.jago.converter.toPos
+import inno.jago.converter.common.toPos
 
 fun GoParser.ExpressionContext.toExpressionNode(): ExpressionNode {
     unaryExpr()?.let {

@@ -7,6 +7,7 @@ import inno.jago.ast.ImportNode
 import inno.jago.ast.PackageNode
 import inno.jago.ast.SourceFileNode
 import inno.jago.ast.decl.TopLevelDeclNode
+import inno.jago.converter.common.toPos
 
 fun GoParser.SourceFileContext.toSourceFile(): SourceFileNode {
     return SourceFileNode(

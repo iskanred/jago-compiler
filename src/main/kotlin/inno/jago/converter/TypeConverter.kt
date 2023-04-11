@@ -3,7 +3,6 @@ package inno.jago.converter
 import GoParser
 import inno.jago.EntityNotSupported
 import inno.jago.UnreachableCodeException
-import inno.jago.ast.expression.ExpressionNode
 import inno.jago.ast.type.ArrayTypeNode
 import inno.jago.ast.type.DoubleTypeNode
 import inno.jago.ast.type.FunctionTypeNode
@@ -11,6 +10,7 @@ import inno.jago.ast.type.IntegerTypeNode
 import inno.jago.ast.type.PointerTypeNode
 import inno.jago.ast.type.StringTypeNode
 import inno.jago.ast.type.TypeNode
+import inno.jago.converter.common.toPos
 import inno.jago.converter.expression.toExpressionNode
 import inno.jago.lexer.Pos
 
