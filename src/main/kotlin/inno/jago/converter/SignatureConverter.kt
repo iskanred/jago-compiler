@@ -1,7 +1,8 @@
 package inno.jago.converter
 
 import GoParser
-import inno.jago.NotSupported
+import inno.jago.EntityNotSupported
+import inno.jago.FunctionIdentifiersException
 import inno.jago.ast.signature.ParameterNode
 import inno.jago.ast.signature.SignatureNode
 import inno.jago.ast.type.TypeNode
@@ -12,15 +13,15 @@ fun GoParser.SignatureContext.toSignatureNode() = SignatureNode(
 )
 
 fun GoParser.ParametersContext.toParameterNodes(): List<ParameterNode> {
-    var haveIdentifiers = 0
+    var haveIdentifiers = HaveIdentifiersState.START_STATE
     return parameterList().parameterDecl().flatMap { paramDecl ->
         // func (int, int, bool)
         if (paramDecl.identifierList() == null || paramDecl.identifierList().isEmpty) {
-            if (haveIdentifiers == 1) {
-                throw NotSupported("Искан добавь")
+            if (haveIdentifiers == HaveIdentifiersState.HAVE_IDENTIFIERS) {
+                throw FunctionIdentifiersException()
             }
 
-            haveIdentifiers = -1
+            haveIdentifiers = HaveIdentifiersState.NOT_HAVE_IDENTIFIERS
             return@flatMap listOf(
                 ParameterNode(
                     identifier = null,
@@ -30,11 +31,11 @@ fun GoParser.ParametersContext.toParameterNodes(): List<ParameterNode> {
         }
 
         // func (a, b int, c bool)
-        if (haveIdentifiers == -1) {
-            throw NotSupported("Искан добавь")
+        if (haveIdentifiers == HaveIdentifiersState.NOT_HAVE_IDENTIFIERS) {
+            throw FunctionIdentifiersException()
         }
 
-        haveIdentifiers = 1
+        haveIdentifiers = HaveIdentifiersState.HAVE_IDENTIFIERS
         return@flatMap paramDecl.identifierList().IDENTIFIER().map { ident ->
             return@map ParameterNode(
                 identifier = ident.text,
@@ -52,12 +53,17 @@ fun GoParser.ResultContext.toResultNode(): List<TypeNode> {
     parameters()?.parameterList()?.let { params ->
         return@let params.parameterDecl().map { paramDecl ->
             if (paramDecl.identifierList() != null || paramDecl.identifierList().IDENTIFIER().isNotEmpty()) {
-                throw NotSupported(reason = "Identifiers in result parameters")
+                throw EntityNotSupported("Identifiers in result parameters")
             }
-
             return@map paramDecl.type().toTypeNode()
         }
     }
 
     return emptyList()
+}
+
+private enum class HaveIdentifiersState {
+    START_STATE,
+    HAVE_IDENTIFIERS,
+    NOT_HAVE_IDENTIFIERS
 }
