@@ -1,6 +1,7 @@
 package inno.jago.converter
 
 import GoParser
+import inno.jago.ast.expression.ExpressionNode
 import inno.jago.ast.statement.BlockStatementNode
 import inno.jago.ast.statement.ReturnStatementNode
 import inno.jago.ast.statement.StatementNode
