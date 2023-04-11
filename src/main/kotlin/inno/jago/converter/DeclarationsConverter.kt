@@ -15,8 +15,8 @@ fun GoParser.DeclarationContext.toDeclarationNodes(): List<DeclarationNode> {
             constSpec.toConstDeclarationNode()
         }
     }
-    varDecl()?.let {
-        return it.varSpec().flatMap { varSpec ->
+    varDecl()?.let { varDecl ->
+        return varDecl.varSpec().flatMap { varSpec ->
             varSpec.toVarDeclarationNodes()
         }
     }
