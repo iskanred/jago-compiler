@@ -15,26 +15,23 @@ fun GoParser.DeclarationContext.toDeclarationNodes(): List<DeclarationNode> {
             constSpec.toConstDeclarationNode()
         }
     }
-
     varDecl()?.let {
         return it.varSpec().flatMap { varSpec ->
             varSpec.toVarDeclarationNodes()
         }
     }
-
     typeDecl()?.let {
         throw EntityNotSupported("Types")
     }
-
     throw UnreachableCodeException()
 }
 
 fun GoParser.ConstSpecContext.toConstDeclarationNode(): List<ConstDeclarationNode> {
-    var identifiers = identifierList().IDENTIFIER().map { it.text }
-    var expressions = expressionList().expression().map { it.toExpressionNode() }
+    val identifiers = identifierList().IDENTIFIER().map { it.text }
+    val expressions = expressionList().expression().map { it.toExpressionNode() }
 
     if (identifiers.size != expressions.size ) {
-        throw WrongNumberOfExpressions(identifiers.size, expressions.size)
+        throw WrongNumberOfExpressions(expected = identifiers.size, actual = expressions.size)
     }
 
     return identifiers.mapIndexed { index, identifier ->
@@ -48,11 +45,11 @@ fun GoParser.ConstSpecContext.toConstDeclarationNode(): List<ConstDeclarationNod
 }
 
 fun GoParser.VarSpecContext.toVarDeclarationNodes(): List<VarDeclarationNode> {
-    var identifiers = identifierList().IDENTIFIER().map { it.text }
-    var expressions = expressionList().expression().map { it.toExpressionNode() }
+    val identifiers = identifierList().IDENTIFIER().map { it.text }
+    val expressions = expressionList().expression().map { it.toExpressionNode() }
 
-    if (expressions.size == 1) {
-        return identifiers.mapIndexed { index, identifier ->
+    return if (expressions.size == 1) {
+        identifiers.mapIndexed { index, identifier ->
             VarDeclarationNode(
                 pos = toPos(),
                 identifier = identifier,
@@ -61,10 +58,8 @@ fun GoParser.VarSpecContext.toVarDeclarationNodes(): List<VarDeclarationNode> {
                 positionInRow = index
             )
         }
-    }
-
-    if (identifiers.size == expressions.size) {
-        return identifiers.mapIndexed { index, identifier ->
+    } else if (identifiers.size == expressions.size) {
+        identifiers.mapIndexed { index, identifier ->
             VarDeclarationNode(
                 pos = toPos(),
                 identifier = identifier,
@@ -73,16 +68,14 @@ fun GoParser.VarSpecContext.toVarDeclarationNodes(): List<VarDeclarationNode> {
                 positionInRow = index
             )
         }
+    } else {
+        throw WrongNumberOfExpressions(identifiers.size, expressions.size)
     }
-
-    throw WrongNumberOfExpressions(identifiers.size, expressions.size)
 }
 
-fun GoParser.FunctionDeclContext.toFunctionDeclarationNode(): FunctionDeclarationNode {
-    return FunctionDeclarationNode(
-        pos = toPos(),
-        functionName = functionName().IDENTIFIER().text,
-        signature = TODO(),
-        functionBody = functionBody().toBlockStatementNode()
-    )
-}
+fun GoParser.FunctionDeclContext.toFunctionDeclarationNode() = FunctionDeclarationNode(
+    pos = toPos(),
+    functionName = functionName().IDENTIFIER().text,
+    signature = signature().toSignatureNode(),
+    functionBody = functionBody().toBlockStatementNode()
+)
