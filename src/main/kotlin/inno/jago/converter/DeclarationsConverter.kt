@@ -50,10 +50,6 @@ fun GoParser.VarSpecContext.toVarDeclarationNodes(): List<VarDeclarationNode> {
     var identifiers = identifierList().IDENTIFIER().map { it.text }
     var expressions = expressionList().expression().map { it.toExpressionNode() }
 
-    if (identifiers.size != expressions.size || expressions.size != 1) {
-        throw WrongNumberOfExpressions(identifiers.size, expressions.size)
-    }
-
     if (expressions.size == 1) {
         return identifiers.mapIndexed { index, identifier ->
             VarDeclarationNode(
@@ -64,7 +60,9 @@ fun GoParser.VarSpecContext.toVarDeclarationNodes(): List<VarDeclarationNode> {
                 positionInRow = index
             )
         }
-    } else {
+    }
+
+    if (identifiers.size == expressions.size) {
         return identifiers.mapIndexed { index, identifier ->
             VarDeclarationNode(
                 pos = toPos(),
@@ -75,6 +73,8 @@ fun GoParser.VarSpecContext.toVarDeclarationNodes(): List<VarDeclarationNode> {
             )
         }
     }
+
+    throw WrongNumberOfExpressions(identifiers.size, expressions.size)
 }
 
 fun GoParser.FunctionDeclContext.toFunctionDeclarationNode(): FunctionDeclarationNode {
