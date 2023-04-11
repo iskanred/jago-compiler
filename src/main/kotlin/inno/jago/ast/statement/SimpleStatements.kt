@@ -21,14 +21,14 @@ class IncDecStatementNode (
 
 class AssignmentNode (
     pos: Pos,
-    val leftExpression: ExpressionNode,
-    val rightExpression: ExpressionNode,
+    val leftExpressions: List<ExpressionNode>,
+    val rightExpressions: List<ExpressionNode>,
 ) : SimpleStatementNode(pos = pos)
 
 class ShortVarDeclNode (
     pos: Pos,
-    val leftExpression: ExpressionNode,
-    val rightExpression: ExpressionNode,
+    val identifierList: List<String>,
+    val expression: List<ExpressionNode>,
 ) : SimpleStatementNode(pos = pos)
 
 class ExpressionStatementNode (
