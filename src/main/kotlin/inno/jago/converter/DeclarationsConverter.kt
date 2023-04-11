@@ -44,7 +44,7 @@ fun GoParser.FunctionDeclContext.toFunctionDeclarationNode(): FunctionDeclaratio
         pos = toPos(),
         functionName = functionName().IDENTIFIER().text,
         signature = TODO(),
-        functionBody = TODO()
+        functionBody = functionBody().toBlockStatementNode()
     )
 }
 
