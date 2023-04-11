@@ -4,6 +4,7 @@ import GoParser
 import inno.jago.EntityNotSupported
 import inno.jago.UnreachableCodeException
 import inno.jago.ast.statement.AssignmentNode
+import inno.jago.ast.statement.EmptyStatementNode
 import inno.jago.ast.statement.ExpressionStatementNode
 import inno.jago.ast.statement.IncDecStatementNode
 import inno.jago.ast.statement.ShortVarDeclNode
@@ -25,10 +26,10 @@ fun GoParser.SimpleStmtContext.toSimpleStatementNode(): SimpleStatementNode {
         return it.toExpressionStatementNode()
     }
     emptyStmt()?.let {
-        throw EntityNotSupported("EmptySimpleStatement")
+        return it.toEmptyStatementNode()
     }
     sendStmt()?.let {
-        throw EntityNotSupported("SendSimpleStatement")
+        throw EntityNotSupported("SendStatement")
     }
     throw UnreachableCodeException()
 }
@@ -65,3 +66,5 @@ fun GoParser.ExpressionStmtContext.toExpressionStatementNode(): ExpressionStatem
     pos = toPos(),
     expression = expression().toExpressionNode()
 )
+
+private fun GoParser.EmptyStmtContext.toEmptyStatementNode() = EmptyStatementNode(pos = toPos())

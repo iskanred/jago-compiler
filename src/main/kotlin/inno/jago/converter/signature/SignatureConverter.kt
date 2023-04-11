@@ -10,12 +10,12 @@ import inno.jago.converter.type.toTypeNode
 
 fun GoParser.SignatureContext.toSignatureNode() = SignatureNode(
     parameterNodes = parameters().toParameterNodes(),
-    resultNode = result().toResultNode()
+    resultNode = result()?.toResultNode() ?: emptyList()
 )
 
 fun GoParser.ParametersContext.toParameterNodes(): List<ParameterNode> {
     var haveIdentifiers = HaveIdentifiersState.START_STATE
-    return parameterList().parameterDecl().flatMap { paramDecl ->
+    return parameterList()?.parameterDecl()?.flatMap { paramDecl ->
         // func (int, int, bool)
         if (paramDecl.identifierList() == null || paramDecl.identifierList().isEmpty) {
             if (haveIdentifiers == HaveIdentifiersState.HAVE_IDENTIFIERS) {
@@ -43,7 +43,7 @@ fun GoParser.ParametersContext.toParameterNodes(): List<ParameterNode> {
                 type = paramDecl.type().toTypeNode()
             )
         }
-    }
+    } ?: emptyList()
 }
 
 fun GoParser.ResultContext.toResultNode(): List<TypeNode> {
