@@ -1,6 +1,7 @@
 package inno.jago.converter.statement
 
 import GoParser
+import inno.jago.EntityNotSupported
 import inno.jago.UnreachableCodeException
 import inno.jago.ast.statement.AssignmentNode
 import inno.jago.ast.statement.ExpressionStatementNode
@@ -22,6 +23,12 @@ fun GoParser.SimpleStmtContext.toSimpleStatementNode(): SimpleStatementNode {
     }
     expressionStmt()?.let {
         return it.toExpressionStatementNode()
+    }
+    emptyStmt()?.let {
+        throw EntityNotSupported("EmptySimpleStatement")
+    }
+    sendStmt()?.let {
+        throw EntityNotSupported("SendSimpleStatement")
     }
     throw UnreachableCodeException()
 }
