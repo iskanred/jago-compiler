@@ -14,4 +14,6 @@ class ConversionException(msg: String) : JaGoException(msg)
 
 class EntityNotSupported(entityName: String) : JaGoException("$entityName are not supported")
 
+class NotSupported(reason: String) : JaGoException("$reason not supported")
+
 class UnreachableCodeException : OperationNotSupportedException("Unreachable code")
