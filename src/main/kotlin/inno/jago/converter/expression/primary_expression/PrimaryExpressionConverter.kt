@@ -22,9 +22,9 @@ fun GoParser.PrimaryExprContext.toPrimaryExpressionNode(): PrimaryExpressionNode
 
     selector()?.let {
         return SelectorExpressionNode(
-            toPos(),
-            primaryExpr().toPrimaryExpressionNode(),
-            it.IDENTIFIER().text
+            pos = toPos(),
+            primaryExpression = primaryExpr().toPrimaryExpressionNode(),
+            selector = it.IDENTIFIER().text
         )
     }
 
