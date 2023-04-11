@@ -2,7 +2,7 @@ package inno.jago.ast.expression.unary_expression.primary_expression.operand.lit
 
 import inno.jago.ast.signature.SignatureNode
 import inno.jago.ast.statement.StatementNode
-import inno.jago.ast.type.ArrayType
+import inno.jago.ast.type.ArrayTypeNode
 import inno.jago.ast.type.TypeNode
 import inno.jago.entity.Entity
 import inno.jago.lexer.Pos
@@ -17,7 +17,7 @@ class BasicLiteralNode(
 
 class CompositeLiteralNode(
     pos: Pos,
-    val literal: ArrayType,
+    val literal: ArrayTypeNode,
     val literalValue: LiteralValueNode
 ) : LiteralNode(pos = pos)
 

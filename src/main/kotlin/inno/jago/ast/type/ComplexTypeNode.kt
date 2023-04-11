@@ -12,7 +12,7 @@ sealed class ComplexTypeNode(
     name = name
 )
 
-class ArrayType(
+class ArrayTypeNode(
     pos: Pos,
     val length: ExpressionNode,
     val elementType: TypeNode
@@ -21,7 +21,7 @@ class ArrayType(
     name = "array<${elementType.name}>"
 )
 
-class PointerType(
+class PointerTypeNode(
     pos: Pos,
     val baseType: TypeNode
 ) : ComplexTypeNode(
@@ -29,7 +29,7 @@ class PointerType(
     name = "pointer to ${baseType.name}"
 )
 
-class FunctionType(
+class FunctionTypeNode(
     pos: Pos,
     val elementType: SignatureNode
 ) : ComplexTypeNode(
