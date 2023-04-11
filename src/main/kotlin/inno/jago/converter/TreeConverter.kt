@@ -8,13 +8,15 @@ import inno.jago.ast.PackageNode
 import inno.jago.ast.SourceFileNode
 import inno.jago.ast.decl.TopLevelDeclNode
 import inno.jago.converter.common.toPos
+import inno.jago.converter.declaration.toDeclarationNodes
+import inno.jago.converter.declaration.toFunctionDeclarationNode
 
-fun GoParser.SourceFileContext.toSourceFile(): SourceFileNode {
+fun GoParser.SourceFileContext.toSourceFileNode(): SourceFileNode {
     return SourceFileNode(
         pos = toPos(),
         packageName = packageClause().toPackageNode(),
         importNodes = importDecl().toImportDeclNodes(),
-        topLevelDecls = topLevelDecl().toTopLevelDeclarations()
+        topLevelDecls = topLevelDecl().toTopLevelDeclarationNodes()
     )
 }
 
@@ -34,11 +36,11 @@ fun List<GoParser.ImportDeclContext>.toImportDeclNodes(): List<ImportNode> = fla
     }
 }
 
-fun List<GoParser.TopLevelDeclContext>.toTopLevelDeclarations(): List<TopLevelDeclNode> = flatMap {
-    it.toTopLevelDeclaration()
+fun List<GoParser.TopLevelDeclContext>.toTopLevelDeclarationNodes(): List<TopLevelDeclNode> = flatMap {
+    it.toTopLevelDeclarationNode()
 }
 
-fun GoParser.TopLevelDeclContext.toTopLevelDeclaration(): List<TopLevelDeclNode> {
+fun GoParser.TopLevelDeclContext.toTopLevelDeclarationNode(): List<TopLevelDeclNode> {
     declaration()?.let {
         return it.toDeclarationNodes()
     }

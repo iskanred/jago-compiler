@@ -5,9 +5,7 @@ import inno.jago.EntityNotSupported
 import inno.jago.UnreachableCodeException
 import inno.jago.ast.statement.BlockStatementNode
 import inno.jago.ast.statement.StatementNode
-import inno.jago.converter.toIfStatementNode
 import inno.jago.converter.common.toPos
-import inno.jago.converter.toReturnStatementNode
 
 fun GoParser.BlockContext.toBlockStatementNode() = BlockStatementNode(
     pos = toPos(),

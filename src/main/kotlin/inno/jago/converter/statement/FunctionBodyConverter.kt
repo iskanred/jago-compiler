@@ -1,8 +1,7 @@
-package inno.jago.converter
+package inno.jago.converter.statement
 
 import GoParser
 import inno.jago.UnreachableCodeException
-import inno.jago.ast.expression.ExpressionNode
 import inno.jago.ast.statement.BlockStatementNode
 import inno.jago.ast.statement.ElseIfStatementNode
 import inno.jago.ast.statement.IfStatementNode
@@ -10,8 +9,6 @@ import inno.jago.ast.statement.ReturnStatementNode
 import inno.jago.ast.statement.SimpleElseStatementNode
 import inno.jago.converter.common.toPos
 import inno.jago.converter.expression.toExpressionNode
-import inno.jago.converter.statement.toSimpleStatementNode
-import inno.jago.converter.statement.toBlockStatementNode
 
 fun GoParser.FunctionBodyContext.toBlockStatementNode(): BlockStatementNode =
     block()?.toBlockStatementNode()

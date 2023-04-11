@@ -1,4 +1,4 @@
-package inno.jago.converter
+package inno.jago.converter.type
 
 import GoParser
 import inno.jago.EntityNotSupported
@@ -12,6 +12,7 @@ import inno.jago.ast.type.StringTypeNode
 import inno.jago.ast.type.TypeNode
 import inno.jago.converter.common.toPos
 import inno.jago.converter.expression.toExpressionNode
+import inno.jago.converter.signature.toSignatureNode
 import inno.jago.lexer.Pos
 
 fun GoParser.TypeContext.toTypeNode(): TypeNode =

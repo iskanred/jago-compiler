@@ -2,6 +2,7 @@ package inno.jago
 
 import GoLexer
 import GoParser
+import inno.jago.converter.toSourceFileNode
 import org.antlr.v4.runtime.CharStreams
 import org.antlr.v4.runtime.CommonTokenStream
 
@@ -12,8 +13,7 @@ fun main() {
     val stream = CommonTokenStream(lexer)
     val parser = GoParser(stream)
 
-//    val sourceFileNode: SourceFileNode = TreeConverter.convertToSourceFileNode(parser.sourceFile())
-    parser.sourceFile()
+    val sourceFileNode = parser.sourceFile().toSourceFileNode()
 
     if (parser.numberOfSyntaxErrors == 0) {
         println("The input GO program is syntactically correct")

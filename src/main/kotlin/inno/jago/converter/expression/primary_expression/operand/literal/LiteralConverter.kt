@@ -9,8 +9,8 @@ import inno.jago.ast.expression.unary_expression.primary_expression.operand.lite
 import inno.jago.ast.expression.unary_expression.primary_expression.operand.literal_operand.LiteralNode
 import inno.jago.ast.expression.unary_expression.primary_expression.operand.literal_operand.StringLiteralNode
 import inno.jago.converter.common.toPos
-import inno.jago.converter.toBlockStatementNode
-import inno.jago.converter.toSignatureNode
+import inno.jago.converter.statement.toBlockStatementNode
+import inno.jago.converter.signature.toSignatureNode
 
 fun GoParser.LiteralContext.toLiteralNode(): LiteralNode {
     basicLit()?.let { return it.toBasicLiteralNode() }

@@ -1,4 +1,4 @@
-package inno.jago.converter
+package inno.jago.converter.declaration
 
 import inno.jago.EntityNotSupported
 import inno.jago.UnreachableCodeException
@@ -9,6 +9,9 @@ import inno.jago.ast.decl.FunctionDeclarationNode
 import inno.jago.ast.decl.VarDeclarationNode
 import inno.jago.converter.common.toPos
 import inno.jago.converter.expression.toExpressionNode
+import inno.jago.converter.statement.toBlockStatementNode
+import inno.jago.converter.signature.toSignatureNode
+import inno.jago.converter.type.toTypeNode
 
 fun GoParser.DeclarationContext.toDeclarationNodes(): List<DeclarationNode> {
     constDecl()?.let { constDecl ->
