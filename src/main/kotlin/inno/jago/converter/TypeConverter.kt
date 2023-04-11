@@ -1,6 +1,10 @@
 package inno.jago.converter
 
 import GoParser
+import inno.jago.EntityNotSupported
+import inno.jago.UnreachableCodeException
+import inno.jago.ast.expression.ExpressionNode
+import inno.jago.ast.type.ArrayTypeNode
 import inno.jago.ast.type.DoubleTypeNode
 import inno.jago.ast.type.IntegerTypeNode
 import inno.jago.ast.type.StringTypeNode
@@ -31,7 +35,26 @@ fun GoParser.TypeLitContext?.toTypeNode(): TypeNode? = this?.let {
     it.functionType()?.let { functionTypeContext ->
 
     }
-    TODO()
+    it.structType()?.let {
+        throw EntityNotSupported("Structures")
+    }
+    it.interfaceType()?.let {
+        throw EntityNotSupported("Interfaces")
+    }
+    it.mapType()?.let {
+        throw EntityNotSupported("Maps")
+    }
+    it.channelType()?.let {
+        throw EntityNotSupported("Channels")
+    }
+    it.sliceType()?.let {
+        throw EntityNotSupported("Slices")
+    }
+    throw UnreachableCodeException()
 }
 
-fun GoParser.ArrayTypeContext(): ArrayTypeNodeNode
+fun GoParser.ArrayTypeContext.toArrayTypeNode() = ArrayTypeNode(
+    pos = toPos(),
+    length = arrayLength().expression(),
+    elementType = elementType().type().toTypeNode()
+)
