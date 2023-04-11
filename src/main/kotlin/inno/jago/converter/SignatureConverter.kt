@@ -12,9 +12,15 @@ fun GoParser.SignatureContext.toSignatureNode() = SignatureNode(
 )
 
 fun GoParser.ParametersContext.toParameterNodes(): List<ParameterNode> {
+    var haveIdentifiers = 0
     return parameterList().parameterDecl().flatMap { paramDecl ->
         // func (int, int, bool)
         if (paramDecl.identifierList() == null || paramDecl.identifierList().isEmpty) {
+            if (haveIdentifiers == 1) {
+                throw NotSupported("Искан добавь")
+            }
+
+            haveIdentifiers = -1
             return@flatMap listOf(
                 ParameterNode(
                     identifier = null,
@@ -24,6 +30,11 @@ fun GoParser.ParametersContext.toParameterNodes(): List<ParameterNode> {
         }
 
         // func (a, b int, c bool)
+        if (haveIdentifiers == -1) {
+            throw NotSupported("Искан добавь")
+        }
+
+        haveIdentifiers = 1
         return@flatMap paramDecl.identifierList().IDENTIFIER().map { ident ->
             return@map ParameterNode(
                 identifier = ident.text,
