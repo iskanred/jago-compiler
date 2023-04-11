@@ -7,6 +7,7 @@ import inno.jago.ast.decl.ConstDeclarationNode
 import inno.jago.ast.decl.DeclarationNode
 import inno.jago.ast.decl.FunctionDeclarationNode
 import inno.jago.ast.decl.VarDeclarationNode
+import inno.jago.converter.expression.toExpressionNode
 
 fun GoParser.DeclarationContext.toDeclarationNodes(): List<DeclarationNode> {
     constDecl()?.let { constDecl ->

@@ -1,4 +1,4 @@
-package inno.jago.converter.statement.simple_statement
+package inno.jago.converter.statement
 
 import GoParser
 import inno.jago.UnreachableCodeException

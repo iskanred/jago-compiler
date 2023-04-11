@@ -3,7 +3,6 @@ package inno.jago.converter.statement
 import GoParser
 import inno.jago.ast.statement.BlockStatementNode
 import inno.jago.ast.statement.StatementNode
-import inno.jago.converter.statement.simple_statement.toSimpleStatementNode
 import inno.jago.converter.toPos
 
 fun GoParser.BlockContext.toBlockStatementNode(): BlockStatementNode {
