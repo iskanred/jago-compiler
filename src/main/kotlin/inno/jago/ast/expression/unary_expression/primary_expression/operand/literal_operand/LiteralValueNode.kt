@@ -4,24 +4,16 @@ import inno.jago.ast.expression.ExpressionNode
 import inno.jago.entity.Entity
 import inno.jago.lexer.Pos
 
-sealed class LiteralValueNode(
-    pos: Pos,
-    val elements: List<ElementNode>
-) : Entity(pos = pos)
-
 sealed class ElementNode(
     pos: Pos,
-    elements: List<ElementNode>
-) : LiteralValueNode(pos = pos, elements = elements)
+) : Entity(pos)
 
-class ExpressionElement(
+class ExpressionElementNode(
     pos: Pos,
-    elements: List<ElementNode>,
     val expression: ExpressionNode
-) : ElementNode(pos = pos, elements = elements)
+) : ElementNode(pos = pos)
 
-class LiteralValueElement(
+class LiteralValueElementNode(
     pos: Pos,
-    elements: List<ElementNode>,
-    val literalValue: LiteralValueNode
-) : ElementNode(pos = pos, elements = elements )
+    val elements: List<ElementNode>
+) : ElementNode(pos = pos)
