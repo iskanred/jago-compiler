@@ -26,11 +26,12 @@ fun GoParser.PackageClauseContext.toPackageNode(): PackageNode = PackageNode(
 )
 
 fun List<GoParser.ImportDeclContext>.toImportDeclNodes(): List<ImportNode> = flatMap { importDeclContext ->
-    importDeclContext.importSpec().map {
+    val importSpec = importDeclContext.importSpec()
+    importSpec.map {
         ImportNode(
             pos = it.toPos(),
-            alias = it.packageName().text,
-            path = it.importPath().text,
+            alias = it.packageName()?.IDENTIFIER()?.text,
+            path = it.importPath().STRING_LIT().text,
             importAll = (it.DOT() != null)
         )
     }

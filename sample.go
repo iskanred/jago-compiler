@@ -1,4 +1,4 @@
 package jago
 
-import a "fmt"
+import alias "../fmt"
 import . "fmt"
