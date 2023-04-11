@@ -6,23 +6,24 @@ import inno.jago.ast.signature.ParameterNode
 import inno.jago.ast.signature.SignatureNode
 import inno.jago.ast.type.TypeNode
 
-
-fun GoParser.SignatureContext.toSignatureNode(): SignatureNode {
-    return SignatureNode(
-        parameterNodes = parameters().toParameterNodes(),
-        resultNode = result().toResultNode()
-    )
-}
+fun GoParser.SignatureContext.toSignatureNode() = SignatureNode(
+    parameterNodes = parameters().toParameterNodes(),
+    resultNode = result().toResultNode()
+)
 
 fun GoParser.ParametersContext.toParameterNodes(): List<ParameterNode> {
     return parameterList().parameterDecl().flatMap { paramDecl ->
-        if (paramDecl.identifierList().isEmpty) {
-            return@flatMap listOf(ParameterNode(
-                identifier = null,
-                type = paramDecl.type().toTypeNode()
-            ))
+        // func (int, int, bool)
+        if (paramDecl.identifierList() == null || paramDecl.identifierList().isEmpty) {
+            return@flatMap listOf(
+                ParameterNode(
+                    identifier = null,
+                    type = paramDecl.type().toTypeNode()
+                )
+            )
         }
 
+        // func (a, b int, c bool)
         return@flatMap paramDecl.identifierList().IDENTIFIER().map { ident ->
             return@map ParameterNode(
                 identifier = ident.text,
