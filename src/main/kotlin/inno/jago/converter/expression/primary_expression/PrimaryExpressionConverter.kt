@@ -3,6 +3,8 @@ package inno.jago.converter.expression.primary_expression
 import inno.jago.EntityNotSupported
 import inno.jago.UnreachableCodeException
 import inno.jago.ast.expression.unary_expression.PrimaryExpressionNode
+import inno.jago.ast.expression.unary_expression.SelectorExpressionNode
+import inno.jago.converter.common.toPos
 
 
 fun GoParser.PrimaryExprContext.toPrimaryExpressionNode(): PrimaryExpressionNode {
@@ -19,7 +21,11 @@ fun GoParser.PrimaryExprContext.toPrimaryExpressionNode(): PrimaryExpressionNode
     }
 
     selector()?.let {
-
+        return SelectorExpressionNode(
+            toPos(),
+            primaryExpr().toPrimaryExpressionNode(),
+            it.IDENTIFIER().text
+        )
     }
 
     index()?.let {
