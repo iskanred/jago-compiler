@@ -9,5 +9,5 @@ import "fmt"
 //}
 
 func main() {
-    var a bool = false
+    var a other = false
 }

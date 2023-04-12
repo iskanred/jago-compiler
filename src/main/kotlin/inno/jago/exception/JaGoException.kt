@@ -24,16 +24,13 @@ class FunctionIdentifiersException
 class UnknownTypeException(
     pos: Pos,
     entityName: String,
-) : ASTBuildException("Wrong entity '$entityName' at $pos")
+) : ASTBuildException("Unknown type '$entityName' at $pos")
 
 
 sealed class SemanticException(msg: String) : JaGoException(msg)
 
 class WrongTypeException(expectedType: Type, actual: SemanticEntity)
     : SemanticException("Expected [$expectedType] type but got [${actual.type}] at ${actual.pos}")
-
-class UnknownVariableException(entity: SemanticEntity)
-    : SemanticException("Unknown entity '${entity.text}' at ${entity.pos}")
 
 class WrongNumberOfArguments(
     expectedNum: Int,
