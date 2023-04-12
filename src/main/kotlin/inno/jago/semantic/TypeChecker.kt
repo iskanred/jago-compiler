@@ -11,6 +11,7 @@ class TypeChecker(
     }
 
     private fun SourceFileNode.typecheck() {
+        importNodes.map { TODO() }
 
     }
 }
