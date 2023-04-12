@@ -13,7 +13,7 @@ fun main() {
     val stream = CommonTokenStream(lexer)
     val parser = GoParser(stream)
 
-    parser.sourceFile().toSourceFileNode()
+    val sourceFileNode = parser.sourceFile().toSourceFileNode()
 
     if (parser.numberOfSyntaxErrors == 0) {
         println("The input GO program is syntactically correct")
