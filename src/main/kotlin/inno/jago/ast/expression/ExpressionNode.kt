@@ -1,7 +1,7 @@
 package inno.jago.ast.expression
 
-import inno.jago.entity.Entity
+import inno.jago.ast.ASTNode
 import inno.jago.lexer.Pos
 
-open class ExpressionNode(pos: Pos) : Entity(pos)
+open class ExpressionNode(pos: Pos) : ASTNode(pos)
 

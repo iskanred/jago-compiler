@@ -3,10 +3,10 @@ package inno.jago.ast.expression.unary_expression.primary_expression.operand.lit
 import inno.jago.ast.signature.SignatureNode
 import inno.jago.ast.statement.BlockStatementNode
 import inno.jago.ast.type.ArrayTypeNode
-import inno.jago.entity.Entity
+import inno.jago.ast.ASTNode
 import inno.jago.lexer.Pos
 
-sealed class LiteralNode(pos: Pos) : Entity(pos = pos)
+sealed class LiteralNode(pos: Pos) : ASTNode(pos = pos)
 
 sealed class BasicLiteralNode(
     pos: Pos,

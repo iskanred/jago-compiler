@@ -1,9 +1,9 @@
 package inno.jago.ast.expression.unary_expression.primary_expression.operand
 
-import inno.jago.entity.Entity
+import inno.jago.ast.ASTNode
 import inno.jago.lexer.Pos
 
-sealed class IdentifierOperandNode(pos: Pos) : Entity(pos)
+sealed class IdentifierOperandNode(pos: Pos) : ASTNode(pos)
 
 class SimpleIdentifierOperandNode(
     pos: Pos,
@@ -19,4 +19,4 @@ class QualifiedIdentifierNode(
     pos: Pos,
     val packageName: String,
     val identifier: String
-) : Entity(pos = pos)
+) : ASTNode(pos = pos)

@@ -1,12 +1,12 @@
 package inno.jago.ast.expression.unary_expression.primary_expression.operand.literal_operand
 
 import inno.jago.ast.expression.ExpressionNode
-import inno.jago.entity.Entity
+import inno.jago.ast.ASTNode
 import inno.jago.lexer.Pos
 
 sealed class ElementNode(
     pos: Pos,
-) : Entity(pos)
+) : ASTNode(pos)
 
 class ExpressionElementNode(
     pos: Pos,

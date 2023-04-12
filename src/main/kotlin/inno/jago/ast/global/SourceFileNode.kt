@@ -1,7 +1,7 @@
-package inno.jago.ast
+package inno.jago.ast.global
 
+import inno.jago.ast.ASTNode
 import inno.jago.ast.decl.TopLevelDeclNode
-import inno.jago.entity.Entity
 import inno.jago.lexer.Pos
 
 class SourceFileNode(
@@ -9,4 +9,4 @@ class SourceFileNode(
     val packageName: PackageNode,
     val importNodes: List<ImportNode>,
     val topLevelDecls: List<TopLevelDeclNode>
-) : Entity(pos = pos)
+) : ASTNode(pos = pos)

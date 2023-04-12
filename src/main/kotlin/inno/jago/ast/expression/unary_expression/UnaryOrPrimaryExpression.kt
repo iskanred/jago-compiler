@@ -3,7 +3,7 @@ package inno.jago.ast.expression.unary_expression
 import inno.jago.ast.expression.ExpressionNode
 import inno.jago.lexer.Pos
 import inno.jago.ast.type.TypeNode
-import inno.jago.entity.Entity
+import inno.jago.ast.ASTNode
 
 sealed class UnaryOrPrimaryExpression(
     pos: Pos
@@ -49,7 +49,7 @@ open class SelectorExpressionNode(
 open class UnaryOperatorNode(
     pos: Pos,
     val operator: UnaryOperators
-) : Entity(pos)
+) : ASTNode(pos)
 
 
 class ApplicationExpressionNode(

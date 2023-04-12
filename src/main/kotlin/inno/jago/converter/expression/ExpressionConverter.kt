@@ -1,7 +1,7 @@
 package inno.jago.converter.expression
 
-import inno.jago.UnreachableCodeException
-import inno.jago.WrongBinaryExpressionNumber
+import inno.jago.exception.UnreachableCodeException
+import inno.jago.exception.WrongBinaryExpressionNumber
 import inno.jago.ast.expression.ExpressionNode
 import inno.jago.ast.expression.binary_expression.BinaryExpression
 import inno.jago.converter.common.toPos

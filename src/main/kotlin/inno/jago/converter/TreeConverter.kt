@@ -1,11 +1,11 @@
 package inno.jago.converter
 
 import GoParser
-import inno.jago.EntityNotSupported
-import inno.jago.UnreachableCodeException
-import inno.jago.ast.ImportNode
-import inno.jago.ast.PackageNode
-import inno.jago.ast.SourceFileNode
+import inno.jago.exception.EntityNotSupported
+import inno.jago.exception.UnreachableCodeException
+import inno.jago.ast.global.ImportNode
+import inno.jago.ast.global.PackageNode
+import inno.jago.ast.global.SourceFileNode
 import inno.jago.ast.decl.TopLevelDeclNode
 import inno.jago.converter.common.toPos
 import inno.jago.converter.declaration.toDeclarationNodes

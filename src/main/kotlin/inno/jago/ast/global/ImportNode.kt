@@ -1,6 +1,6 @@
-package inno.jago.ast
+package inno.jago.ast.global
 
-import inno.jago.entity.Entity
+import inno.jago.ast.ASTNode
 import inno.jago.lexer.Pos
 
 class ImportNode(
@@ -8,4 +8,4 @@ class ImportNode(
     val path: String,
     val alias: String?,
     val importAll: Boolean
-) : Entity(pos = pos)
+) : ASTNode(pos = pos)

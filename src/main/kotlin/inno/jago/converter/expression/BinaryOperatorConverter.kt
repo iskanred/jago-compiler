@@ -1,6 +1,6 @@
 package inno.jago.converter.expression
 
-import inno.jago.UnreachableCodeException
+import inno.jago.exception.UnreachableCodeException
 import inno.jago.ast.expression.binary_expression.AddOperator
 import inno.jago.ast.expression.binary_expression.AddOperators
 import inno.jago.ast.expression.binary_expression.BinaryOperator

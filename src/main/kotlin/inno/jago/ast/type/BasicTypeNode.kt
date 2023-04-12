@@ -1,5 +1,9 @@
 package inno.jago.ast.type
 
+import inno.jago.common.BOOL_TYPE_NAME
+import inno.jago.common.DOUBLE_TYPE_NAME
+import inno.jago.common.INT_TYPE_NAME
+import inno.jago.common.STRING_TYPE_NAME
 import inno.jago.lexer.Pos
 
 sealed class BasicTypeNode(
@@ -14,42 +18,26 @@ class IntegerTypeNode(
     pos: Pos,
 ) : BasicTypeNode(
     pos = pos,
-    name = typeName
-) {
-    companion object {
-        const val typeName = "int"
-    }
-}
+    name = INT_TYPE_NAME
+)
 
 class DoubleTypeNode(
     pos: Pos,
 ) : BasicTypeNode(
     pos = pos,
-    name = typeName
-) {
-    companion object {
-        const val typeName = "float64"
-    }
-}
+    name = DOUBLE_TYPE_NAME
+)
 
 class StringTypeNode(
     pos: Pos,
 ) : BasicTypeNode(
     pos = pos,
-    name = typeName
-) {
-    companion object {
-        const val typeName = "string"
-    }
-}
+    name = STRING_TYPE_NAME
+)
 
 class BoolTypeNode(
     pos: Pos,
 ) : BasicTypeNode(
     pos = pos,
-    name = typeName
-) {
-    companion object {
-        const val typeName = "bool"
-    }
-}
+    name = BOOL_TYPE_NAME
+)

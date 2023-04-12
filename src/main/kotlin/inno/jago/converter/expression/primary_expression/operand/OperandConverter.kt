@@ -1,6 +1,6 @@
 package inno.jago.converter.expression.primary_expression.operand
 
-import inno.jago.UnreachableCodeException
+import inno.jago.exception.UnreachableCodeException
 import inno.jago.ast.expression.unary_expression.primary_expression.operand.ExpressionOperandNode
 import inno.jago.ast.expression.unary_expression.primary_expression.operand.LiteralOperandNode
 import inno.jago.ast.expression.unary_expression.primary_expression.operand.IdentifierOperandNode

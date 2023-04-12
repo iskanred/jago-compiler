@@ -1,8 +1,8 @@
 package inno.jago.converter.statement
 
 import GoParser
-import inno.jago.EntityNotSupported
-import inno.jago.UnreachableCodeException
+import inno.jago.exception.EntityNotSupported
+import inno.jago.exception.UnreachableCodeException
 import inno.jago.ast.statement.BlockStatementNode
 import inno.jago.ast.statement.StatementNode
 import inno.jago.converter.common.toPos

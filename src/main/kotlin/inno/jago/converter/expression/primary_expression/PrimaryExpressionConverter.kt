@@ -1,7 +1,7 @@
 package inno.jago.converter.expression.primary_expression
 
-import inno.jago.EntityNotSupported
-import inno.jago.UnreachableCodeException
+import inno.jago.exception.EntityNotSupported
+import inno.jago.exception.UnreachableCodeException
 import inno.jago.ast.expression.ExpressionNode
 import inno.jago.ast.expression.unary_expression.ApplicationExpressionNode
 import inno.jago.ast.expression.unary_expression.IndexExpressionNode

@@ -1,8 +1,8 @@
 package inno.jago.converter.signature
 
 import GoParser
-import inno.jago.EntityNotSupported
-import inno.jago.FunctionIdentifiersException
+import inno.jago.exception.EntityNotSupported
+import inno.jago.exception.FunctionIdentifiersException
 import inno.jago.ast.signature.ParameterNode
 import inno.jago.ast.signature.SignatureNode
 import inno.jago.ast.type.TypeNode

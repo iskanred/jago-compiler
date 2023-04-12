@@ -1,8 +1,8 @@
 package inno.jago.converter.declaration
 
-import inno.jago.EntityNotSupported
-import inno.jago.UnreachableCodeException
-import inno.jago.WrongNumberOfExpressions
+import inno.jago.exception.EntityNotSupported
+import inno.jago.exception.UnreachableCodeException
+import inno.jago.exception.WrongNumberOfExpressions
 import inno.jago.ast.decl.ConstDeclarationNode
 import inno.jago.ast.decl.DeclarationNode
 import inno.jago.ast.decl.FunctionDeclarationNode

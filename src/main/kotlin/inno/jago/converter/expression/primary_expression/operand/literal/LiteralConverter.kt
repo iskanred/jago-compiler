@@ -1,7 +1,7 @@
 package inno.jago.converter.expression.primary_expression.operand.literal
 
-import inno.jago.EntityNotSupported
-import inno.jago.UnreachableCodeException
+import inno.jago.exception.EntityNotSupported
+import inno.jago.exception.UnreachableCodeException
 import inno.jago.ast.expression.unary_expression.primary_expression.operand.literal_operand.BasicLiteralNode
 import inno.jago.ast.expression.unary_expression.primary_expression.operand.literal_operand.CompositeLiteralNode
 import inno.jago.ast.expression.unary_expression.primary_expression.operand.literal_operand.DoubleLiteralNode

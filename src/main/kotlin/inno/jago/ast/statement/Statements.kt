@@ -2,12 +2,12 @@ package inno.jago.ast.statement
 
 import inno.jago.ast.decl.DeclarationNode
 import inno.jago.ast.expression.ExpressionNode
-import inno.jago.entity.Entity
+import inno.jago.ast.ASTNode
 import inno.jago.lexer.Pos
 
 sealed class StatementNode (
     pos: Pos
-) : Entity(pos = pos)
+) : ASTNode(pos = pos)
 
 class BlockStatementNode (
     pos: Pos,

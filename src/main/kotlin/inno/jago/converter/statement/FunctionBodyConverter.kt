@@ -1,7 +1,7 @@
 package inno.jago.converter.statement
 
 import GoParser
-import inno.jago.UnreachableCodeException
+import inno.jago.exception.UnreachableCodeException
 import inno.jago.ast.statement.BlockStatementNode
 import inno.jago.ast.statement.ElseIfStatementNode
 import inno.jago.ast.statement.IfStatementNode
