@@ -3,11 +3,12 @@ package inno.jago.converter.expression.primary_expression.operand
 import inno.jago.UnreachableCodeException
 import inno.jago.ast.expression.unary_expression.primary_expression.operand.ExpressionOperandNode
 import inno.jago.ast.expression.unary_expression.primary_expression.operand.LiteralOperandNode
-import inno.jago.ast.expression.unary_expression.primary_expression.operand.OperandIdentifierNode
+import inno.jago.ast.expression.unary_expression.primary_expression.operand.IdentifierOperandNode
 import inno.jago.ast.expression.unary_expression.primary_expression.operand.OperandNameNode
 import inno.jago.ast.expression.unary_expression.primary_expression.operand.OperandNode
 import inno.jago.ast.expression.unary_expression.primary_expression.operand.QualifiedIdentifierNode
-import inno.jago.ast.expression.unary_expression.primary_expression.operand.SimpleOperandIdentifierNode
+import inno.jago.ast.expression.unary_expression.primary_expression.operand.QualifiedIdentifierOperandNode
+import inno.jago.ast.expression.unary_expression.primary_expression.operand.SimpleIdentifierOperandNode
 import inno.jago.converter.common.toPos
 import inno.jago.converter.expression.primary_expression.operand.literal.toLiteralNode
 import inno.jago.converter.expression.toExpressionNode
@@ -17,7 +18,7 @@ fun GoParser.OperandContext.toOperandNode(): OperandNode {
         return LiteralOperandNode(pos = toPos(), literalNode = it.toLiteralNode())
     }
     operandName()?.let {
-        return it.toOperandNameNode()
+        return OperandNameNode(pos = toPos(), name = it.toOperandNameNode())
     }
     expression()?.let {
         return ExpressionOperandNode(
@@ -29,22 +30,24 @@ fun GoParser.OperandContext.toOperandNode(): OperandNode {
 }
 
 
-fun GoParser.OperandNameContext.toOperandNameNode() = OperandNameNode(
-    pos = toPos(),
-    identifier = qualifiedIdent().toOperandIdentifierNode()
-)
-
-fun GoParser.QualifiedIdentContext.toOperandIdentifierNode(): OperandIdentifierNode {
-    packageName()?.let {
-        return QualifiedIdentifierNode(
+fun GoParser.OperandNameContext.toOperandNameNode(): IdentifierOperandNode {
+    qualifiedIdent()?.let {
+        return QualifiedIdentifierOperandNode(
             pos = toPos(),
-            packageName =  it.IDENTIFIER().text,
-            identifier = IDENTIFIER().text
+            qualifiedIdentifier = it.toQualifiedIdentifierNode()
         )
     }
-
-    return SimpleOperandIdentifierNode(
-        pos = toPos(),
-        identifier = IDENTIFIER().text
-    )
+    IDENTIFIER()?.let {
+        return SimpleIdentifierOperandNode(
+            pos = toPos(),
+            identifier = it.text
+        )
+    }
+    throw UnreachableCodeException()
 }
+
+fun GoParser.QualifiedIdentContext.toQualifiedIdentifierNode() = QualifiedIdentifierNode(
+    pos = toPos(),
+    packageName = packageName().IDENTIFIER().text,
+    identifier = IDENTIFIER().text
+)

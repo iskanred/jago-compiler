@@ -16,7 +16,7 @@ class LiteralOperandNode(
 
 class OperandNameNode(
     pos: Pos,
-    val identifier: OperandIdentifierNode
+    val name: IdentifierOperandNode
 ): OperandNode(pos)
 
 class ExpressionOperandNode(
