@@ -50,15 +50,15 @@ fun GoParser.ConstSpecContext.toConstDeclarationNode(): List<ConstDeclarationNod
 
 fun GoParser.VarSpecContext.toVarDeclarationNodes(): List<VarDeclarationNode> {
     val identifiers = identifierList().IDENTIFIER().map { it.text }
-    val expressions = expressionList().expression().map { it.toExpressionNode() }
+    val expressions = expressionList()?.expression()?.map { it.toExpressionNode() }
 
-    return if (expressions.size == 1) {
+    return if (expressions == null || expressions.size == 1) {
         identifiers.mapIndexed { index, identifier ->
             VarDeclarationNode(
                 pos = toPos(),
                 identifier = identifier,
                 type = type().toTypeNode(),
-                expression = expressions.first(),
+                expression = expressions?.first(),
                 positionInRow = index
             )
         }

@@ -1,5 +1,6 @@
 package inno.jago
 
+import inno.jago.lexer.Pos
 import javax.naming.OperationNotSupportedException
 
 sealed class JaGoException(msg: String) : Exception(msg)
@@ -15,3 +16,8 @@ class EntityNotSupported(entityName: String) : JaGoException("$entityName are no
 class FunctionIdentifiersException : JaGoException("Function can only have parameters with identifiers or not at all")
 
 class UnreachableCodeException : OperationNotSupportedException("Unreachable code")
+
+class WrongEntityException(
+    pos: Pos,
+    entityName: String,
+) : JaGoException("Wrong entity '$entityName' at $pos")

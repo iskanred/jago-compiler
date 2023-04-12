@@ -9,5 +9,5 @@ data class Pos (
 ) {
     constructor(token: Token) : this(token.line, token.startIndex, token.stopIndex)
     constructor(tokenStart: Token, tokenStop: Token) :
-            this(tokenStart.line, tokenStart.startIndex, tokenStop.stopIndex)
+            this(tokenStart.line, tokenStart.charPositionInLine, tokenStop.charPositionInLine)
 }

@@ -4,10 +4,10 @@ package main
 
 import "fmt"
 
-func vals(a int) (int, int) {
-	return 3, a
-}
+//func vals(a int) (int, int) {
+//	return 3, a
+//}
 
 func main() {
-	a, b := vals(5)
+    var a bool = false
 }

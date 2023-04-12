@@ -196,7 +196,6 @@ fragment BINARY_LIT                 :   '0' [bB] '_'? BINARY_DIGITS;
 fragment OCTAL_LIT                  :   '0' [oO]? '_'?  OCTAL_DIGITS;
 fragment HEX_LIT                    :   '0' [xX] '_'? HEX_DIGITS;
 
-
 /* Floating point literal */
 FLOAT_LIT                           :   DECIMAL_FLOAT_LIT | HEX_FLOAT_LIT;
 

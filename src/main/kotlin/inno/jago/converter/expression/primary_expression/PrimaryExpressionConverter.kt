@@ -63,5 +63,5 @@ private fun GoParser.ArgumentsContext.toExpressionNodes(): List<ExpressionNode> 
     type()?.let {
         throw EntityNotSupported("Types in function arguments")
     }
-    return expressionList()?.expression()?.map {it.toExpressionNode() } ?: emptyList()
+    return expressionList()?.expression()?.map { it.toExpressionNode() } ?: emptyList()
 }

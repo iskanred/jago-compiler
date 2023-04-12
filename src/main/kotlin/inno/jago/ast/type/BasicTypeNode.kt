@@ -36,9 +36,20 @@ class StringTypeNode(
     pos: Pos,
 ) : BasicTypeNode(
     pos = pos,
-    name = "string"
+    name = typeName
 ) {
     companion object {
         const val typeName = "string"
+    }
+}
+
+class BoolTypeNode(
+    pos: Pos,
+) : BasicTypeNode(
+    pos = pos,
+    name = typeName
+) {
+    companion object {
+        const val typeName = "bool"
     }
 }

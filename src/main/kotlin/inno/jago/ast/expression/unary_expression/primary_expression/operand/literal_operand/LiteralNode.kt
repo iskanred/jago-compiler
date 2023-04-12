@@ -27,7 +27,9 @@ class DoubleLiteralNode(
 ) : BasicLiteralNode(
     pos = pos,
     value = value
-)
+) {
+    val doubleValue: Double = value.toDouble()
+}
 
 class StringLiteralNode(
     pos: Pos,
@@ -36,6 +38,17 @@ class StringLiteralNode(
     pos = pos,
     value = value
 )
+
+class BoolLiteralNode(
+    pos: Pos,
+    value: String
+) : BasicLiteralNode(
+    pos = pos,
+    value = value
+) {
+    val boolValue: Boolean = value.toBooleanStrict()
+
+}
 
 class CompositeLiteralNode(
     pos: Pos,

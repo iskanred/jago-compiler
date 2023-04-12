@@ -3,7 +3,9 @@ package inno.jago.converter.type
 import GoParser
 import inno.jago.EntityNotSupported
 import inno.jago.UnreachableCodeException
+import inno.jago.WrongEntityException
 import inno.jago.ast.type.ArrayTypeNode
+import inno.jago.ast.type.BoolTypeNode
 import inno.jago.ast.type.DoubleTypeNode
 import inno.jago.ast.type.FunctionTypeNode
 import inno.jago.ast.type.IntegerTypeNode
@@ -18,12 +20,13 @@ import inno.jago.lexer.Pos
 fun GoParser.TypeContext.toTypeNode(): TypeNode =
     typeName()?.IDENTIFIER()?.text.toTypeNode(pos = toPos())
         ?: typeLit().toTypeNode()
-        ?: throw UnreachableCodeException()
+        ?: throw WrongEntityException(entityName = text, pos = toPos())
 
 fun String?.toTypeNode(pos: Pos): TypeNode? = when {
     this == IntegerTypeNode.typeName -> IntegerTypeNode(pos = pos)
     this == DoubleTypeNode.typeName -> DoubleTypeNode(pos = pos)
     this == StringTypeNode.typeName -> StringTypeNode(pos = pos)
+    this == BoolTypeNode.typeName -> BoolTypeNode(pos = pos)
     else -> null
 }
 

@@ -9,6 +9,7 @@ import inno.jago.ast.expression.unary_expression.primary_expression.operand.Oper
 import inno.jago.ast.expression.unary_expression.primary_expression.operand.QualifiedIdentifierNode
 import inno.jago.ast.expression.unary_expression.primary_expression.operand.QualifiedIdentifierOperandNode
 import inno.jago.ast.expression.unary_expression.primary_expression.operand.SimpleIdentifierOperandNode
+import inno.jago.ast.expression.unary_expression.primary_expression.operand.literal_operand.BoolLiteralNode
 import inno.jago.converter.common.toPos
 import inno.jago.converter.expression.primary_expression.operand.literal.toLiteralNode
 import inno.jago.converter.expression.toExpressionNode
@@ -18,7 +19,13 @@ fun GoParser.OperandContext.toOperandNode(): OperandNode {
         return LiteralOperandNode(pos = toPos(), literalNode = it.toLiteralNode())
     }
     operandName()?.let {
-        return OperandNameNode(pos = toPos(), name = it.toOperandNameNode())
+        val operandName = OperandNameNode(pos = toPos(), name = it.toOperandNameNode())
+        val boolLiteral = (operandName.name as? SimpleIdentifierOperandNode).toBooleanLiteralNode()
+
+        if (boolLiteral != null) {
+            return LiteralOperandNode(pos = toPos(), literalNode = boolLiteral)
+        }
+        return operandName
     }
     expression()?.let {
         return ExpressionOperandNode(
@@ -51,3 +58,10 @@ fun GoParser.QualifiedIdentContext.toQualifiedIdentifierNode() = QualifiedIdenti
     packageName = packageName().IDENTIFIER().text,
     identifier = IDENTIFIER().text
 )
+
+fun SimpleIdentifierOperandNode?.toBooleanLiteralNode(): BoolLiteralNode? = this?.identifier?.let {
+    when (it) {
+        "false", "true" -> BoolLiteralNode(pos = this.pos, value = it)
+        else -> null
+    }
+}
