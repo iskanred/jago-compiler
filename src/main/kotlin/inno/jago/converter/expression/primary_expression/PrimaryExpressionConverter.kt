@@ -3,7 +3,7 @@ package inno.jago.converter.expression.primary_expression
 import inno.jago.EntityNotSupported
 import inno.jago.UnreachableCodeException
 import inno.jago.ast.expression.ExpressionNode
-import inno.jago.ast.expression.unary_expression.ArgumentsExpressionNode
+import inno.jago.ast.expression.unary_expression.ApplicationExpressionNode
 import inno.jago.ast.expression.unary_expression.IndexExpressionNode
 import inno.jago.ast.expression.unary_expression.PrimaryExpressionNode
 import inno.jago.ast.expression.unary_expression.SelectorExpressionNode
@@ -41,7 +41,11 @@ fun GoParser.PrimaryExprContext.toPrimaryExpressionNode(): PrimaryExpressionNode
     }
 
     arguments()?.let {
-        return it.toExpressionNodes()
+        return ApplicationExpressionNode(
+            pos = toPos(),
+            leftExpression = primaryExpr().toPrimaryExpressionNode(),
+            expressions = it.toExpressionNodes()
+        )
     }
 
     slice()?.let {
@@ -55,12 +59,9 @@ fun GoParser.PrimaryExprContext.toPrimaryExpressionNode(): PrimaryExpressionNode
     throw UnreachableCodeException()
 }
 
-private fun GoParser.ArgumentsContext.toExpressionNodes(): ArgumentsExpressionNode {
+private fun GoParser.ArgumentsContext.toExpressionNodes(): List<ExpressionNode> {
     type()?.let {
         throw EntityNotSupported("Types in function arguments")
     }
-    return ArgumentsExpressionNode(
-        pos = toPos(),
-        expressionList = expressionList()?.expression()?.map {it.toExpressionNode() } ?: emptyList()
-    )
+    return expressionList()?.expression()?.map {it.toExpressionNode() } ?: emptyList()
 }
