@@ -4,8 +4,10 @@ package main
 
 import "fmt"
 
-const a, b = 3
+func vals() (int, int) {
+	return 1, 2
+}
 
 func main() {
-
+    var a, b int = vals()
 }
