@@ -18,10 +18,10 @@ fun TopLevelDeclNode.toSemanticEntity(scope: ScopeNode): SemanticEntity = when(t
 
 private fun FunctionDeclarationNode.toSemanticEntity(scope: ScopeNode): SemanticEntity {
     return SemanticEntity(
-        functionName,
-        Type.Func(signature.parameterNodes.map { it.type.toType() }, signature.resultNode.map { it.toType() }),
-        EntityType.FUNCTION,
-        pos
+        type = Type.Func(signature.parameterNodes.map { it.type.toType() }, signature.resultNode.map { it.toType() }),
+        pos = pos,
+        entityType = EntityType.FUNCTION,
+        identifier = functionName
     )
 }
 

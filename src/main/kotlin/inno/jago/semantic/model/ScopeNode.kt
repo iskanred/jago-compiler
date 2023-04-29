@@ -1,5 +1,6 @@
 package inno.jago.semantic.model
 
+import inno.jago.exception.JaGoException
 import inno.jago.semantic.EntityAlreadyExistsException
 
 class ScopeNode(
@@ -22,14 +23,16 @@ class ScopeNode(
         .toList()
 
     fun addUniqueEntity(entity: SemanticEntity): SemanticEntity {
-        val oldEntityType = table[entity.text]?.entityType
+        entity.identifier
+            ?: throw JaGoException("Only entity with non-null can be added to symbol table")
+
+        val oldEntityType = table[entity.identifier]?.entityType
 
         return if (oldEntityType == entity.entityType) {
             throw EntityAlreadyExistsException(entity)
         } else {
-            entity.also {
-                table[it.text] = it
-            }
+            table[entity.identifier] = entity
+            entity
         }
     }
 

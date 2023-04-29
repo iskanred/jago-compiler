@@ -11,7 +11,7 @@ class TypeChecker(
     fun startTypeCheck() = sourceFileNode.typecheck(ScopeNode(name = "GLOBAL", parent = null))
 
     private fun SourceFileNode.typecheck(scope: ScopeNode) {
-        importNodes.map { /* todo */ }
+
         scope.addUniqueEntities(topLevelDecls) { it.toSemanticEntity(scope) }
     }
 }
