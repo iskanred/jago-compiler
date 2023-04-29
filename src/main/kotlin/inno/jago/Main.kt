@@ -2,7 +2,7 @@ package inno.jago
 
 import GoLexer
 import GoParser
-import inno.jago.converter.toSourceFileNode
+import inno.jago.ast.converter.toSourceFileNode
 import inno.jago.semantic.TypeChecker
 import org.antlr.v4.runtime.CharStreams
 import org.antlr.v4.runtime.CommonTokenStream

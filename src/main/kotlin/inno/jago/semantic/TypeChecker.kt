@@ -1,10 +1,8 @@
 package inno.jago.semantic
 
-import inno.jago.ast.decl.ConstDeclarationNode
-import inno.jago.ast.decl.FunctionDeclarationNode
-import inno.jago.ast.decl.TopLevelDeclNode
-import inno.jago.ast.decl.VarDeclarationNode
-import inno.jago.ast.global.SourceFileNode
+import inno.jago.ast.model.global.SourceFileNode
+import inno.jago.semantic.converter.declaration.toSemanticEntity
+import inno.jago.semantic.model.ScopeNode
 
 class TypeChecker(
     private val sourceFileNode: SourceFileNode
@@ -15,28 +13,5 @@ class TypeChecker(
     private fun SourceFileNode.typecheck(scope: ScopeNode) {
         importNodes.map { /* todo */ }
         scope.addUniqueEntities(topLevelDecls) { it.toSemanticEntity(scope) }
-    }
-
-    private fun TopLevelDeclNode.toSemanticEntity(scope: ScopeNode): SemanticEntity = when(this) {
-        is FunctionDeclarationNode -> toSemanticEntity(scope)
-        is ConstDeclarationNode -> toSemanticEntity(scope)
-        is VarDeclarationNode -> toSemanticEntity(scope)
-    }
-
-    private fun FunctionDeclarationNode.toSemanticEntity(scope: ScopeNode): SemanticEntity {
-        return SemanticEntity(
-            functionName,
-            Type.Func(signature.parameterNodes.map { it.type.toType() }, signature.resultNode.map { it.toType() }),
-            EntityType.FUNCTION,
-            pos
-        )
-    }
-
-    private fun ConstDeclarationNode.toSemanticEntity(scope: ScopeNode): SemanticEntity {
-        TODO()
-    }
-
-    private fun VarDeclarationNode.toSemanticEntity(scope: ScopeNode): SemanticEntity {
-        TODO()
     }
 }
