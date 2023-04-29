@@ -25,9 +25,11 @@ private fun FunctionDeclarationNode.toSemanticEntity(scope: ScopeNode): Semantic
     )
 }
 
-private fun ConstDeclarationNode.toSemanticEntity(scope: ScopeNode): SemanticEntity {
-    TODO()
-}
+private fun ConstDeclarationNode.toSemanticEntity(scope: ScopeNode) = SemanticEntity(
+    type = type.toType(),
+    pos = pos,
+    entityType =
+)
 
 private fun VarDeclarationNode.toSemanticEntity(scope: ScopeNode): SemanticEntity {
     TODO()
