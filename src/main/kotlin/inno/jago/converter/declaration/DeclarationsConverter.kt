@@ -42,7 +42,7 @@ fun GoParser.ConstSpecContext.toConstDeclarationNode(): List<ConstDeclarationNod
         ConstDeclarationNode(
             pos = toPos(),
             identifier = identifier,
-            type = type().toTypeNode(),
+            type = type()?.toTypeNode(),
             expression = expressions[index]
         )
     }
@@ -57,7 +57,7 @@ fun GoParser.VarSpecContext.toVarDeclarationNodes(): List<VarDeclarationNode> {
             VarDeclarationNode(
                 pos = toPos(),
                 identifier = identifier,
-                type = type().toTypeNode(),
+                type = type()?.toTypeNode(),
                 expression = expressions?.first(),
                 positionInRow = index
             )
@@ -67,7 +67,7 @@ fun GoParser.VarSpecContext.toVarDeclarationNodes(): List<VarDeclarationNode> {
             VarDeclarationNode(
                 pos = toPos(),
                 identifier = identifier,
-                type = type().toTypeNode(),
+                type = type()?.toTypeNode(),
                 expression = expressions[index],
                 positionInRow = index
             )

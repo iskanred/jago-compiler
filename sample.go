@@ -9,5 +9,5 @@ func vals() (int, int) {
 }
 
 func main() {
-    var a, b int = vals()
+    var a, b = vals()
 }
