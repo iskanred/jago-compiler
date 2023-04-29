@@ -7,15 +7,15 @@ import inno.jago.converter.expression.primary_expression.toPrimaryExpressionNode
 import inno.jago.converter.common.toPos
 
 fun GoParser.UnaryExprContext.toUnaryOrPrimaryExpression(): UnaryOrPrimaryExpression {
-    primaryExpr()?.let {
-        return it.toPrimaryExpressionNode()
+    primaryExpr()?.let { primaryExpr ->
+        return primaryExpr.toPrimaryExpressionNode()
     }
 
-    unaryExpr()?.let {
+    unaryExpr()?.let { unaryExpr ->
         return UnaryExpressionNode(
             pos = toPos(),
-            operator = it.unary_op().toUnaryOperator(),
-            unaryOrPrimaryExpression = it.toUnaryOrPrimaryExpression()
+            operator = unary_op().toUnaryOperator(),
+            unaryOrPrimaryExpression = unaryExpr.toUnaryOrPrimaryExpression()
         )
     }
 
