@@ -17,4 +17,4 @@ class WrongNumberOfArguments(
 ) : SemanticException("Wrong number of arguments at $pos: expected $expectedNum, but got $actualNum")
 
 class EntityAlreadyExistsException(entity: SemanticEntity)
-    : SemanticException("${entity.entityType} with name '${entity.text}' already exists at ${entity.pos}")
+    : SemanticException("${entity.entityType} with name '${entity.identifier}' already exists at ${entity.pos}")

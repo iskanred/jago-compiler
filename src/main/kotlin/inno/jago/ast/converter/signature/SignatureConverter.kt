@@ -3,6 +3,7 @@ package inno.jago.ast.converter.signature
 import GoParser
 import inno.jago.ast.EntityNotSupportedException
 import inno.jago.ast.FunctionIdentifiersException
+import inno.jago.ast.converter.common.toPos
 import inno.jago.ast.model.signature.ParameterNode
 import inno.jago.ast.model.signature.SignatureNode
 import inno.jago.ast.model.type.TypeNode
@@ -25,6 +26,7 @@ fun GoParser.ParametersContext.toParameterNodes(): List<ParameterNode> {
             haveIdentifiers = HaveIdentifiersState.NOT_HAVE_IDENTIFIERS
             return@flatMap listOf(
                 ParameterNode(
+                    toPos(),
                     identifier = null,
                     type = paramDecl.type().toTypeNode()
                 )
@@ -39,6 +41,7 @@ fun GoParser.ParametersContext.toParameterNodes(): List<ParameterNode> {
         haveIdentifiers = HaveIdentifiersState.HAVE_IDENTIFIERS
         return@flatMap paramDecl.identifierList().IDENTIFIER().map { ident ->
             return@map ParameterNode(
+                toPos(),
                 identifier = ident.text,
                 type = paramDecl.type().toTypeNode()
             )
