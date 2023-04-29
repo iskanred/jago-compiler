@@ -31,6 +31,8 @@ sealed class Type {
         override fun toString(): String = BOOL_TYPE_NAME
     }
 
+    object ImportType : Type()
+
     /**
      * Implementation specific type that is not presented in language syntax
      * It represents any type

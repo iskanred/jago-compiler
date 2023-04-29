@@ -16,6 +16,7 @@ data class SemanticEntity(
 enum class EntityType {
     PARAMETER,
     FUNCTION,
+    IMPORT,
     VARIABLE,
     EXPRESSION
 }

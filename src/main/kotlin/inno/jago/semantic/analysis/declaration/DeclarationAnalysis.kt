@@ -1,4 +1,4 @@
-package inno.jago.semantic.converter.declaration
+package inno.jago.semantic.analysis.declaration
 
 import inno.jago.ast.model.decl.ConstDeclarationNode
 import inno.jago.ast.model.decl.FunctionDeclarationNode
