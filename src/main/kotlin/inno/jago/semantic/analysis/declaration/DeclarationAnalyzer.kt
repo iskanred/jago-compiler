@@ -4,6 +4,8 @@ import inno.jago.ast.model.decl.ConstDeclarationNode
 import inno.jago.ast.model.decl.FunctionDeclarationNode
 import inno.jago.ast.model.decl.TopLevelDeclNode
 import inno.jago.ast.model.decl.VarDeclarationNode
+import inno.jago.semantic.WrongTypeException
+import inno.jago.semantic.analysis.expression.toSemanticEntity
 import inno.jago.semantic.model.EntityType
 import inno.jago.semantic.model.ScopeNode
 import inno.jago.semantic.model.SemanticEntity
@@ -25,12 +27,34 @@ private fun FunctionDeclarationNode.toSemanticEntity(scope: ScopeNode): Semantic
     )
 }
 
-private fun ConstDeclarationNode.toSemanticEntity(scope: ScopeNode) = SemanticEntity(
-    type = type.toType(),
-    pos = pos,
-    entityType =
-)
+private fun ConstDeclarationNode.toSemanticEntity(scope: ScopeNode): SemanticEntity {
+    val expressionEntity = expression!!.toSemanticEntity(scope)
+    type?.toType()?.let { expectedType ->
+        if (expressionEntity.type != expectedType) {
+            throw WrongTypeException(expectedType = expectedType, actual = expressionEntity)
+        }
+    }
+    return SemanticEntity(
+        type = expressionEntity.type,
+        pos = pos,
+        entityType = EntityType.CONSTANT,
+        identifier = identifier
+    )
+}
+
 
 private fun VarDeclarationNode.toSemanticEntity(scope: ScopeNode): SemanticEntity {
     TODO()
+//    val expressionEntity = expression!!.toSemanticEntity(scope)
+//    type?.toType()?.let { expectedType ->
+//        if (expressionEntity.type != expectedType) {
+//            throw WrongTypeException(expectedType = expectedType, actual = expressionEntity)
+//        }
+//    }
+//    return SemanticEntity(
+//        type = expressionEntity.type,
+//        pos = pos,
+//        entityType = EntityType.VARIABLE,
+//        identifier = identifier
+//    )
 }
