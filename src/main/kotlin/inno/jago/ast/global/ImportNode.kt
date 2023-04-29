@@ -8,4 +8,6 @@ class ImportNode(
     val path: String,
     val alias: String?,
     val importAll: Boolean
-) : ASTNode(pos = pos)
+) : ASTNode(pos = pos) {
+    val name = path.split("/").last()
+}
