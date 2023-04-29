@@ -23,7 +23,6 @@ fun GoParser.ReturnStmtContext.toReturnStatementNode(): ReturnStatementNode {
 }
 
 fun GoParser.IfStmtContext.toIfStatementNode(): IfStatementNode {
-
     val simpleStatement = simpleStmt()?.toSimpleStatementNode()
     val expression = expression().toExpressionNode()
     val block = block()[0].toBlockStatementNode()
@@ -31,7 +30,7 @@ fun GoParser.IfStmtContext.toIfStatementNode(): IfStatementNode {
     val elseBranch = ifStmt()?.let {
         ElseIfStatementNode(pos = toPos(), ifStmt = it.toIfStatementNode())
     } ?:
-    block()[1]?.toBlockStatementNode()?.let {
+    block().takeIf { it.size > 1 }?.get(1)?.toBlockStatementNode()?.let {
         SimpleElseStatementNode(pos = toPos(), block = it)
     }
 
