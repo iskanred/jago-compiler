@@ -49,6 +49,7 @@ fun GoParser.ParametersContext.toParameterNodes(): List<ParameterNode> {
     } ?: emptyList()
 }
 
+@Suppress("ReturnCount")
 fun GoParser.ResultContext.toResultNode(): List<TypeNode> {
     type()?.let {
         return listOf(it.toTypeNode())

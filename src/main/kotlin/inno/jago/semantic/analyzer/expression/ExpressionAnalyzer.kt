@@ -1,4 +1,4 @@
-package inno.jago.semantic.analysis.expression
+package inno.jago.semantic.analyzer.expression
 
 import inno.jago.ast.model.expression.ExpressionNode
 import inno.jago.semantic.model.ScopeNode

@@ -75,5 +75,5 @@ fun GoParser.PointerTypeContext.toPointerTypeNode() = PointerTypeNode(
 
 fun GoParser.FunctionTypeContext.toFunctionTypeNode() = FunctionTypeNode(
     pos = toPos(),
-    elementType = signature().toSignatureNode()
+    signature = signature().toSignatureNode()
 )

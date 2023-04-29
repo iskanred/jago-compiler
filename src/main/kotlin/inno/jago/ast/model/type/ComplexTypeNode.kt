@@ -31,7 +31,7 @@ class PointerTypeNode(
 
 class FunctionTypeNode(
     pos: Pos,
-    val elementType: SignatureNode
+    val signature: SignatureNode
 ) : ComplexTypeNode(
     pos = pos,
     name = "function type"

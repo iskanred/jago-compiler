@@ -17,7 +17,7 @@ fun GoParser.FunctionBodyContext.toBlockStatementNode(): BlockStatementNode =
 fun GoParser.ReturnStmtContext.toReturnStatementNode(): ReturnStatementNode {
     val expressionNodes = expressionList()?.expression()?.map {
         it.toExpressionNode()
-    } ?: throw UnreachableCodeException()
+    } ?: emptyList()
 
     return ReturnStatementNode(pos = toPos(), expressions = expressionNodes)
 }

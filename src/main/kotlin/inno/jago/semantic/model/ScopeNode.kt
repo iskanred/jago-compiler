@@ -12,16 +12,6 @@ class ScopeNode(
     fun createNewScope(name: String): ScopeNode =
         ScopeNode(name = name, parent = this)
 
-    /**
-     * Here are operations are completed on sequence because
-     *  we need to add entity right after transformation
-     */
-    fun<T> addUniqueEntities(list: List<T>, transform: (T) -> SemanticEntity): List<SemanticEntity> = list
-        .asSequence()
-        .map { transform(it) }
-        .map { addUniqueEntity(it) }
-        .toList()
-
     fun addUniqueEntity(entity: SemanticEntity): SemanticEntity {
         entity.identifier
             ?: throw JaGoException("Only entity with non-null can be added to symbol table")

@@ -1,5 +1,6 @@
 package inno.jago.semantic.model
 
+import inno.jago.exception.JaGoException
 import inno.jago.lexer.Pos
 
 /**
@@ -11,7 +12,13 @@ data class SemanticEntity(
     val pos: Pos,
     val entityType: EntityType,
     val identifier: String? = null,
-)
+) {
+    init {
+        if (entityType != EntityType.EXPRESSION) {
+            throw JaGoException("Identifier expected")
+        }
+    }
+}
 
 enum class EntityType {
     PARAMETER,

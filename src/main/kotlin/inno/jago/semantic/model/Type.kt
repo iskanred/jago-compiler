@@ -12,6 +12,7 @@ import inno.jago.common.BOOL_TYPE_NAME
 import inno.jago.common.DOUBLE_TYPE_NAME
 import inno.jago.common.INT_TYPE_NAME
 import inno.jago.common.STRING_TYPE_NAME
+import inno.jago.semantic.analyzer.signature.toType
 
 sealed class Type {
 
@@ -31,22 +32,62 @@ sealed class Type {
         override fun toString(): String = BOOL_TYPE_NAME
     }
 
+    /**
+     * Implementation specific type that is not presented in language syntax
+     * It represents number type = int or float64
+     * It can be used that some construction can only accept or return numbers
+     */
+    object NumberType : Type() {
+        override fun toString(): String = "$INT_TYPE_NAME or $DOUBLE_TYPE_NAME"
+    }
+
+    /**
+     * Implementation specific type that is not presented in language syntax
+     * It represents import and is needed only for semantic analysis
+     *
+     * Example: [import "fmt"] is of type ImportType
+     */
     object ImportType : Type()
 
     /**
      * Implementation specific type that is not presented in language syntax
-     * It represents any type
-     * It can be for example to show any possible function that can return any result
+     * It represents function that does not return anything
      *
-     * Example: func () any
+     * Example:
+     * func a(a int) {
+     *     a++
+     * }
+     * Here function return type is UnitType
      */
-    object Any : Type() {
+    object UnitType : Type()
+
+    /**
+     * Implementation specific type that is not presented in language syntax
+     * It represents any type
+     * It can be used to show any possible function that can return any result
+     *
+     * Example: func(any) any
+     */
+    object AnyType : Type() {
         override fun toString(): String = "Any"
     }
 
-    data class Func(
+    /**
+     * Implementation specific type that is not presented in language syntax
+     * It represents a structure of any number of any types
+     * It can be used for functions that return several values
+     *
+     * Example: func() (int, int)
+     * Here function return type is TupleType
+     */
+    data class TupleType(
+        val elementTypes: List<Type>
+    ) : Type()
+
+
+    data class FuncType(
         val paramTypes: List<Type>,
-        val returnTypes: List<Type>
+        val returnType: Type
     ) : Type() {
         override fun toString(): String = super.toString()
     }
@@ -67,9 +108,6 @@ fun TypeNode.toType(): Type = when(this) {
     is StringTypeNode -> Type.StringType
     is BoolTypeNode -> Type.BoolType
     is ArrayTypeNode -> Type.ArrayType(length = 1, elementType = elementType.toType())
-    is FunctionTypeNode -> Type.Func(
-        paramTypes = elementType.parameterNodes.map { it.type.toType() },
-        returnTypes = elementType.resultNode.map { it.toType() }
-    )
+    is FunctionTypeNode -> signature.toType()
     is PointerTypeNode -> Type.PointerType(baseType = baseType.toType())
 }
