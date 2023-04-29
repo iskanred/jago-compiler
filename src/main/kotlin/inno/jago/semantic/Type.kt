@@ -43,8 +43,8 @@ sealed class Type {
     }
 
     data class Func(
-        val returnTypes: List<Type>,
-        val paramTypes: List<Type>
+        val paramTypes: List<Type>,
+        val returnTypes: List<Type>
     ) : Type() {
         override fun toString(): String = super.toString()
     }

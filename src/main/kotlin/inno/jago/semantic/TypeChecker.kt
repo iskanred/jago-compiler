@@ -24,7 +24,12 @@ class TypeChecker(
     }
 
     private fun FunctionDeclarationNode.toSemanticEntity(scope: ScopeNode): SemanticEntity {
-        TODO()
+        return SemanticEntity(
+            functionName,
+            Type.Func(signature.parameterNodes.map { it.type.toType() }, signature.resultNode.map { it.toType() }),
+            EntityType.FUNCTION,
+            pos
+        )
     }
 
     private fun ConstDeclarationNode.toSemanticEntity(scope: ScopeNode): SemanticEntity {
