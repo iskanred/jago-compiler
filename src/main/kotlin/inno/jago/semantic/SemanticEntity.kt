@@ -10,9 +10,8 @@ data class SemanticEntity(
 )
 
 enum class EntityType {
-    LITERAL,
     PARAMETER,
     FUNCTION,
-    LET_VAR,
-    BUILT_IN
+    EXPRESSION,
+    PATTERN_VAR
 }
