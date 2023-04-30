@@ -11,10 +11,7 @@ import inno.jago.ast.model.expression.unary_expression.primary_expression.operan
 import inno.jago.ast.model.expression.unary_expression.primary_expression.operand.LiteralOperandNode
 import inno.jago.ast.model.expression.unary_expression.primary_expression.operand.OperandNameNode
 import inno.jago.ast.model.expression.unary_expression.primary_expression.operand.OperandNode
-import inno.jago.ast.model.expression.unary_expression.primary_expression.operand.QualifiedIdentifierOperandNode
-import inno.jago.ast.model.expression.unary_expression.primary_expression.operand.SimpleIdentifierOperandNode
 import inno.jago.exception.UnreachableCodeException
-import inno.jago.semantic.NoSuchVariableInCurrentScopeException
 import inno.jago.semantic.model.ScopeNode
 import inno.jago.semantic.model.SemanticEntity
 
@@ -34,6 +31,7 @@ fun PrimaryExpressionNode.toSemanticEntity(scope: ScopeNode): SemanticEntity = w
     is IndexExpressionNode -> TODO()
     is SelectorExpressionNode -> TODO()
     is ApplicationExpressionNode -> TODO()
+    // делает iskanred
     is LiteralOperandNode -> toSemanticEntity(scope)
     is OperandNameNode -> toSemanticEntity(scope)
     is OperandNode -> TODO()
