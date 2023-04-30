@@ -25,3 +25,6 @@ class VarDeclMustPresentTypeOrExpressionException(varIdentifier: String, pos: Po
 
 class ReturnInGlobalScopeException(pos : Pos)
     : SemanticException("Return statement at $pos cannot exist in global scope")
+
+class NoSuchVariableInCurrentScopeException(identifier: String, pos : Pos)
+    : SemanticException("No such variable $identifier at $pos")

@@ -26,5 +26,6 @@ enum class EntityType {
     IMPORT,
     VARIABLE,
     CONSTANT,
-    EXPRESSION
+    EXPRESSION,
+    EMPTY
 }

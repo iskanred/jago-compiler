@@ -34,7 +34,7 @@ fun StatementNode.toSemanticEntity(scope: ScopeNode): SemanticEntity = when (thi
     is ContinueStatementNode -> TODO()
     is DeclarationStatementNode -> TODO()
     is ReturnStatementNode -> toSemanticEntity(scope)
-    is EmptyStatementNode -> TODO()
+    is EmptyStatementNode -> toSemanticEntity(scope)
     is ForStatementNode -> TODO()
     is ShortVarDeclNode -> TODO()
 }
@@ -61,3 +61,12 @@ private fun ReturnStatementNode.toSemanticEntity(scope: ScopeNode) = SemanticEnt
         throw WrongTypeException(expectedType = expectedReturnType, actual = entity)
     }
 }
+
+private fun EmptyStatementNode.toSemanticEntity(scope: ScopeNode) = SemanticEntity (
+    type = Type.AnyType,
+    pos = pos,
+    entityType = EntityType.EMPTY,
+    identifier = ""
+)
+
+
