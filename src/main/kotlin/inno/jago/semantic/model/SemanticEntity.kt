@@ -14,7 +14,7 @@ data class SemanticEntity(
     val identifier: String? = null,
 ) {
     init {
-        if (entityType != EntityType.EXPRESSION && identifier == null) {
+        if (entityType != EntityType.EXPRESSION && entityType != EntityType.STATEMENT && identifier == null) {
             throw JaGoException("Identifier expected")
         }
     }

@@ -19,16 +19,12 @@ fun IfStatementNode.toSemanticEntity(scope: ScopeNode): SemanticEntity {
         throw WrongTypeException(Type.BoolType, actualConditionSemanticEntity)
     }
 
-    block.block.forEach { statementNode ->
-        statementNode.toSemanticEntity(ifScope)
-    }
+    block.eachStatementToSemanticEntity(ifScope)
 
     elseBranch?.let {
         when (it) {
             is ElseIfStatementNode -> it.ifStmt.toSemanticEntity(scope)
-            is SimpleElseStatementNode -> it.block.block.forEach { statementNode ->
-                statementNode.toSemanticEntity(ifScope)
-            }
+            is SimpleElseStatementNode -> it.block.eachStatementToSemanticEntity(scope)
         }
     }
 
