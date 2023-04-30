@@ -32,7 +32,7 @@ fun StatementNode.toSemanticEntity(scope: ScopeNode): SemanticEntity = when (thi
     is BlockStatementNode -> toSemanticEntity(scope)
     is BreakStatementNode -> toSemanticEntity(scope)
     is ContinueStatementNode -> toSemanticNode(scope)
-    is DeclarationStatementNode -> TODO()
+    is DeclarationStatementNode -> toSemanticNode(scope)
     is ReturnStatementNode -> toSemanticEntity(scope)
     is EmptyStatementNode -> toSemanticEntity()
     is ForStatementNode -> toSemanticEntity(scope)
