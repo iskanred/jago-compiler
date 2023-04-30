@@ -34,27 +34,27 @@ fun StatementNode.toSemanticEntity(scope: ScopeNode): SemanticEntity = when (thi
     is ContinueStatementNode -> TODO()
     is DeclarationStatementNode -> TODO()
     is ReturnStatementNode -> toSemanticEntity(scope)
-    is EmptyStatementNode -> toSemanticEntity(scope)
+    is EmptyStatementNode -> toSemanticEntity()
     is ForStatementNode -> TODO()
     is ShortVarDeclNode -> TODO()
 }
 
 private fun IncDecStatementNode.toSemanticEntity(scope: ScopeNode): SemanticEntity {
     val expressionEntity = expression.toSemanticEntity(scope)
-    if (expressionEntity.type != Type.IntegerType || expressionEntity.type != Type.DoubleType) {
-        throw WrongTypeException(Type.NumberType, expressionEntity)
+    if (expressionEntity.type !is Type.NumberType) {
+        throw WrongTypeException(Type.NumberType(), expressionEntity)
     }
     return SemanticEntity(
         type = expressionEntity.type,
         pos = pos,
-        entityType = EntityType.EXPRESSION
+        entityType = EntityType.STATEMENT
     )
 }
 
 private fun ReturnStatementNode.toSemanticEntity(scope: ScopeNode) = SemanticEntity(
     type = expressions.toType { it.toSemanticEntity(scope).type },
     pos = pos,
-    entityType = EntityType.EXPRESSION
+    entityType = EntityType.STATEMENT
 ).also { entity ->
     val expectedReturnType: Type = scope.getExpectedReturnType() ?: throw ReturnInGlobalScopeException(pos)
     if (expectedReturnType != entity.type) {
@@ -62,9 +62,8 @@ private fun ReturnStatementNode.toSemanticEntity(scope: ScopeNode) = SemanticEnt
     }
 }
 
-private fun EmptyStatementNode.toSemanticEntity(scope: ScopeNode) = SemanticEntity (
+private fun EmptyStatementNode.toSemanticEntity() = SemanticEntity (
     type = Type.AnyType,
     pos = pos,
-    entityType = EntityType.EMPTY,
-    identifier = ""
+    entityType = EntityType.STATEMENT,
 )

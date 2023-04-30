@@ -28,3 +28,6 @@ class ReturnInGlobalScopeException(pos : Pos)
 
 class NoSuchVariableInCurrentScopeException(identifier: String, pos : Pos)
     : SemanticException("No such variable $identifier at $pos")
+
+class NonCastableTypeException(from: Type, to: Type, pos: Pos)
+    : SemanticException("Cannot cast from $from to $to at $pos")

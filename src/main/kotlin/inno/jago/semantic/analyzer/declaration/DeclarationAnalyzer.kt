@@ -84,7 +84,7 @@ fun FunctionDeclarationNode.toSemanticEntity(scope: ScopeNode) = SemanticEntity(
     // add function to parent scope
     scope.addUniqueEntity(entity)
     // create scope for function
-    val functionScope = scope.createNewScope(
+    val functionScope = scope.createNewFuncScope(
         name = "Function $functionName in [${scope.name}]",
         expectedReturnType = (entity.type as Type.FuncType).returnType
     )

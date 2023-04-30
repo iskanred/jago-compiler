@@ -14,11 +14,15 @@ import inno.jago.ast.model.expression.unary_expression.primary_expression.operan
 import inno.jago.ast.model.expression.unary_expression.primary_expression.operand.OperandNode
 import inno.jago.ast.model.type.ArrayTypeNode
 import inno.jago.exception.UnreachableCodeException
+import inno.jago.semantic.NonCastableTypeException
+import inno.jago.semantic.model.EntityType
 import inno.jago.semantic.NoSuchVariableInCurrentScopeException
 import inno.jago.semantic.WrongTypeException
 import inno.jago.semantic.model.EntityType
 import inno.jago.semantic.model.ScopeNode
 import inno.jago.semantic.model.SemanticEntity
+import inno.jago.semantic.model.Type
+import inno.jago.semantic.model.toType
 import inno.jago.semantic.model.Type
 import java.beans.Expression
 
@@ -34,7 +38,7 @@ fun UnaryExpressionNode.toSemanticEntity(scope: ScopeNode): SemanticEntity {
 @Suppress("CyclomaticComplexMethod")
 fun PrimaryExpressionNode.toSemanticEntity(scope: ScopeNode): SemanticEntity = when (this) {
     is ExpressionOperandNode -> toSemanticEntity(scope)
-    is ConversionNode -> TODO()
+    is ConversionNode -> toSemanticEntity(scope)
     is IndexExpressionNode -> toSemanticEntity(scope)
     is SelectorExpressionNode -> TODO()
     is ApplicationExpressionNode -> TODO()
@@ -43,6 +47,21 @@ fun PrimaryExpressionNode.toSemanticEntity(scope: ScopeNode): SemanticEntity = w
     is OperandNameNode -> toSemanticEntity(scope)
     is OperandNode -> TODO()
     else -> throw UnreachableCodeException()
+}
+
+fun ConversionNode.toSemanticEntity(scope: ScopeNode): SemanticEntity {
+    var entity = expression.toSemanticEntity(scope)
+    if (entity.type != type.toType() ) {
+        if (entity.type !is Type.NumberType || type.toType() !is Type.NumberType) {
+            throw NonCastableTypeException(entity.type, type.toType(), pos)
+        }
+        return SemanticEntity(
+            type = type.toType(),
+            pos = pos,
+            entityType = EntityType.EXPRESSION
+        )
+    }
+    return entity
 }
 
 fun IndexExpressionNode.toSemanticEntity(scope: ScopeNode): SemanticEntity  {

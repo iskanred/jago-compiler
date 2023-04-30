@@ -15,12 +15,20 @@ import inno.jago.common.STRING_TYPE_NAME
 import inno.jago.semantic.analyzer.signature.toType
 
 sealed class Type {
+    /**
+     * Implementation specific type that is not presented in language syntax
+     * It represents number type = int or float64
+     * It can be used that some construction can only accept or return numbers
+     */
+    open class NumberType : Type() {
+        override fun toString(): String = "$INT_TYPE_NAME or $DOUBLE_TYPE_NAME"
+    }
 
-    object IntegerType : Type() {
+    object IntegerType : NumberType() {
         override fun toString(): String = INT_TYPE_NAME
     }
 
-    object DoubleType : Type() {
+    object DoubleType : NumberType() {
         override fun toString(): String = DOUBLE_TYPE_NAME
     }
 
@@ -30,15 +38,6 @@ sealed class Type {
 
     object BoolType : Type() {
         override fun toString(): String = BOOL_TYPE_NAME
-    }
-
-    /**
-     * Implementation specific type that is not presented in language syntax
-     * It represents number type = int or float64
-     * It can be used that some construction can only accept or return numbers
-     */
-    object NumberType : Type() {
-        override fun toString(): String = "$INT_TYPE_NAME or $DOUBLE_TYPE_NAME"
     }
 
     /**
