@@ -47,14 +47,14 @@ private fun IncDecStatementNode.toSemanticEntity(scope: ScopeNode): SemanticEnti
     return SemanticEntity(
         type = expressionEntity.type,
         pos = pos,
-        entityType = EntityType.EXPRESSION
+        entityType = EntityType.STATEMENT
     )
 }
 
 private fun ReturnStatementNode.toSemanticEntity(scope: ScopeNode) = SemanticEntity(
     type = expressions.toType { it.toSemanticEntity(scope).type },
     pos = pos,
-    entityType = EntityType.EXPRESSION
+    entityType = EntityType.STATEMENT
 ).also { entity ->
     val expectedReturnType: Type = scope.getExpectedReturnType() ?: throw ReturnInGlobalScopeException(pos)
     if (expectedReturnType != entity.type) {

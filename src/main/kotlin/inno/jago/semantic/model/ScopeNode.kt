@@ -3,15 +3,20 @@ package inno.jago.semantic.model
 import inno.jago.exception.JaGoException
 import inno.jago.semantic.EntityAlreadyExistsException
 
-class ScopeNode(
+sealed class ScopeNode(
     val name: String,
     private val parent: ScopeNode?,
-    private val expectedReturnType: Type?
 ) {
     private val table = mutableMapOf<String, SemanticEntity>()
 
-    fun createNewScope(name: String, expectedReturnType: Type? = null): ScopeNode =
-        ScopeNode(name = name, parent = this, expectedReturnType = expectedReturnType)
+    fun createNewFuncScope(name: String, expectedReturnType: Type? = null): ScopeNode =
+        FuncScopeNode(name = name, parent = this, expectedReturnType = expectedReturnType)
+
+    fun createNewForScope(name: String): ScopeNode =
+        ForScopeNode(name = name, parent = this)
+
+    fun createNewIfScope(name: String): ScopeNode =
+        IfScopeNode(name = name, parent = this)
 
     fun addUniqueEntity(entity: SemanticEntity): SemanticEntity {
         entity.identifier
@@ -42,7 +47,41 @@ class ScopeNode(
         return null
     }
 
-    fun getExpectedReturnType(): Type? =
-        expectedReturnType ?: parent?.getExpectedReturnType()
+    fun getExpectedReturnType(): Type? {
+        if (this is FuncScopeNode) {
+            return expectedReturnType
+        }
+        return parent?.getExpectedReturnType()
+    }
+
+    companion object {
+        val globalScopeNode = GlobalScopeNode()
+    }
 }
 
+class IfScopeNode(
+    name: String,
+    parent: ScopeNode?
+) : ScopeNode(
+    name = name,
+    parent = parent
+)
+
+class ForScopeNode(
+    name: String,
+    parent: ScopeNode?
+) : ScopeNode(
+    name = name,
+    parent = parent
+)
+
+class FuncScopeNode(
+    name: String,
+    parent: ScopeNode?,
+    val expectedReturnType: Type?
+) : ScopeNode(
+    name = name,
+    parent = parent
+)
+
+class GlobalScopeNode : ScopeNode("GLOBAL", null)
