@@ -2,7 +2,6 @@ package inno.jago.semantic.model
 
 import inno.jago.exception.JaGoException
 import inno.jago.semantic.EntityAlreadyExistsException
-import inno.jago.semantic.ReturnInGlobalScopeException
 
 class ScopeNode(
     val name: String,
@@ -43,8 +42,7 @@ class ScopeNode(
         return null
     }
 
-    fun getExpectedReturnType(): Type? {
-        return expectedReturnType ?: parent?.getExpectedReturnType()
-    }
+    fun getExpectedReturnType(): Type? =
+        expectedReturnType ?: parent?.getExpectedReturnType()
 }
 

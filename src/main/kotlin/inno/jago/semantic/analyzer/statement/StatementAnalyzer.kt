@@ -58,6 +58,6 @@ private fun ReturnStatementNode.toSemanticEntity(scope: ScopeNode) = SemanticEnt
 ).also { entity ->
     val expectedReturnType: Type = scope.getExpectedReturnType() ?: throw ReturnInGlobalScopeException(pos)
     if (expectedReturnType != entity.type) {
-        throw WrongTypeException(expectedReturnType, entity)
+        throw WrongTypeException(expectedType = expectedReturnType, actual = entity)
     }
 }

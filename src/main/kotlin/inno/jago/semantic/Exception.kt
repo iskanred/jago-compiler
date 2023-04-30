@@ -23,4 +23,5 @@ class VarDeclMustPresentTypeOrExpressionException(varIdentifier: String, pos: Po
     "The variable declaration '$varIdentifier' must specify the type or the assigned expression at $pos"
 )
 
-class ReturnInGlobalScopeException(pos : Pos) : SemanticException("Return statement (at $pos) cannot exist in global scope")
+class ReturnInGlobalScopeException(pos : Pos)
+    : SemanticException("Return statement at $pos cannot exist in global scope")
