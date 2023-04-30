@@ -31,3 +31,9 @@ class NoSuchEntityInCurrentScopeException(identifier: String, pos : Pos)
 
 class NonCastableTypeException(from: Type, to: Type, pos: Pos)
     : SemanticException("Cannot cast from $from to $to at $pos")
+
+class BreakIsNotInLoopException(pos: Pos)
+    : SemanticException("break is not in a loop at $pos")
+
+class ContinueIsNotInLoopException(pos: Pos)
+    : SemanticException("continue is not in a loop at $pos")

@@ -54,6 +54,13 @@ sealed class ScopeNode(
         return parent?.getExpectedReturnType()
     }
 
+    fun hasLoopScope(): Boolean {
+        if (this is ForScopeNode) {
+            return true;
+        }
+        return parent?.hasLoopScope() ?: false
+    }
+
     companion object {
         val globalScopeNode = GlobalScopeNode()
     }
