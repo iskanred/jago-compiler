@@ -36,7 +36,7 @@ fun StatementNode.toSemanticEntity(scope: ScopeNode): SemanticEntity = when (thi
     is ReturnStatementNode -> toSemanticEntity(scope)
     is EmptyStatementNode -> toSemanticEntity()
     is ForStatementNode -> toSemanticEntity(scope)
-    is ShortVarDeclNode -> TODO()
+    is ShortVarDeclNode -> toSemanticEntity(scope)
 }
 
 private fun IncDecStatementNode.toSemanticEntity(scope: ScopeNode): SemanticEntity {
