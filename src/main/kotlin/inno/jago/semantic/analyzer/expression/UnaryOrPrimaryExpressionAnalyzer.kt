@@ -1,5 +1,6 @@
 package inno.jago.semantic.analyzer.expression
 
+import inno.jago.ast.model.expression.ExpressionNode
 import inno.jago.ast.model.expression.unary_expression.ApplicationExpressionNode
 import inno.jago.ast.model.expression.unary_expression.ConversionNode
 import inno.jago.ast.model.expression.unary_expression.IndexExpressionNode
@@ -17,6 +18,7 @@ import inno.jago.exception.UnreachableCodeException
 import inno.jago.semantic.NoSuchVariableInCurrentScopeException
 import inno.jago.semantic.model.ScopeNode
 import inno.jago.semantic.model.SemanticEntity
+import java.beans.Expression
 
 fun UnaryOrPrimaryExpression.toSemanticEntity(scope: ScopeNode): SemanticEntity = when (this) {
     is UnaryExpressionNode -> toSemanticEntity(scope)
@@ -39,3 +41,8 @@ fun PrimaryExpressionNode.toSemanticEntity(scope: ScopeNode): SemanticEntity = w
     is OperandNode -> TODO()
     else -> throw UnreachableCodeException()
 }
+
+fun ExpressionOperandNode.toSemanticEntity(scope: ScopeNode): SemanticEntity {
+    return expression.toSemanticEntity(scope)
+}
+
