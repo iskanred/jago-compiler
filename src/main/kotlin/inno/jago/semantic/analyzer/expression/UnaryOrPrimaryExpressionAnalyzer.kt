@@ -5,7 +5,6 @@ import inno.jago.ast.model.expression.unary_expression.ApplicationExpressionNode
 import inno.jago.ast.model.expression.unary_expression.ConversionNode
 import inno.jago.ast.model.expression.unary_expression.IndexExpressionNode
 import inno.jago.ast.model.expression.unary_expression.PrimaryExpressionNode
-import inno.jago.ast.model.expression.unary_expression.SelectorExpressionNode
 import inno.jago.ast.model.expression.unary_expression.UnaryExpressionNode
 import inno.jago.ast.model.expression.unary_expression.UnaryOrPrimaryExpression
 import inno.jago.ast.model.expression.unary_expression.primary_expression.operand.ExpressionOperandNode
@@ -18,12 +17,10 @@ import inno.jago.semantic.NonCastableTypeException
 import inno.jago.semantic.model.EntityType
 import inno.jago.semantic.NoSuchVariableInCurrentScopeException
 import inno.jago.semantic.WrongTypeException
-import inno.jago.semantic.model.EntityType
 import inno.jago.semantic.model.ScopeNode
 import inno.jago.semantic.model.SemanticEntity
 import inno.jago.semantic.model.Type
 import inno.jago.semantic.model.toType
-import inno.jago.semantic.model.Type
 import java.beans.Expression
 
 fun UnaryOrPrimaryExpression.toSemanticEntity(scope: ScopeNode): SemanticEntity = when (this) {
@@ -40,7 +37,6 @@ fun PrimaryExpressionNode.toSemanticEntity(scope: ScopeNode): SemanticEntity = w
     is ExpressionOperandNode -> toSemanticEntity(scope)
     is ConversionNode -> toSemanticEntity(scope)
     is IndexExpressionNode -> toSemanticEntity(scope)
-    is SelectorExpressionNode -> TODO()
     is ApplicationExpressionNode -> TODO()
     // делает iskanred
     is LiteralOperandNode -> toSemanticEntity(scope)

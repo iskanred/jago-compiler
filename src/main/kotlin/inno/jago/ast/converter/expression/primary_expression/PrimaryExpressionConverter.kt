@@ -6,7 +6,6 @@ import inno.jago.ast.model.expression.ExpressionNode
 import inno.jago.ast.model.expression.unary_expression.ApplicationExpressionNode
 import inno.jago.ast.model.expression.unary_expression.IndexExpressionNode
 import inno.jago.ast.model.expression.unary_expression.PrimaryExpressionNode
-import inno.jago.ast.model.expression.unary_expression.SelectorExpressionNode
 import inno.jago.ast.converter.common.toPos
 import inno.jago.ast.converter.expression.toExpressionNode
 import inno.jago.ast.converter.expression.primary_expression.operand.toOperandNode
@@ -25,11 +24,7 @@ fun GoParser.PrimaryExprContext.toPrimaryExpressionNode(): PrimaryExpressionNode
     }
 
     selector()?.let {
-        return SelectorExpressionNode(
-            pos = toPos(),
-            primaryExpression = primaryExpr().toPrimaryExpressionNode(),
-            selector = it.IDENTIFIER().text
-        )
+        throw EntityNotSupportedException("MethodExpression")
     }
 
     index()?.let {
