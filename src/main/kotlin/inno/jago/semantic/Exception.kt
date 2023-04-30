@@ -22,3 +22,5 @@ class EntityAlreadyExistsException(entity: SemanticEntity)
 class VarDeclMustPresentTypeOrExpressionException(varIdentifier: String, pos: Pos) : SemanticException(
     "The variable declaration '$varIdentifier' must specify the type or the assigned expression at $pos"
 )
+
+class ReturnInGlobalScopeException(pos : Pos) : SemanticException("Return statement (at $pos) cannot exist in global scope")

@@ -90,7 +90,7 @@ fun FunctionDeclarationNode.toSemanticEntity(scope: ScopeNode) = SemanticEntity(
     // add function to parent scope
     scope.addUniqueEntity(entity)
     // create scope for function
-    val functionScope = scope.createNewScope("Function $functionName in [${scope.name}]")
+    val functionScope = scope.createNewScope("Function $functionName in [${scope.name}]", Type.TupleType(signature.resultNode.map { it.toType() }))
 
     signature.parameterNodes.forEach { it.toSemanticEntity(functionScope) }
     functionBody.block.forEach { statementNode ->

@@ -14,6 +14,7 @@ import inno.jago.ast.model.statement.IncDecStatementNode
 import inno.jago.ast.model.statement.ReturnStatementNode
 import inno.jago.ast.model.statement.ShortVarDeclNode
 import inno.jago.ast.model.statement.StatementNode
+import inno.jago.semantic.ReturnInGlobalScopeException
 import inno.jago.semantic.WrongTypeException
 import inno.jago.semantic.analyzer.expression.toSemanticEntity
 import inno.jago.semantic.model.EntityType
@@ -55,5 +56,8 @@ private fun ReturnStatementNode.toSemanticEntity(scope: ScopeNode) = SemanticEnt
     pos = pos,
     entityType = EntityType.EXPRESSION
 ).also { entity ->
-    TODO("check that entity type matches function return type")
+    val expectedReturnType: Type = scope.getExpectedReturnType() ?: throw ReturnInGlobalScopeException(pos)
+    if (expectedReturnType != entity.type) {
+        throw WrongTypeException(expectedReturnType, entity)
+    }
 }
