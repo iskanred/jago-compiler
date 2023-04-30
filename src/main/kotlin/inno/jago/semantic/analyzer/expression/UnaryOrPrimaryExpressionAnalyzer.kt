@@ -109,6 +109,6 @@ fun ApplicationExpressionNode.toSemanticEntity(scope: ScopeNode): SemanticEntity
             )
         }
 
-        else -> throw UnreachableCodeException()
+        else -> throw WrongTypeException(Type.FuncType(args.map { it.type }, Type.AnyType), actual = function)
     }
 }
