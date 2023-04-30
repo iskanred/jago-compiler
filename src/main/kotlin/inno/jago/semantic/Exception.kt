@@ -7,8 +7,8 @@ import inno.jago.semantic.model.Type
 
 sealed class SemanticException(msg: String) : JaGoException(msg)
 
-class WrongTypeException(expectedType: Type, actual: SemanticEntity)
-    : SemanticException("Expected [$expectedType] type but got [${actual.type}] at ${actual.pos}")
+class WrongTypeException(vararg expectedType: Type, actual: SemanticEntity)
+    : SemanticException("Expected [${expectedType.joinToString()}] type but got [${actual.type}] at ${actual.pos}")
 
 class WrongNumberOfArguments(
     expectedNum: Int,
