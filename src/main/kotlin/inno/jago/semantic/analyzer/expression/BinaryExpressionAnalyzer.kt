@@ -8,7 +8,6 @@ import inno.jago.ast.model.expression.binary_expression.MulOperator
 import inno.jago.ast.model.expression.binary_expression.MulOperators
 import inno.jago.ast.model.expression.binary_expression.RelationOperator
 import inno.jago.ast.model.expression.binary_expression.RelationOperators
-import inno.jago.exception.UnreachableCodeException
 import inno.jago.semantic.WrongTypeException
 import inno.jago.semantic.model.EntityType
 import inno.jago.semantic.model.ScopeNode
@@ -23,7 +22,7 @@ fun BinaryExpression.toSemanticEntity(scope: ScopeNode): SemanticEntity {
     when (binaryOperator) {
 //      EQUALS, NOT_EQUALS, LESS, LESS_OR_EQUALS, GREATER, GREATER_OR_EQUALS
         is RelationOperator -> {
-            listOf(left, right).forEach fo@ {
+            listOf(left, right).forEach {
                 when (binaryOperator.operator) {
                     RelationOperators.EQUALS, RelationOperators.NOT_EQUALS ->
                         if (!it.type.isEquatable()) {
@@ -41,7 +40,7 @@ fun BinaryExpression.toSemanticEntity(scope: ScopeNode): SemanticEntity {
                 throw WrongTypeException(left.type, actual = right)
             }
 
-            return SemanticEntity(left.type, pos, EntityType.EXPRESSION)
+            return SemanticEntity(type = left.type, pos = pos, entityType = EntityType.EXPRESSION)
         }
 
 //        *    product                integers, floats
@@ -60,6 +59,7 @@ fun BinaryExpression.toSemanticEntity(scope: ScopeNode): SemanticEntity {
                 }
 
                 if (it.type !in expectedTypes) {
+                    @Suppress("SpreadOperator")
                     throw WrongTypeException(*expectedTypes.toTypedArray(), actual = it)
                 }
             }
@@ -68,7 +68,7 @@ fun BinaryExpression.toSemanticEntity(scope: ScopeNode): SemanticEntity {
                 throw WrongTypeException(left.type, actual = right)
             }
 
-            return SemanticEntity(left.type, pos, EntityType.EXPRESSION)
+            return SemanticEntity(type = left.type, pos = pos, entityType = EntityType.EXPRESSION)
         }
 
 //        +    sum                    integers, floats, strings
@@ -85,6 +85,7 @@ fun BinaryExpression.toSemanticEntity(scope: ScopeNode): SemanticEntity {
                 }
 
                 if (it.type !in expectedTypes) {
+                    @Suppress("SpreadOperator")
                     throw WrongTypeException(*expectedTypes.toTypedArray(), actual = it)
                 }
             }
@@ -93,7 +94,7 @@ fun BinaryExpression.toSemanticEntity(scope: ScopeNode): SemanticEntity {
                 throw WrongTypeException(left.type, actual = right)
             }
 
-            return SemanticEntity(left.type, pos, EntityType.EXPRESSION)
+            return SemanticEntity(type = left.type, pos = pos, entityType = EntityType.EXPRESSION)
         }
 
 //        &&    conditional AND    p && q  is  "if p then q else false"
@@ -106,51 +107,22 @@ fun BinaryExpression.toSemanticEntity(scope: ScopeNode): SemanticEntity {
                 }
             }
 
-            return SemanticEntity(Type.BoolType, pos, EntityType.EXPRESSION)
+            return SemanticEntity(type = Type.BoolType, pos = pos, entityType = EntityType.EXPRESSION)
         }
     }
 }
 
-fun Type.isEquatable(): Boolean {
-    if (this is Type.IntegerType) {
-        return true
-    }
-
-    if (this is Type.DoubleType) {
-        return true
-    }
-
-    if (this is Type.StringType) {
-        return true
-    }
-
-    if (this is Type.BoolType) {
-        return true
-    }
-
-    if (this is Type.PointerType) {
-        return true
-    }
-
-    if ((this is Type.ArrayType) && this.elementType.isEquatable()) {
-        return true
-    }
-
-    return false
+fun Type.isEquatable(): Boolean = when(this) {
+    is Type.IntegerType,
+    is Type.DoubleType,
+    is Type.StringType,
+    is Type.BoolType,
+    is Type.PointerType -> true
+    is Type.ArrayType -> elementType.isEquatable()
+    else -> false
 }
 
-fun Type.isComparable(): Boolean {
-    if (this is Type.IntegerType) {
-        return true
-    }
-
-    if (this is Type.DoubleType) {
-        return true
-    }
-
-    if (this is Type.StringType) {
-        return true
-    }
-
-    return false
+fun Type.isComparable(): Boolean = when(this) {
+    is Type.IntegerType, is Type.DoubleType, Type.StringType -> true
+    else -> false
 }

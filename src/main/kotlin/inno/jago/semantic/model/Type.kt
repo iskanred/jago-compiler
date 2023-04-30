@@ -41,7 +41,8 @@ sealed class Type {
     }
 
     object EquatableTypes : Type() {
-        override fun toString(): String = "$INT_TYPE_NAME or $DOUBLE_TYPE_NAME or $STRING_TYPE_NAME or $BOOL_TYPE_NAME pointer or array (with equatable elements)"
+        override fun toString(): String = "$INT_TYPE_NAME or $DOUBLE_TYPE_NAME or $STRING_TYPE_NAME or $BOOL_TYPE_NAME " +
+                "or pointer or array (with equatable elements)"
     }
 
     object ComparableTypes : Type() {

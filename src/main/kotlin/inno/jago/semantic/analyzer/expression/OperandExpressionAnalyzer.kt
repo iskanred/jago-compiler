@@ -22,7 +22,7 @@ fun OperandNode.toSemanticEntity(scope: ScopeNode): SemanticEntity = when(this) 
 }
 
 private fun LiteralOperandNode.toSemanticEntity(scope: ScopeNode): SemanticEntity =
-    literalNode.toSemanticEntity(scope)
+    literalNode.toSemanticEntity()
 
 private fun OperandNameNode.toSemanticEntity(scope: ScopeNode): SemanticEntity =
     name.toSemanticEntity(scope)
