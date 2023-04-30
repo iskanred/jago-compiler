@@ -18,3 +18,7 @@ class WrongNumberOfArguments(
 
 class EntityAlreadyExistsException(entity: SemanticEntity)
     : SemanticException("${entity.entityType} with name '${entity.identifier}' already exists at ${entity.pos}")
+
+class VarDeclMustPresentTypeOrExpressionException(varIdentifier: String, pos: Pos) : SemanticException(
+    "The variable declaration '$varIdentifier' must specify the type or the assigned expression at $pos"
+)

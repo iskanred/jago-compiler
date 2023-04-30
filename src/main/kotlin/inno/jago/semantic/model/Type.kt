@@ -84,7 +84,6 @@ sealed class Type {
         val elementTypes: List<Type>
     ) : Type()
 
-
     data class FuncType(
         val paramTypes: List<Type>,
         val returnType: Type
