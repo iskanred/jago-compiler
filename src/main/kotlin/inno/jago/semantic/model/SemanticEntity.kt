@@ -27,5 +27,5 @@ enum class EntityType {
     VARIABLE,
     CONSTANT,
     EXPRESSION,
-    EMPTY
+    STATEMENT
 }
