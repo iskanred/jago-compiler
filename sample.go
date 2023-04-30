@@ -5,5 +5,7 @@ package main
 import "fmt"
 
 func main() {
-    return
+    var a = 1
+    b := 2
+    fmt.Println(a + b)
 }
