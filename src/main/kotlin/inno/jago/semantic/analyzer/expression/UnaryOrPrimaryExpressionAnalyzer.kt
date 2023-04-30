@@ -39,19 +39,3 @@ fun PrimaryExpressionNode.toSemanticEntity(scope: ScopeNode): SemanticEntity = w
     is OperandNode -> TODO()
     else -> throw UnreachableCodeException()
 }
-
-private fun LiteralOperandNode.toSemanticEntity(scope: ScopeNode): SemanticEntity = TODO()
-
-private fun OperandNameNode.toSemanticEntity(scope: ScopeNode): SemanticEntity = when (name) {
-    is QualifiedIdentifierOperandNode -> {
-        scope.findVisibleEntity(name.qualifiedIdentifier.packageName)
-            ?: throw NoSuchVariableInCurrentScopeException(name.qualifiedIdentifier.packageName, pos)
-    }
-
-    is SimpleIdentifierOperandNode -> {
-        scope.findVisibleEntity(name.identifier) ?: throw NoSuchVariableInCurrentScopeException(
-            name.identifier,
-            pos
-        )
-    }
-}
