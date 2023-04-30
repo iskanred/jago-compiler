@@ -1,3 +1,4 @@
+@file:Suppress("ReturnCount")
 package inno.jago.ast.converter.expression
 
 import inno.jago.exception.UnreachableCodeException

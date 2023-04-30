@@ -1,5 +1,6 @@
 package inno.jago.ast.model.expression.binary_expression
 
+import inno.jago.ast.model.ASTNode
 import inno.jago.lexer.Pos
 import inno.jago.ast.model.expression.ExpressionNode
 
@@ -13,7 +14,7 @@ open class BinaryExpression(
 
 sealed class BinaryOperator(
     pos: Pos
-) : ExpressionNode(pos)
+) : ASTNode(pos)
 
 open class RelationOperator(
     pos: Pos,
