@@ -11,7 +11,7 @@ import inno.jago.semantic.model.Type
 class TypeChecker(
     private val sourceFileNode: SourceFileNode
 ) {
-    fun startTypeCheck() = sourceFileNode.typecheck(ScopeNode(name = "GLOBAL", parent = null))
+    fun startTypeCheck() = sourceFileNode.typecheck(ScopeNode(name = "GLOBAL", parent = null, expectedReturnType = null))
 
     private fun SourceFileNode.typecheck(scope: ScopeNode) {
         importNodes.forEach { it.toSemanticEntity(scope) }

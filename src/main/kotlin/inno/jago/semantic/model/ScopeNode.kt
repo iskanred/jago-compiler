@@ -5,12 +5,13 @@ import inno.jago.semantic.EntityAlreadyExistsException
 
 class ScopeNode(
     val name: String,
-    private val parent: ScopeNode?
+    private val parent: ScopeNode?,
+    private val expectedReturnType: Type?
 ) {
     private val table = mutableMapOf<String, SemanticEntity>()
 
-    fun createNewScope(name: String): ScopeNode =
-        ScopeNode(name = name, parent = this)
+    fun createNewScope(name: String, expectedReturnType: Type? = null): ScopeNode =
+        ScopeNode(name = name, parent = this, expectedReturnType = expectedReturnType)
 
     fun addUniqueEntity(entity: SemanticEntity): SemanticEntity {
         entity.identifier
