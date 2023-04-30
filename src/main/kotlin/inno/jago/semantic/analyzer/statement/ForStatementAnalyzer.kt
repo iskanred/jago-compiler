@@ -15,20 +15,27 @@ fun ForStatementNode.toSemanticEntity(scope: ScopeNode) = SemanticEntity(
     pos = pos,
     entityType = EntityType.STATEMENT
 ).also {
+    val forScope = scope.createNewForScope("'for' scope in ${scope.name}")
     when (this) {
         is ConditionalForStatementNode -> {
             val conditionSemanticEntity = condition.toSemanticEntity(scope)
             if (conditionSemanticEntity.type != Type.BoolType) {
                 throw WrongTypeException(Type.BoolType, conditionSemanticEntity)
             }
-
-            val forScope = scope.createNewForScope("'for' scope in ${scope.name}")
-            block.eachStatementToSemanticEntity(forScope)
         }
-
         is ForClauseStatementNode -> {
+            initStatementNode?.eachStatementToSemanticEntity(forScope)
 
+            condition?.let {
+                val conditionSemanticEntity = it.toSemanticEntity(scope)
+                if (conditionSemanticEntity.type != Type.BoolType) {
+                    throw WrongTypeException(Type.BoolType, conditionSemanticEntity)
+                }
+            }
+
+            postStatementNode?.toSemanticEntity(forScope)
         }
     }
+    block.eachStatementToSemanticEntity(forScope)
 }
 

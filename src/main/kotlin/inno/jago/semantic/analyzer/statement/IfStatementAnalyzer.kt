@@ -11,7 +11,7 @@ import inno.jago.semantic.model.SemanticEntity
 import inno.jago.semantic.model.Type
 
 fun IfStatementNode.toSemanticEntity(scope: ScopeNode): SemanticEntity {
-    val ifScope = scope.createNewIfScope("if scope in ${scope.name}")
+    val ifScope = scope.createNewIfScope("'if' scope in ${scope.name}")
     simpleStatement?.toSemanticEntity(ifScope)
 
     val actualConditionSemanticEntity = expression.toSemanticEntity(ifScope)
