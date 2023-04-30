@@ -35,7 +35,7 @@ fun PrimaryExpressionNode.toSemanticEntity(scope: ScopeNode): SemanticEntity = w
     is ExpressionOperandNode -> toSemanticEntity(scope)
     is ConversionNode -> toSemanticEntity(scope)
     is IndexExpressionNode -> toSemanticEntity(scope)
-    is ApplicationExpressionNode -> TODO()
+    is ApplicationExpressionNode -> toSemanticEntity(scope)
     // делает iskanred
     is LiteralOperandNode -> toSemanticEntity(scope)
     is OperandNameNode -> toSemanticEntity(scope)
