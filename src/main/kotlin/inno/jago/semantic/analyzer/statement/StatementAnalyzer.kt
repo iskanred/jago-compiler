@@ -25,7 +25,7 @@ import inno.jago.semantic.toType
 
 fun StatementNode.toSemanticEntity(scope: ScopeNode): SemanticEntity = when (this) {
     is AssignmentNode -> TODO()
-    is IfStatementNode -> TODO()
+    is IfStatementNode -> toSemanticEntity(scope)
     is ElseStatementNode -> TODO()
     is ExpressionStatementNode -> TODO()
     is IncDecStatementNode -> toSemanticEntity(scope)
@@ -68,5 +68,3 @@ private fun EmptyStatementNode.toSemanticEntity(scope: ScopeNode) = SemanticEnti
     entityType = EntityType.EMPTY,
     identifier = ""
 )
-
-
