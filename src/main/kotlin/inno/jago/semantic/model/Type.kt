@@ -40,15 +40,6 @@ sealed class Type {
         override fun toString(): String = BOOL_TYPE_NAME
     }
 
-    /**
-     * Implementation specific type that is not presented in language syntax
-     * It represents number type = int or float64
-     * It can be used that some construction can only accept or return numbers
-     */
-    object NumberType : Type() {
-        override fun toString(): String = "$INT_TYPE_NAME or $DOUBLE_TYPE_NAME"
-    }
-
     object EquatableTypes : Type() {
         override fun toString(): String = "$INT_TYPE_NAME or $DOUBLE_TYPE_NAME or $STRING_TYPE_NAME or $BOOL_TYPE_NAME pointer or array (with equatable elements)"
     }

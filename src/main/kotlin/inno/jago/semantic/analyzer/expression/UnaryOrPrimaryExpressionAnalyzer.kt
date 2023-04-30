@@ -16,11 +16,11 @@ import inno.jago.exception.JaGoException
 import inno.jago.exception.UnreachableCodeException
 import inno.jago.semantic.NoSuchEntityInCurrentScopeException
 import inno.jago.semantic.NonCastableTypeException
-import inno.jago.semantic.NoSuchVariableInCurrentScopeException
 import inno.jago.semantic.model.EntityType
 import inno.jago.semantic.WrongTypeException
 import inno.jago.semantic.model.ScopeNode
 import inno.jago.semantic.model.SemanticEntity
+import inno.jago.semantic.model.Type
 import inno.jago.semantic.model.toType
 
 fun UnaryOrPrimaryExpression.toSemanticEntity(scope: ScopeNode): SemanticEntity = when (this) {
@@ -65,14 +65,14 @@ fun IndexExpressionNode.toSemanticEntity(scope: ScopeNode): SemanticEntity {
     val index = expression.toSemanticEntity(scope)
 
     if (index.type !is Type.IntegerType) {
-        throw WrongTypeException(Type.IntegerType, index)
+        throw WrongTypeException(Type.IntegerType, actual = index)
     }
 
     if (expr.identifier != null) {
         val exprFromScope = scope.findVisibleEntity(expr.identifier)
         if (exprFromScope != null) {
             if (exprFromScope.type != expr.type) {
-                throw WrongTypeException(Type.ArrayType(-1, Type.AnyType), index)
+                throw WrongTypeException(Type.ArrayType(-1, Type.AnyType), actual = index)
             }
         } else {
             throw NoSuchEntityInCurrentScopeException(expr.identifier, pos)
@@ -80,7 +80,7 @@ fun IndexExpressionNode.toSemanticEntity(scope: ScopeNode): SemanticEntity {
     }
 
     if (expr.type !is Type.ArrayType) {
-        throw WrongTypeException(Type.ArrayType(-1, Type.AnyType), index)
+        throw WrongTypeException(Type.ArrayType(-1, Type.AnyType), actual = index)
     }
 
     return SemanticEntity(expr.type, pos, EntityType.EXPRESSION)
@@ -99,7 +99,7 @@ fun ApplicationExpressionNode.toSemanticEntity(scope: ScopeNode): SemanticEntity
             // проверка соответствия типов
             for (i in 0..args.size) {
                 if (!left.type.paramTypes[i].equals(args[i])) {
-                    throw WrongTypeException(left.type.paramTypes[i], args[i])
+                    throw WrongTypeException(left.type.paramTypes[i], actual = args[i])
                 }
             }
 
@@ -108,8 +108,9 @@ fun ApplicationExpressionNode.toSemanticEntity(scope: ScopeNode): SemanticEntity
                 type = left.type.returnType,
                 pos = pos,
                 entityType = EntityType.EXPRESSION,
-                )
+            )
         }
+
         else -> throw UnreachableCodeException()
     }
 }
