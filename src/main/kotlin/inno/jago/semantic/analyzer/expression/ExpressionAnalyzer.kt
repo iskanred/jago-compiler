@@ -39,63 +39,57 @@ fun UnaryOrPrimaryExpression.toSemanticEntity(scope: ScopeNode): SemanticEntity 
         throw NotImplementedError()
     }
 
-    is PrimaryExpressionNode -> {
-        when (this) {
-            is ExpressionOperandNode -> {
-                throw NotImplementedError()
+    is ExpressionOperandNode -> {
+        throw NotImplementedError()
+    }
+
+    is ConversionNode -> {
+        throw NotImplementedError()
+    }
+
+    is IndexExpressionNode -> {
+        throw NotImplementedError()
+    }
+
+    is SelectorExpressionNode -> {
+        throw NotImplementedError()
+    }
+
+    is ApplicationExpressionNode -> {
+        throw NotImplementedError()
+    }
+
+    is LiteralOperandNode -> {
+        when (literalNode) {
+            is IntegerLiteralNode -> SemanticEntity(Type.IntegerType, pos, EntityType.EXPRESSION, null)
+            else -> throw NotImplementedError()
+        }
+    }
+
+    is OperandNameNode -> {
+        when (name) {
+            is QualifiedIdentifierOperandNode -> {
+                scope.findVisibleEntity(name.qualifiedIdentifier.packageName)
+                    ?: throw NoSuchVariableInCurrentScopeException(name.qualifiedIdentifier.packageName, pos)
             }
 
-            is ConversionNode -> {
-                throw NotImplementedError()
-            }
-
-            is IndexExpressionNode -> {
-                throw NotImplementedError()
-            }
-
-            is SelectorExpressionNode -> {
-                throw NotImplementedError()
-            }
-
-            is ApplicationExpressionNode -> {
-                throw NotImplementedError()
-            }
-
-            is LiteralOperandNode -> {
-                when (literalNode) {
-                    is IntegerLiteralNode -> SemanticEntity(Type.IntegerType, pos, EntityType.EXPRESSION, null)
-                    else -> throw NotImplementedError()
-                }
-            }
-
-            is OperandNameNode -> {
-                when (name) {
-                    is QualifiedIdentifierOperandNode -> {
-                        scope.findVisibleEntity(name.qualifiedIdentifier.packageName)
-                            ?: throw NoSuchVariableInCurrentScopeException(name.qualifiedIdentifier.packageName, pos)
-                    }
-
-                    is SimpleIdentifierOperandNode -> {
-                        scope.findVisibleEntity(name.identifier) ?: throw NoSuchVariableInCurrentScopeException(
-                            name.identifier,
-                            pos
-                        )
-                    }
-                }
-            }
-
-            is OperandNode -> {
-                throw NotImplementedError()
-            }
-
-            else -> {
-                throw NotImplementedError()
+            is SimpleIdentifierOperandNode -> {
+                scope.findVisibleEntity(name.identifier) ?: throw NoSuchVariableInCurrentScopeException(
+                    name.identifier,
+                    pos
+                )
             }
         }
     }
 
+    is OperandNode -> {
+        throw NotImplementedError()
+    }
 
-    else -> throw NotImplementedError()
+    is PrimaryExpressionNode -> {
+        throw NotImplementedError()
+    }
+
 }
 
 fun BinaryExpression.toSemanticEntity(scope: ScopeNode): SemanticEntity {
