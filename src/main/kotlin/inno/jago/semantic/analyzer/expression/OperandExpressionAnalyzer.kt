@@ -21,28 +21,28 @@ fun OperandNode.toSemanticEntity(scope: ScopeNode): SemanticEntity = when(this) 
     is ExpressionOperandNode -> toSemanticEntity(scope)
 }
 
-fun LiteralOperandNode.toSemanticEntity(scope: ScopeNode): SemanticEntity =
+private fun LiteralOperandNode.toSemanticEntity(scope: ScopeNode): SemanticEntity =
     literalNode.toSemanticEntity(scope)
 
-fun OperandNameNode.toSemanticEntity(scope: ScopeNode): SemanticEntity =
+private fun OperandNameNode.toSemanticEntity(scope: ScopeNode): SemanticEntity =
     name.toSemanticEntity(scope)
 
-fun ExpressionOperandNode.toSemanticEntity(scope: ScopeNode): SemanticEntity =
+private fun ExpressionOperandNode.toSemanticEntity(scope: ScopeNode): SemanticEntity =
     expression.toSemanticEntity(scope)
 
-fun IdentifierOperandNode.toSemanticEntity(scope: ScopeNode): SemanticEntity = when(this) {
+private fun IdentifierOperandNode.toSemanticEntity(scope: ScopeNode): SemanticEntity = when(this) {
     is SimpleIdentifierOperandNode -> toSemanticEntity(scope)
     is QualifiedIdentifierOperandNode -> toSemanticEntity(scope)
 }
 
-fun SimpleIdentifierOperandNode.toSemanticEntity(scope: ScopeNode): SemanticEntity =
+private fun SimpleIdentifierOperandNode.toSemanticEntity(scope: ScopeNode): SemanticEntity =
     scope.findVisibleEntity(identifier)
         ?: throw NoSuchEntityInCurrentScopeException(identifier = identifier, pos = pos)
 
-fun QualifiedIdentifierOperandNode.toSemanticEntity(scope: ScopeNode): SemanticEntity =
+private fun QualifiedIdentifierOperandNode.toSemanticEntity(scope: ScopeNode): SemanticEntity =
     qualifiedIdentifier.toSemanticEntity(scope)
 
-fun QualifiedIdentifierNode.toSemanticEntity(scope: ScopeNode): SemanticEntity {
+private fun QualifiedIdentifierNode.toSemanticEntity(scope: ScopeNode): SemanticEntity {
     val packageNameEntity = scope.findVisibleEntity(packageName)
         ?: throw NoSuchEntityInCurrentScopeException(identifier = packageName, pos = pos)
     packageNameEntity.takeIf { it.type == Type.ImportType }

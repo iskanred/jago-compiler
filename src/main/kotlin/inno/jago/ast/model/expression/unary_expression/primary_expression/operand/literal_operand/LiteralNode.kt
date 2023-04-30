@@ -19,7 +19,9 @@ class IntegerLiteralNode(
 ) : BasicLiteralNode(
     pos = pos,
     value = value
-)
+) {
+    val intValue: Int = value.toInt()
+}
 
 class DoubleLiteralNode(
     pos: Pos,
