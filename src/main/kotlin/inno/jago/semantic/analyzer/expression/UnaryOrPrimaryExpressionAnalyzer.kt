@@ -11,14 +11,16 @@ import inno.jago.ast.model.expression.unary_expression.primary_expression.operan
 import inno.jago.ast.model.expression.unary_expression.primary_expression.operand.LiteralOperandNode
 import inno.jago.ast.model.expression.unary_expression.primary_expression.operand.OperandNameNode
 import inno.jago.ast.model.expression.unary_expression.primary_expression.operand.OperandNode
+import inno.jago.ast.model.type.ArrayTypeNode
+import inno.jago.exception.JaGoException
 import inno.jago.exception.UnreachableCodeException
 import inno.jago.semantic.NoSuchEntityInCurrentScopeException
 import inno.jago.semantic.NonCastableTypeException
+import inno.jago.semantic.NoSuchVariableInCurrentScopeException
 import inno.jago.semantic.model.EntityType
 import inno.jago.semantic.WrongTypeException
 import inno.jago.semantic.model.ScopeNode
 import inno.jago.semantic.model.SemanticEntity
-import inno.jago.semantic.model.Type
 import inno.jago.semantic.model.toType
 
 fun UnaryOrPrimaryExpression.toSemanticEntity(scope: ScopeNode): SemanticEntity = when (this) {
@@ -45,7 +47,7 @@ fun PrimaryExpressionNode.toSemanticEntity(scope: ScopeNode): SemanticEntity = w
 
 fun ConversionNode.toSemanticEntity(scope: ScopeNode): SemanticEntity {
     var entity = expression.toSemanticEntity(scope)
-    if (entity.type != type.toType() ) {
+    if (entity.type != type.toType()) {
         if (entity.type !is Type.NumberType || type.toType() !is Type.NumberType) {
             throw NonCastableTypeException(entity.type, type.toType(), pos)
         }
@@ -58,7 +60,7 @@ fun ConversionNode.toSemanticEntity(scope: ScopeNode): SemanticEntity {
     return entity
 }
 
-fun IndexExpressionNode.toSemanticEntity(scope: ScopeNode): SemanticEntity  {
+fun IndexExpressionNode.toSemanticEntity(scope: ScopeNode): SemanticEntity {
     val expr = primaryExpression.toSemanticEntity(scope)
     val index = expression.toSemanticEntity(scope)
 
@@ -85,5 +87,29 @@ fun IndexExpressionNode.toSemanticEntity(scope: ScopeNode): SemanticEntity  {
 }
 
 fun ApplicationExpressionNode.toSemanticEntity(scope: ScopeNode): SemanticEntity {
+    val left = leftExpression.toSemanticEntity(scope)
+    val args = expressions.map { it.toSemanticEntity(scope) }
 
+    when (left.type) {
+        is Type.FuncType -> {
+            // длина
+            if (left.type.paramTypes.size != args.size) {
+                throw JaGoException("number of params is not equal to arguments number")
+            }
+            // проверка соответствия типов
+            for (i in 0..args.size) {
+                if (!left.type.paramTypes[i].equals(args[i])) {
+                    throw WrongTypeException(left.type.paramTypes[i], args[i])
+                }
+            }
+
+            // возвращаем то, что вернула функция
+            return SemanticEntity(
+                type = left.type.returnType,
+                pos = pos,
+                entityType = EntityType.EXPRESSION,
+                )
+        }
+        else -> throw UnreachableCodeException()
+    }
 }
