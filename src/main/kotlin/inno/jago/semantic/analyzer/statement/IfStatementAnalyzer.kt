@@ -1,10 +1,10 @@
-package inno.jago.semantic.analyzer.expression
+package inno.jago.semantic.analyzer.statement
 
 import inno.jago.ast.model.statement.ElseIfStatementNode
 import inno.jago.ast.model.statement.IfStatementNode
 import inno.jago.ast.model.statement.SimpleElseStatementNode
 import inno.jago.semantic.WrongTypeException
-import inno.jago.semantic.analyzer.statement.toSemanticEntity
+import inno.jago.semantic.analyzer.expression.toSemanticEntity
 import inno.jago.semantic.model.EntityType
 import inno.jago.semantic.model.ScopeNode
 import inno.jago.semantic.model.SemanticEntity

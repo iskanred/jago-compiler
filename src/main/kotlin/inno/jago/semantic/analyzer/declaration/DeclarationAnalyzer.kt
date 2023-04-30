@@ -7,9 +7,9 @@ import inno.jago.ast.model.decl.VarDeclarationNode
 import inno.jago.semantic.VarDeclMustPresentTypeOrExpressionException
 import inno.jago.semantic.WrongTypeException
 import inno.jago.semantic.analyzer.expression.toSemanticEntity
+import inno.jago.semantic.analyzer.statement.toSemanticEntity
 import inno.jago.semantic.analyzer.signature.toSemanticEntity
 import inno.jago.semantic.analyzer.signature.toType
-import inno.jago.semantic.analyzer.statement.toSemanticEntity
 import inno.jago.semantic.model.EntityType
 import inno.jago.semantic.model.ScopeNode
 import inno.jago.semantic.model.SemanticEntity
