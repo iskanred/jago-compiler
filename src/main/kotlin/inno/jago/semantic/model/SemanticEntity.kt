@@ -25,7 +25,6 @@ enum class EntityType {
     FUNCTION,
     IMPORT,
     VARIABLE,
-    CONSTANT,
     EXPRESSION,
     STATEMENT
 }

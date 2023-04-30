@@ -47,7 +47,6 @@ class BoolLiteralNode(
     value = value
 ) {
     val boolValue: Boolean = value.toBooleanStrict()
-
 }
 
 class CompositeLiteralNode(

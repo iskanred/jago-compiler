@@ -34,7 +34,7 @@ private fun ConstDeclarationNode.toSemanticEntity(scope: ScopeNode): SemanticEnt
     return SemanticEntity(
         type = expressionEntity.type,
         pos = pos,
-        entityType = EntityType.CONSTANT,
+        entityType = EntityType.VARIABLE,
         identifier = identifier
     ).also { entity ->
         // add const to current scope
