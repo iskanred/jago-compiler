@@ -1,6 +1,5 @@
 package inno.jago.semantic.analyzer.expression
 
-import inno.jago.ast.model.expression.ExpressionNode
 import inno.jago.ast.model.expression.unary_expression.ApplicationExpressionNode
 import inno.jago.ast.model.expression.unary_expression.ConversionNode
 import inno.jago.ast.model.expression.unary_expression.IndexExpressionNode
@@ -11,7 +10,6 @@ import inno.jago.ast.model.expression.unary_expression.primary_expression.operan
 import inno.jago.ast.model.expression.unary_expression.primary_expression.operand.LiteralOperandNode
 import inno.jago.ast.model.expression.unary_expression.primary_expression.operand.OperandNameNode
 import inno.jago.ast.model.expression.unary_expression.primary_expression.operand.OperandNode
-import inno.jago.ast.model.type.ArrayTypeNode
 import inno.jago.exception.JaGoException
 import inno.jago.exception.UnreachableCodeException
 import inno.jago.semantic.NoSuchEntityInCurrentScopeException
@@ -87,25 +85,25 @@ fun IndexExpressionNode.toSemanticEntity(scope: ScopeNode): SemanticEntity {
 }
 
 fun ApplicationExpressionNode.toSemanticEntity(scope: ScopeNode): SemanticEntity {
-    val left = leftExpression.toSemanticEntity(scope)
+    val function = leftExpression.toSemanticEntity(scope)
     val args = expressions.map { it.toSemanticEntity(scope) }
 
-    when (left.type) {
+    when (function.type) {
         is Type.FuncType -> {
             // длина
-            if (left.type.paramTypes.size != args.size) {
+            if (function.type.paramTypes.size != args.size) {
                 throw JaGoException("number of params is not equal to arguments number")
             }
             // проверка соответствия типов
             for (i in 0..args.size) {
-                if (!left.type.paramTypes[i].equals(args[i])) {
-                    throw WrongTypeException(left.type.paramTypes[i], actual = args[i])
+                if (!function.type.paramTypes[i].equals(args[i])) {
+                    throw WrongTypeException(function.type.paramTypes[i], actual = args[i])
                 }
             }
 
             // возвращаем то, что вернула функция
             return SemanticEntity(
-                type = left.type.returnType,
+                type = function.type.returnType,
                 pos = pos,
                 entityType = EntityType.EXPRESSION,
             )
