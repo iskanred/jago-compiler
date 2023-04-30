@@ -26,7 +26,7 @@ import inno.jago.semantic.toType
 fun StatementNode.toSemanticEntity(scope: ScopeNode): SemanticEntity = when (this) {
     is AssignmentNode -> TODO()
     is IfStatementNode -> toSemanticEntity(scope)
-    is ElseStatementNode -> TODO()
+    is ElseStatementNode -> TODO() // NOT NEEDED
     is ExpressionStatementNode -> TODO()
     is IncDecStatementNode -> toSemanticEntity(scope)
     is BlockStatementNode -> TODO()
