@@ -18,6 +18,9 @@ sealed class ScopeNode(
     fun createNewIfScope(name: String): ScopeNode =
         IfScopeNode(name = name, parent = this)
 
+    fun createNewSimpleBlockScope(name: String): ScopeNode =
+        SimpleBLockScopeNode(name = name, parent = this)
+
     fun addUniqueEntity(entity: SemanticEntity): SemanticEntity {
         entity.identifier
             ?: throw JaGoException("Only entity with non-null can be added to symbol table")
@@ -56,7 +59,7 @@ sealed class ScopeNode(
 
     fun hasLoopScope(): Boolean {
         if (this is ForScopeNode) {
-            return true;
+            return true
         }
         return parent?.hasLoopScope() ?: false
     }
@@ -65,6 +68,14 @@ sealed class ScopeNode(
         val globalScopeNode = GlobalScopeNode()
     }
 }
+
+class SimpleBLockScopeNode(
+    name: String,
+    parent: ScopeNode?
+) : ScopeNode(
+    name = name,
+    parent = parent
+)
 
 class IfScopeNode(
     name: String,

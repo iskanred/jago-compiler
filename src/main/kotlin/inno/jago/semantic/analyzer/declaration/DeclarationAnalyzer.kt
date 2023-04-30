@@ -27,7 +27,7 @@ private fun ConstDeclarationNode.toSemanticEntity(scope: ScopeNode): SemanticEnt
 
     type?.toType()?.let { expectedType ->
         if (expressionEntity.type != expectedType) {
-            throw WrongTypeException(expectedType = expectedType, actual = expressionEntity)
+            throw WrongTypeException(expectedType, actual = expressionEntity)
         }
     }
 
@@ -57,7 +57,7 @@ private fun VarDeclarationNode.toSemanticEntity(scope: ScopeNode): SemanticEntit
 
         type?.toType()?.let { expectedType ->
             if (expressionType != expectedType) {
-                throw WrongTypeException(expectedType = expectedType, actual = expressionEntity)
+                throw WrongTypeException(expectedType, actual = expressionEntity)
             }
         }
 

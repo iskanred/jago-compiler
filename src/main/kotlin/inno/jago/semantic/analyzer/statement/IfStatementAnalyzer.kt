@@ -16,7 +16,7 @@ fun IfStatementNode.toSemanticEntity(scope: ScopeNode): SemanticEntity {
 
     val actualConditionSemanticEntity = expression.toSemanticEntity(ifScope)
     if (actualConditionSemanticEntity.type != Type.BoolType) {
-        throw WrongTypeException(Type.BoolType, actualConditionSemanticEntity)
+        throw WrongTypeException(Type.BoolType, actual = actualConditionSemanticEntity)
     }
 
     block.eachStatementToSemanticEntity(ifScope)
