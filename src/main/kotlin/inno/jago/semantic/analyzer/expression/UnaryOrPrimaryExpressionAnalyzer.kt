@@ -13,9 +13,9 @@ import inno.jago.ast.model.expression.unary_expression.primary_expression.operan
 import inno.jago.ast.model.expression.unary_expression.primary_expression.operand.OperandNode
 import inno.jago.ast.model.type.ArrayTypeNode
 import inno.jago.exception.UnreachableCodeException
+import inno.jago.semantic.NoSuchEntityInCurrentScopeException
 import inno.jago.semantic.NonCastableTypeException
 import inno.jago.semantic.model.EntityType
-import inno.jago.semantic.NoSuchVariableInCurrentScopeException
 import inno.jago.semantic.WrongTypeException
 import inno.jago.semantic.model.ScopeNode
 import inno.jago.semantic.model.SemanticEntity
@@ -75,7 +75,7 @@ fun IndexExpressionNode.toSemanticEntity(scope: ScopeNode): SemanticEntity  {
                 throw WrongTypeException(Type.ArrayType(-1, Type.AnyType), index)
             }
         } else {
-            throw NoSuchVariableInCurrentScopeException(expr.identifier, pos)
+            throw NoSuchEntityInCurrentScopeException(expr.identifier, pos)
         }
     }
 
@@ -84,4 +84,8 @@ fun IndexExpressionNode.toSemanticEntity(scope: ScopeNode): SemanticEntity  {
     }
 
     return SemanticEntity(expr.type, pos, EntityType.EXPRESSION)
+}
+
+fun ApplicationExpressionNode.toSemanticEntity(scope: ScopeNode): SemanticEntity {
+
 }
