@@ -1,3 +1,4 @@
+@file:Suppress("ThrowsCount")
 package inno.jago.semantic.analyzer.expression
 
 import inno.jago.ast.model.expression.unary_expression.ApplicationExpressionNode
@@ -36,7 +37,6 @@ fun PrimaryExpressionNode.toSemanticEntity(scope: ScopeNode): SemanticEntity = w
     is ConversionNode -> toSemanticEntity(scope)
     is IndexExpressionNode -> toSemanticEntity(scope)
     is ApplicationExpressionNode -> toSemanticEntity(scope)
-    // делает iskanred
     is LiteralOperandNode -> toSemanticEntity(scope)
     is OperandNameNode -> toSemanticEntity(scope)
     is OperandNode -> TODO()
@@ -44,7 +44,7 @@ fun PrimaryExpressionNode.toSemanticEntity(scope: ScopeNode): SemanticEntity = w
 }
 
 fun ConversionNode.toSemanticEntity(scope: ScopeNode): SemanticEntity {
-    var entity = expression.toSemanticEntity(scope)
+    val entity = expression.toSemanticEntity(scope)
     if (entity.type != type.toType()) {
         if (entity.type !is Type.NumberType || type.toType() !is Type.NumberType) {
             throw NonCastableTypeException(entity.type, type.toType(), pos)

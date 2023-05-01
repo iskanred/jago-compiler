@@ -16,12 +16,12 @@ import inno.jago.semantic.model.SemanticEntity
 import inno.jago.semantic.model.Type
 
 fun OperandNode.toSemanticEntity(scope: ScopeNode): SemanticEntity = when(this) {
-    is LiteralOperandNode -> toSemanticEntity(scope)
+    is LiteralOperandNode -> toSemanticEntity()
     is OperandNameNode -> toSemanticEntity(scope)
     is ExpressionOperandNode -> toSemanticEntity(scope)
 }
 
-private fun LiteralOperandNode.toSemanticEntity(scope: ScopeNode): SemanticEntity =
+private fun LiteralOperandNode.toSemanticEntity(): SemanticEntity =
     literalNode.toSemanticEntity()
 
 private fun OperandNameNode.toSemanticEntity(scope: ScopeNode): SemanticEntity =
@@ -46,7 +46,7 @@ private fun QualifiedIdentifierNode.toSemanticEntity(scope: ScopeNode): Semantic
     val packageNameEntity = scope.findVisibleEntity(packageName)
         ?: throw NoSuchEntityInCurrentScopeException(identifier = packageName, pos = pos)
     packageNameEntity.takeIf { it.type == Type.ImportType }
-        ?: throw WrongTypeException(expectedType = Type.ImportType, actual = packageNameEntity)
+        ?: throw WrongTypeException(Type.ImportType, actual = packageNameEntity)
 
     // maybe here is necessary to load other packages type information
     //  and get entity for identifier
