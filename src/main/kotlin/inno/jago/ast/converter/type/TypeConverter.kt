@@ -3,7 +3,7 @@ package inno.jago.ast.converter.type
 import GoParser
 import inno.jago.ast.EntityNotSupportedException
 import inno.jago.ast.UnknownTypeException
-import inno.jago.exception.UnreachableCodeException
+import inno.jago.common.UnreachableCodeException
 import inno.jago.ast.model.type.ArrayTypeNode
 import inno.jago.ast.model.type.BoolTypeNode
 import inno.jago.ast.model.type.DoubleTypeNode

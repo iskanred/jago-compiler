@@ -1,12 +1,9 @@
 package inno.jago.ast
 
-import inno.jago.exception.JaGoException
+import inno.jago.common.JaGoException
 import inno.jago.lexer.Pos
 
 sealed class ASTBuildException(msg: String) : JaGoException(msg)
-
-class WrongNumberOfExpressionsException(expected: Int, actual: Int)
-    : ASTBuildException("Expected $expected or func expressions, got $actual expression")
 
 class WrongBinaryExpressionNumberException : ASTBuildException("Expected two expressions around binary operator")
 

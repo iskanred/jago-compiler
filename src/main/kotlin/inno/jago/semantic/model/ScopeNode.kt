@@ -1,6 +1,6 @@
 package inno.jago.semantic.model
 
-import inno.jago.exception.JaGoException
+import inno.jago.common.JaGoException
 import inno.jago.semantic.EntityAlreadyExistsException
 
 sealed class ScopeNode(

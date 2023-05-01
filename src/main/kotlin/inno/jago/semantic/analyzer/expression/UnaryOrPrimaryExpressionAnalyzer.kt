@@ -11,8 +11,8 @@ import inno.jago.ast.model.expression.unary_expression.primary_expression.operan
 import inno.jago.ast.model.expression.unary_expression.primary_expression.operand.LiteralOperandNode
 import inno.jago.ast.model.expression.unary_expression.primary_expression.operand.OperandNameNode
 import inno.jago.ast.model.expression.unary_expression.primary_expression.operand.OperandNode
-import inno.jago.exception.JaGoException
-import inno.jago.exception.UnreachableCodeException
+import inno.jago.common.JaGoException
+import inno.jago.common.UnreachableCodeException
 import inno.jago.semantic.NoSuchEntityInCurrentScopeException
 import inno.jago.semantic.NonCastableTypeException
 import inno.jago.semantic.model.EntityType

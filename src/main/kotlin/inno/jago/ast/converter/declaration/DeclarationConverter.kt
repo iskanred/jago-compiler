@@ -1,8 +1,7 @@
 package inno.jago.ast.converter.declaration
 
 import inno.jago.ast.EntityNotSupportedException
-import inno.jago.ast.WrongNumberOfExpressionsException
-import inno.jago.exception.UnreachableCodeException
+import inno.jago.common.UnreachableCodeException
 import inno.jago.ast.model.decl.ConstDeclarationNode
 import inno.jago.ast.model.decl.DeclarationNode
 import inno.jago.ast.model.decl.FunctionDeclarationNode
@@ -12,6 +11,7 @@ import inno.jago.ast.converter.expression.toExpressionNode
 import inno.jago.ast.converter.statement.toBlockStatementNode
 import inno.jago.ast.converter.signature.toSignatureNode
 import inno.jago.ast.converter.type.toTypeNode
+import inno.jago.common.WrongNumberOfExpressionsException
 
 fun GoParser.DeclarationContext.toDeclarationNodes(): List<DeclarationNode> {
     constDecl()?.let { constDecl ->
@@ -35,7 +35,11 @@ fun GoParser.ConstSpecContext.toConstDeclarationNode(): List<ConstDeclarationNod
     val expressions = expressionList().expression().map { it.toExpressionNode() }
 
     if (identifiers.size != expressions.size ) {
-        throw WrongNumberOfExpressionsException(expected = identifiers.size, actual = expressions.size)
+        throw WrongNumberOfExpressionsException(
+            expected = identifiers.size,
+            actual = expressions.size,
+            pos = toPos()
+        )
     }
 
     return identifiers.mapIndexed { index, identifier ->
@@ -73,7 +77,11 @@ fun GoParser.VarSpecContext.toVarDeclarationNodes(): List<VarDeclarationNode> {
             )
         }
     } else {
-        throw WrongNumberOfExpressionsException(identifiers.size, expressions.size)
+        throw WrongNumberOfExpressionsException(
+            expected = identifiers.size,
+            actual = expressions.size,
+            pos = toPos()
+        )
     }
 }
 

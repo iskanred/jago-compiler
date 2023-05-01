@@ -1,7 +1,7 @@
 @file:Suppress("ReturnCount")
 package inno.jago.ast.converter.expression
 
-import inno.jago.exception.UnreachableCodeException
+import inno.jago.common.UnreachableCodeException
 import inno.jago.ast.model.expression.binary_expression.AddOperator
 import inno.jago.ast.model.expression.binary_expression.AddOperators
 import inno.jago.ast.model.expression.binary_expression.BinaryOperator

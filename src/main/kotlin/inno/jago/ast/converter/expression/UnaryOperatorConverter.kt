@@ -1,6 +1,6 @@
 package inno.jago.ast.converter.expression
 
-import inno.jago.exception.UnreachableCodeException
+import inno.jago.common.UnreachableCodeException
 import inno.jago.ast.model.expression.unary_expression.UnaryOperatorNode
 import inno.jago.ast.model.expression.unary_expression.UnaryOperators
 import inno.jago.ast.converter.common.toPos

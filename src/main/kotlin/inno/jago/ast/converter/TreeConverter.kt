@@ -2,7 +2,7 @@ package inno.jago.ast.converter
 
 import GoParser
 import inno.jago.ast.EntityNotSupportedException
-import inno.jago.exception.UnreachableCodeException
+import inno.jago.common.UnreachableCodeException
 import inno.jago.ast.model.global.ImportNode
 import inno.jago.ast.model.global.PackageNode
 import inno.jago.ast.model.global.SourceFileNode

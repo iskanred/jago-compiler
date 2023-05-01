@@ -1,7 +1,7 @@
 package inno.jago.ast.converter.statement
 
 import inno.jago.ast.EntityNotSupportedException
-import inno.jago.exception.UnreachableCodeException
+import inno.jago.common.UnreachableCodeException
 import inno.jago.ast.model.statement.BlockStatementNode
 import inno.jago.ast.model.statement.ConditionalForStatementNode
 import inno.jago.ast.model.statement.ForClauseStatementNode

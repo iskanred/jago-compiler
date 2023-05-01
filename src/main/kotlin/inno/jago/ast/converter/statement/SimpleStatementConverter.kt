@@ -2,7 +2,7 @@ package inno.jago.ast.converter.statement
 
 import GoParser
 import inno.jago.ast.EntityNotSupportedException
-import inno.jago.exception.UnreachableCodeException
+import inno.jago.common.UnreachableCodeException
 import inno.jago.ast.model.statement.AssignmentNode
 import inno.jago.ast.model.statement.EmptyStatementNode
 import inno.jago.ast.model.statement.ExpressionStatementNode

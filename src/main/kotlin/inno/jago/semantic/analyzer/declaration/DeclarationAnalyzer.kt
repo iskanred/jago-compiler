@@ -4,6 +4,7 @@ import inno.jago.ast.model.decl.ConstDeclarationNode
 import inno.jago.ast.model.decl.FunctionDeclarationNode
 import inno.jago.ast.model.decl.TopLevelDeclNode
 import inno.jago.ast.model.decl.VarDeclarationNode
+import inno.jago.common.WrongNumberOfExpressionsException
 import inno.jago.semantic.VarDeclMustPresentTypeOrExpressionException
 import inno.jago.semantic.WrongTypeException
 import inno.jago.semantic.analyzer.expression.toSemanticEntity
@@ -50,6 +51,14 @@ private fun VarDeclarationNode.toSemanticEntity(scope: ScopeNode): SemanticEntit
     } else { // expression != null
         val expressionEntity = expression!!.toSemanticEntity(scope)
         val expressionType = if (expressionEntity.type is Type.TupleType) {
+            // проверка кол-ва переменных слева и выражений для присвоения справа
+            if (positionInRow + 1 >= expressionEntity.type.elementTypes.size) {
+                throw WrongNumberOfExpressionsException(
+                    expected = positionInRow + 1,
+                    actual = expressionEntity.type.elementTypes.size,
+                    pos = pos
+                )
+            }
             expressionEntity.type.elementTypes[positionInRow]
         } else {
             expressionEntity.type
