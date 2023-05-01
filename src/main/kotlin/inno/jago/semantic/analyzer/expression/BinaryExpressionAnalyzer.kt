@@ -14,7 +14,7 @@ import inno.jago.semantic.model.ScopeNode
 import inno.jago.semantic.model.SemanticEntity
 import inno.jago.semantic.model.Type
 
-@Suppress("ThrowsCount")
+@Suppress("ThrowsCount", "CyclomaticComplexMethod", "LongMethod", "NestedBlockDepth", "ReturnCount")
 fun BinaryExpression.toSemanticEntity(scope: ScopeNode): SemanticEntity {
     val left = leftExpression.toSemanticEntity(scope)
     val right = leftExpression.toSemanticEntity(scope)
@@ -40,7 +40,7 @@ fun BinaryExpression.toSemanticEntity(scope: ScopeNode): SemanticEntity {
                 throw WrongTypeException(left.type, actual = right)
             }
 
-            return SemanticEntity(type = left.type, pos = pos, entityType = EntityType.EXPRESSION)
+            return SemanticEntity(type = left.type, pos = pos, entityType = EntityType.NO_IDENTIFIER)
         }
 
 //        *    product                integers, floats
@@ -68,7 +68,7 @@ fun BinaryExpression.toSemanticEntity(scope: ScopeNode): SemanticEntity {
                 throw WrongTypeException(left.type, actual = right)
             }
 
-            return SemanticEntity(type = left.type, pos = pos, entityType = EntityType.EXPRESSION)
+            return SemanticEntity(type = left.type, pos = pos, entityType = EntityType.NO_IDENTIFIER)
         }
 
 //        +    sum                    integers, floats, strings
@@ -94,7 +94,7 @@ fun BinaryExpression.toSemanticEntity(scope: ScopeNode): SemanticEntity {
                 throw WrongTypeException(left.type, actual = right)
             }
 
-            return SemanticEntity(type = left.type, pos = pos, entityType = EntityType.EXPRESSION)
+            return SemanticEntity(type = left.type, pos = pos, entityType = EntityType.NO_IDENTIFIER)
         }
 
 //        &&    conditional AND    p && q  is  "if p then q else false"
@@ -107,7 +107,7 @@ fun BinaryExpression.toSemanticEntity(scope: ScopeNode): SemanticEntity {
                 }
             }
 
-            return SemanticEntity(type = Type.BoolType, pos = pos, entityType = EntityType.EXPRESSION)
+            return SemanticEntity(type = Type.BoolType, pos = pos, entityType = EntityType.NO_IDENTIFIER)
         }
     }
 }

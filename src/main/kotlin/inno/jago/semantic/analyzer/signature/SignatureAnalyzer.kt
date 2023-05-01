@@ -17,7 +17,7 @@ fun SignatureNode.toType() = Type.FuncType(
 fun ParameterNode.toSemanticEntity(scope: ScopeNode) = SemanticEntity(
     type = type.toType(),
     pos = pos,
-    entityType = EntityType.PARAMETER,
+    entityType = EntityType.VAR,
     identifier = identifier
 ).also { entity ->
     // add parameter to parent scope

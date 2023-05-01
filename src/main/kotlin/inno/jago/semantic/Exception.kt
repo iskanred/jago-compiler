@@ -11,7 +11,7 @@ class WrongTypeException(vararg expectedType: Type, actual: SemanticEntity)
     : SemanticException("Expected [${expectedType.joinToString()}] type but got [${actual.type}] at ${actual.pos}")
 
 class EntityAlreadyExistsException(entity: SemanticEntity)
-    : SemanticException("${entity.entityType} with name '${entity.identifier}' already exists at ${entity.pos}")
+    : SemanticException("'${entity.identifier}' already exists at ${entity.pos}")
 
 class VarDeclMustPresentTypeOrExpressionException(varIdentifier: String, pos: Pos) : SemanticException(
     "The variable declaration '$varIdentifier' must specify the type or the assigned expression at $pos"

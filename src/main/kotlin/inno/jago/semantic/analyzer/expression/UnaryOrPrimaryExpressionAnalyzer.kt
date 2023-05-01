@@ -13,7 +13,6 @@ import inno.jago.ast.model.expression.unary_expression.primary_expression.operan
 import inno.jago.ast.model.expression.unary_expression.primary_expression.operand.OperandNode
 import inno.jago.common.JaGoException
 import inno.jago.common.UnreachableCodeException
-import inno.jago.semantic.NoSuchEntityInCurrentScopeException
 import inno.jago.semantic.NonCastableTypeException
 import inno.jago.semantic.SemanticException
 import inno.jago.semantic.model.EntityType
@@ -51,44 +50,39 @@ fun PrimaryExpressionNode.toSemanticEntity(scope: ScopeNode): SemanticEntity = w
 }
 
 fun ConversionNode.toSemanticEntity(scope: ScopeNode): SemanticEntity {
-    val entity = expression.toSemanticEntity(scope)
-    if (entity.type != type.toType()) {
-        if (entity.type !is Type.NumberType || type.toType() !is Type.NumberType) {
-            throw NonCastableTypeException(entity.type, type.toType(), pos)
+    val expressionEntity = expression.toSemanticEntity(scope)
+    val conversionType = type.toType()
+
+    if (expressionEntity.type != conversionType) {
+        if (expressionEntity.type !is Type.NumberType || conversionType !is Type.NumberType) {
+            throw NonCastableTypeException(
+                from = expressionEntity.type,
+                to = conversionType,
+                pos = pos
+            )
         }
         return SemanticEntity(
-            type = type.toType(),
+            type = conversionType,
             pos = pos,
-            entityType = EntityType.EXPRESSION
+            entityType = EntityType.NO_IDENTIFIER
         )
     }
-    return entity
+    return expressionEntity
 }
 
 fun IndexExpressionNode.toSemanticEntity(scope: ScopeNode): SemanticEntity {
-    val expr = primaryExpression.toSemanticEntity(scope)
-    val index = expression.toSemanticEntity(scope)
+    val exprEntity = primaryExpression.toSemanticEntity(scope)
+    val indexEntity = expression.toSemanticEntity(scope)
 
-    if (index.type !is Type.IntegerType) {
-        throw WrongTypeException(Type.IntegerType, actual = index)
+    if (indexEntity.type !is Type.IntegerType) {
+        throw WrongTypeException(Type.IntegerType, actual = indexEntity)
     }
 
-    if (expr.identifier != null) {
-        val exprFromScope = scope.findVisibleEntity(expr.identifier)
-        if (exprFromScope != null) {
-            if (exprFromScope.type != expr.type) {
-                throw WrongTypeException(Type.ArrayType(-1, Type.AnyType), actual = index)
-            }
-        } else {
-            throw NoSuchEntityInCurrentScopeException(expr.identifier, pos)
-        }
+    if (exprEntity.type !is Type.ArrayType) {
+        throw WrongTypeException(Type.ArrayType(0, Type.AnyType), actual = exprEntity)
     }
 
-    if (expr.type !is Type.ArrayType) {
-        throw WrongTypeException(Type.ArrayType(-1, Type.AnyType), actual = index)
-    }
-
-    return SemanticEntity(expr.type, pos, EntityType.EXPRESSION)
+    return SemanticEntity(exprEntity.type, pos, EntityType.NO_IDENTIFIER)
 }
 
 fun ApplicationExpressionNode.toSemanticEntity(scope: ScopeNode): SemanticEntity {
@@ -114,7 +108,7 @@ fun ApplicationExpressionNode.toSemanticEntity(scope: ScopeNode): SemanticEntity
             return SemanticEntity(
                 type = function.type.returnType,
                 pos = pos,
-                entityType = EntityType.EXPRESSION,
+                entityType = EntityType.NO_IDENTIFIER,
             )
         }
         else -> throw WrongTypeException(Type.FuncType(args.map { it.type }, Type.AnyType), actual = function)

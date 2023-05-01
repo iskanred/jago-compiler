@@ -4,13 +4,13 @@ import inno.jago.ast.model.statement.ShortVarDeclNode
 import inno.jago.common.JaGoException
 import inno.jago.common.UnreachableCodeException
 import inno.jago.common.WrongNumberOfExpressionsException
-import inno.jago.semantic.SemanticException
 import inno.jago.semantic.model.EntityType
 import inno.jago.semantic.model.ScopeNode
 import inno.jago.semantic.model.Type
 import inno.jago.semantic.model.SemanticEntity
 
 // ShortVarDecl = IdentifierList ":=" ExpressionList
+@Suppress("ThrowsCount")
 fun ShortVarDeclNode.toSemanticEntity(scope: ScopeNode): SemanticEntity {
     val semanticEntities = expression.map { toSemanticEntity(scope) }
     if (semanticEntities.any { it.type is Type.FuncType } ) {
@@ -46,7 +46,7 @@ fun ShortVarDeclNode.toSemanticEntity(scope: ScopeNode): SemanticEntity {
 
             val entity = SemanticEntity(
                 type = returnType, pos = pos,
-                entityType = EntityType.VARIABLE, identifier = identifierList.first()
+                entityType = EntityType.VAR, identifier = identifierList.first()
             )
 
             scope.addUniqueEntity(entity)

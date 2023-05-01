@@ -17,7 +17,7 @@ fun BreakStatementNode.toSemanticEntity(scopeNode: ScopeNode): SemanticEntity {
     return SemanticEntity(
         type = Type.UnitType,
         pos = pos,
-        entityType = EntityType.STATEMENT
+        entityType = EntityType.NO_IDENTIFIER
     )
 }
 
@@ -28,6 +28,6 @@ fun ContinueStatementNode.toSemanticNode(scopeNode: ScopeNode): SemanticEntity {
     return SemanticEntity(
         type = Type.UnitType,
         pos = pos,
-        entityType = EntityType.STATEMENT
+        entityType = EntityType.NO_IDENTIFIER
     )
 }

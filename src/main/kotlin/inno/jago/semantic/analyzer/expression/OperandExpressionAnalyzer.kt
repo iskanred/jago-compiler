@@ -54,7 +54,7 @@ private fun QualifiedIdentifierNode.toSemanticEntity(scope: ScopeNode): Semantic
     return SemanticEntity(
         type = Type.AnyType,
         pos = pos,
-        entityType = EntityType.VARIABLE,
+        entityType = EntityType.VAR,
         identifier = "$packageName.$identifier"
     )
 }

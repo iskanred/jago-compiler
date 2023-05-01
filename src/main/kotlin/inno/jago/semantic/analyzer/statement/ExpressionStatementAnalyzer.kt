@@ -12,6 +12,6 @@ fun ExpressionStatementNode.toSemanticEntity(scope: ScopeNode): SemanticEntity {
     return SemanticEntity(
         type = Type.UnitType,
         pos = pos,
-        entityType = EntityType.STATEMENT
+        entityType = EntityType.NO_IDENTIFIER
     )
 }

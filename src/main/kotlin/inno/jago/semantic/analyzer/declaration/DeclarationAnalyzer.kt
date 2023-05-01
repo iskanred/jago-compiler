@@ -35,7 +35,7 @@ private fun ConstDeclarationNode.toSemanticEntity(scope: ScopeNode): SemanticEnt
     return SemanticEntity(
         type = expressionEntity.type,
         pos = pos,
-        entityType = EntityType.VARIABLE,
+        entityType = EntityType.VAR,
         identifier = identifier
     ).also { entity ->
         // add const to current scope
@@ -77,7 +77,7 @@ private fun VarDeclarationNode.toSemanticEntity(scope: ScopeNode): SemanticEntit
     return SemanticEntity(
         type = entityType,
         pos = pos,
-        entityType = EntityType.VARIABLE,
+        entityType = EntityType.VAR,
         identifier = identifier
     ).also { entity ->
         // add var to current scope
@@ -88,7 +88,7 @@ private fun VarDeclarationNode.toSemanticEntity(scope: ScopeNode): SemanticEntit
 fun FunctionDeclarationNode.toSemanticEntity(scope: ScopeNode) = SemanticEntity(
     type = signature.toType(),
     pos = pos,
-    entityType = EntityType.FUNCTION,
+    entityType = EntityType.VAR,
     identifier = functionName
 ).also { entity ->
     // add function to parent scope

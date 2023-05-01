@@ -28,23 +28,23 @@ fun BasicLiteralNode.toSemanticEntity(): SemanticEntity = when(this) {
 fun IntegerLiteralNode.toSemanticEntity() = SemanticEntity(
     type = Type.IntegerType,
     pos = pos,
-    entityType = EntityType.EXPRESSION
+    entityType = EntityType.NO_IDENTIFIER
 )
 
 fun DoubleLiteralNode.toSemanticEntity() = SemanticEntity(
     type = Type.DoubleType,
     pos = pos,
-    entityType = EntityType.EXPRESSION
+    entityType = EntityType.NO_IDENTIFIER
 )
 
 fun StringLiteralNode.toSemanticEntity() = SemanticEntity(
     type = Type.StringType,
     pos = pos,
-    entityType = EntityType.EXPRESSION
+    entityType = EntityType.NO_IDENTIFIER
 )
 
 fun BoolLiteralNode.toSemanticEntity() = SemanticEntity(
     type = Type.BoolType,
     pos = pos,
-    entityType = EntityType.EXPRESSION
+    entityType = EntityType.NO_IDENTIFIER
 )

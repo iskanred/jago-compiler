@@ -13,7 +13,7 @@ import inno.jago.semantic.model.Type
 fun ForStatementNode.toSemanticEntity(scope: ScopeNode) = SemanticEntity(
     type = Type.UnitType,
     pos = pos,
-    entityType = EntityType.STATEMENT
+    entityType = EntityType.NO_IDENTIFIER
 ).also {
     val forScope = scope.createNewForScope("'for' scope in ${scope.name}")
     when (this) {

@@ -18,6 +18,6 @@ fun BlockStatementNode.toSemanticEntity(scope: ScopeNode): SemanticEntity {
     return SemanticEntity(
         type = Type.UnitType,
         pos = pos,
-        entityType = EntityType.STATEMENT
+        entityType = EntityType.NO_IDENTIFIER
     )
 }
