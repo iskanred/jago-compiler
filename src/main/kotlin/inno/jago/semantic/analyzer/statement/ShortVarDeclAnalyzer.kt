@@ -11,9 +11,12 @@ import inno.jago.semantic.model.Type
 import inno.jago.semantic.model.SemanticEntity
 
 // ShortVarDecl = IdentifierList ":=" ExpressionList
+@Suppress("LongMethod", "ThrowsCount")
 fun ShortVarDeclNode.toSemanticEntity(scope: ScopeNode): SemanticEntity {
     val semanticEntities = expression.map { toSemanticEntity(scope) }
-    if (semanticEntities.any { it.type is Type.TupleType } ) { // a, b := someFun(), someFun return > 1 elements
+
+    // a, b := someFun(); someFun return > 1 elements
+    if (semanticEntities.any { it.type is Type.TupleType } ) {
         if (semanticEntities.size != 1) {
             throw JaGoException(msg = "Can be only one tuple in expressions")
         }
@@ -32,24 +35,22 @@ fun ShortVarDeclNode.toSemanticEntity(scope: ScopeNode): SemanticEntity {
             )
         }
 
-        identifierList.zip(tupleElements).forEach {
-            val visibleEntity = scope.findVisibleEntity(it.first)
+        identifierList.zip(tupleElements).forEach { (identifier, type) ->
+            val visibleEntity = scope.findVisibleEntity(identifier)
             if (visibleEntity == null) {
-                scope.addUniqueEntity(SemanticEntity(
-                    type = it.second,
-                    pos = pos,
-                    entityType = EntityType.VAR,
-                    identifier = it.first
-                ))
-                return@forEach
-            }
-
-            if (visibleEntity.type != it.second) {
-                throw WrongTypeException(it.second, actual = visibleEntity)
+                scope.addUniqueEntity(
+                    SemanticEntity(
+                        type = type,
+                        pos = pos,
+                        entityType = EntityType.VAR,
+                        identifier = identifier
+                    )
+                )
+            } else if (visibleEntity.type != type) {
+                throw WrongTypeException(type, actual = visibleEntity)
             }
         }
-    }
-    else { // a, b := 3, true. No tuple in semanticEntities.
+    } else { // a, b := 3, true. No tuple in semanticEntities.
         if (semanticEntities.size != identifierList.size) {
             throw WrongNumberOfExpressionsException(
                 expected =  identifierList.size,
@@ -58,20 +59,19 @@ fun ShortVarDeclNode.toSemanticEntity(scope: ScopeNode): SemanticEntity {
             )
         }
 
-        identifierList.zip(semanticEntities).forEach {
-            val visibleEntity = scope.findVisibleEntity(it.first)
+        identifierList.zip(semanticEntities).forEach { (identifier, type) ->
+            val visibleEntity = scope.findVisibleEntity(identifier)
             if (visibleEntity == null) {
-                scope.addUniqueEntity(SemanticEntity(
-                    type = it.second.type,
-                    pos = pos,
-                    entityType = EntityType.VAR,
-                    identifier = it.first
-                ))
-                return@forEach
-            }
-
-            if (visibleEntity.type != it.second.type) {
-                throw WrongTypeException(it.second.type, actual = visibleEntity)
+                scope.addUniqueEntity(
+                    SemanticEntity(
+                        type = type.type,
+                        pos = pos,
+                        entityType = EntityType.VAR,
+                        identifier = identifier
+                    )
+                )
+            } else if (visibleEntity.type != type.type) {
+                throw WrongTypeException(type.type, actual = visibleEntity)
             }
         }
     }
