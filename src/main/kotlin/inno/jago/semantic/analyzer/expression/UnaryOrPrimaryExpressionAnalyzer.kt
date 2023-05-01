@@ -6,11 +6,13 @@ import inno.jago.ast.model.expression.unary_expression.ConversionNode
 import inno.jago.ast.model.expression.unary_expression.IndexExpressionNode
 import inno.jago.ast.model.expression.unary_expression.PrimaryExpressionNode
 import inno.jago.ast.model.expression.unary_expression.UnaryExpressionNode
+import inno.jago.ast.model.expression.unary_expression.UnaryOperators
 import inno.jago.ast.model.expression.unary_expression.UnaryOrPrimaryExpression
 import inno.jago.ast.model.expression.unary_expression.primary_expression.operand.ExpressionOperandNode
 import inno.jago.ast.model.expression.unary_expression.primary_expression.operand.LiteralOperandNode
 import inno.jago.ast.model.expression.unary_expression.primary_expression.operand.OperandNameNode
 import inno.jago.ast.model.expression.unary_expression.primary_expression.operand.OperandNode
+import inno.jago.common.EntityNotSupportedException
 import inno.jago.common.JaGoException
 import inno.jago.common.UnreachableCodeException
 import inno.jago.semantic.NonCastableTypeException
@@ -28,12 +30,41 @@ fun UnaryOrPrimaryExpression.toSemanticEntity(scope: ScopeNode): SemanticEntity 
 }
 
 fun UnaryExpressionNode.toSemanticEntity(scope: ScopeNode): SemanticEntity = when (this.unaryOrPrimaryExpression) {
-    is PrimaryExpressionNode -> toSemanticEntity(scope)
+    is PrimaryExpressionNode -> this.unaryOrPrimaryExpression.toSemanticEntity(scope)
     is UnaryExpressionNode -> {
         if (operator == null) {
             throw JaGoException("Unary operator is null")
         }
-        toSemanticEntity(scope)
+        this.unaryOrPrimaryExpression.toSemanticEntity(scope).also {
+            when (operator.operator) {
+                UnaryOperators.PLUS, UnaryOperators.MINUS -> {
+                    if (it.type !is Type.NumberType) {
+                        throw WrongTypeException(Type.NumberType(), actual = it)
+                    }
+                }
+                UnaryOperators.EXCLAMATION -> {
+                    if (it.type !is Type.BoolType) {
+                        throw WrongTypeException(Type.BoolType, actual = it)
+                    }
+                }
+                UnaryOperators.CARET -> {
+                    if (it.type !is Type.IntegerType) {
+                        throw WrongTypeException(Type.IntegerType, actual = it)
+                    }
+                }
+                UnaryOperators.ASTERISK -> {
+                    if (it.type !is Type.PointerType) {
+                        throw WrongTypeException(Type.PointerType(Type.AnyType), actual = it)
+                    }
+                }
+                UnaryOperators.AMPERSAND -> { // TODO: Здесь нужно проверить, что справа от амерасанда стоит переменная
+                    if (it.type !is Type.EquatableTypes) {
+                        throw WrongTypeException(Type.EquatableTypes, actual = it)
+                    }
+                }
+                UnaryOperators.RECEIVE -> throw EntityNotSupportedException("Unary operator <-")
+            }
+        }
     }
 }
 

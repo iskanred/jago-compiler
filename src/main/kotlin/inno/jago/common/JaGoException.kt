@@ -10,3 +10,5 @@ class UnreachableCodeException : OperationNotSupportedException("Unreachable cod
 
 class WrongNumberOfExpressionsException(expected: Int, actual: Int, pos: Pos)
     : JaGoException("Expected $expected or func expressions, got $actual expression at $pos")
+
+class EntityNotSupportedException(entityName: String) : JaGoException("$entityName are not supported")

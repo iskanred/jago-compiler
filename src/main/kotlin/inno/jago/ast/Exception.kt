@@ -7,7 +7,6 @@ open class ASTBuildException(msg: String) : JaGoException(msg)
 
 class WrongBinaryExpressionNumberException : ASTBuildException("Expected two expressions around binary operator")
 
-class EntityNotSupportedException(entityName: String) : ASTBuildException("$entityName are not supported")
 
 class FunctionIdentifiersException
     : ASTBuildException("Function can only have parameters with identifiers or do not have at all")
