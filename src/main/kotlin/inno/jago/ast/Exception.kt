@@ -3,7 +3,7 @@ package inno.jago.ast
 import inno.jago.common.JaGoException
 import inno.jago.lexer.Pos
 
-sealed class ASTBuildException(msg: String) : JaGoException(msg)
+open class ASTBuildException(msg: String) : JaGoException(msg)
 
 class WrongBinaryExpressionNumberException : ASTBuildException("Expected two expressions around binary operator")
 
