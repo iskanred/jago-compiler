@@ -1,5 +1,6 @@
 package inno.jago.ast.model.expression.unary_expression.primary_expression.operand.literal_operand
 
+import inno.jago.ast.IncorrectNumberLiteral
 import inno.jago.ast.model.signature.SignatureNode
 import inno.jago.ast.model.statement.BlockStatementNode
 import inno.jago.ast.model.type.ArrayTypeNode
@@ -20,7 +21,19 @@ class IntegerLiteralNode(
     pos = pos,
     value = value
 ) {
-    val intValue: Int = value.toInt()
+    val intValue: Int by lazy {
+        try {
+            if (value.lowercase().startsWith("0x")) {
+                value.substring(2).toInt(radix = 16)
+            } else if (value.startsWith("0")) {
+                value.toInt(radix = 8)
+            } else {
+                value.toInt()
+            }
+        } catch(e: NumberFormatException) {
+            throw IncorrectNumberLiteral(literal = value, pos = pos)
+        }
+    }
 }
 
 class DoubleLiteralNode(
@@ -30,7 +43,13 @@ class DoubleLiteralNode(
     pos = pos,
     value = value
 ) {
-    val doubleValue: Double = value.toDouble()
+    val doubleValue: Double by lazy {
+        try {
+            value.toDouble()
+        } catch (e: NumberFormatException) {
+            throw IncorrectNumberLiteral(literal = value, pos = pos)
+        }
+    }
 }
 
 class StringLiteralNode(
@@ -48,7 +67,9 @@ class BoolLiteralNode(
     pos = pos,
     value = value
 ) {
-    val boolValue: Boolean = value.toBooleanStrict()
+    val boolValue: Boolean by lazy {
+        value.toBooleanStrict()
+    }
 }
 
 class CompositeLiteralNode(

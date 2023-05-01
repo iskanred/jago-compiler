@@ -8,7 +8,9 @@ import inno.jago.ast.model.expression.unary_expression.primary_expression.operan
 import inno.jago.ast.model.expression.unary_expression.primary_expression.operand.literal_operand.IntegerLiteralNode
 import inno.jago.ast.model.expression.unary_expression.primary_expression.operand.literal_operand.LiteralNode
 import inno.jago.ast.model.expression.unary_expression.primary_expression.operand.literal_operand.StringLiteralNode
+import inno.jago.semantic.model.EntityType
 import inno.jago.semantic.model.SemanticEntity
+import inno.jago.semantic.model.Type
 
 fun LiteralNode.toSemanticEntity(): SemanticEntity = when(this) {
     is BasicLiteralNode -> toSemanticEntity()
@@ -23,17 +25,26 @@ fun BasicLiteralNode.toSemanticEntity(): SemanticEntity = when(this) {
     is BoolLiteralNode -> toSemanticEntity()
 }
 
-fun IntegerLiteralNode.toSemanticEntity(): SemanticEntity {
+fun IntegerLiteralNode.toSemanticEntity() = SemanticEntity(
+    type = Type.IntegerType,
+    pos = pos,
+    entityType = EntityType.EXPRESSION
+)
 
-}
+fun DoubleLiteralNode.toSemanticEntity() = SemanticEntity(
+    type = Type.DoubleType,
+    pos = pos,
+    entityType = EntityType.EXPRESSION
+)
 
-fun DoubleLiteralNode.toSemanticEntity(): SemanticEntity {
+fun StringLiteralNode.toSemanticEntity() = SemanticEntity(
+    type = Type.StringType,
+    pos = pos,
+    entityType = EntityType.EXPRESSION
+)
 
-}
-fun StringLiteralNode.toSemanticEntity(): SemanticEntity {
-
-}
-
-fun BoolLiteralNode.toSemanticEntity(): SemanticEntity {
-
-}
+fun BoolLiteralNode.toSemanticEntity() = SemanticEntity(
+    type = Type.BoolType,
+    pos = pos,
+    entityType = EntityType.EXPRESSION
+)
