@@ -29,6 +29,7 @@ fun UnaryOrPrimaryExpression.toSemanticEntity(scope: ScopeNode): SemanticEntity 
     is PrimaryExpressionNode -> toSemanticEntity(scope)
 }
 
+@Suppress("CyclomaticComplexMethod")
 fun UnaryExpressionNode.toSemanticEntity(scope: ScopeNode): SemanticEntity = when (this.unaryOrPrimaryExpression) {
     is PrimaryExpressionNode -> this.unaryOrPrimaryExpression.toSemanticEntity(scope)
     is UnaryExpressionNode -> {
@@ -76,7 +77,7 @@ fun PrimaryExpressionNode.toSemanticEntity(scope: ScopeNode): SemanticEntity = w
     is ApplicationExpressionNode -> toSemanticEntity(scope)
     is LiteralOperandNode -> toSemanticEntity(scope)
     is OperandNameNode -> toSemanticEntity(scope)
-    is OperandNode -> TODO()
+    is OperandNode -> toSemanticEntity(scope)
     else -> throw UnreachableCodeException()
 }
 

@@ -14,6 +14,7 @@ import inno.jago.ast.model.statement.IncDecStatementNode
 import inno.jago.ast.model.statement.ReturnStatementNode
 import inno.jago.ast.model.statement.ShortVarDeclNode
 import inno.jago.ast.model.statement.StatementNode
+import inno.jago.common.UnreachableCodeException
 import inno.jago.semantic.ReturnInGlobalScopeException
 import inno.jago.semantic.WrongTypeException
 import inno.jago.semantic.analyzer.expression.toSemanticEntity
@@ -26,7 +27,6 @@ import inno.jago.semantic.toType
 fun StatementNode.toSemanticEntity(scope: ScopeNode): SemanticEntity = when (this) {
     is AssignmentNode -> toSemanticEntity(scope)
     is IfStatementNode -> toSemanticEntity(scope)
-    is ElseStatementNode -> TODO() // NOT NEEDED
     is ExpressionStatementNode -> toSemanticEntity(scope)
     is IncDecStatementNode -> toSemanticEntity(scope)
     is BlockStatementNode -> toSemanticEntity(scope)
@@ -37,6 +37,7 @@ fun StatementNode.toSemanticEntity(scope: ScopeNode): SemanticEntity = when (thi
     is EmptyStatementNode -> toSemanticEntity()
     is ForStatementNode -> toSemanticEntity(scope)
     is ShortVarDeclNode -> toSemanticEntity(scope)
+    is ElseStatementNode -> throw UnreachableCodeException() // NOT NEEDED
 }
 
 private fun IncDecStatementNode.toSemanticEntity(scope: ScopeNode): SemanticEntity {
