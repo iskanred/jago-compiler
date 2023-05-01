@@ -27,8 +27,14 @@ fun UnaryOrPrimaryExpression.toSemanticEntity(scope: ScopeNode): SemanticEntity 
     is PrimaryExpressionNode -> toSemanticEntity(scope)
 }
 
-fun UnaryExpressionNode.toSemanticEntity(scope: ScopeNode): SemanticEntity {
-    TODO()
+fun UnaryExpressionNode.toSemanticEntity(scope: ScopeNode): SemanticEntity = when (this.unaryOrPrimaryExpression) {
+    is PrimaryExpressionNode -> toSemanticEntity(scope)
+    is UnaryExpressionNode -> {
+        if (operator == null) {
+            throw JaGoException("Unary operator is null")
+        }
+        toSemanticEntity(scope)
+    }
 }
 
 @Suppress("CyclomaticComplexMethod")

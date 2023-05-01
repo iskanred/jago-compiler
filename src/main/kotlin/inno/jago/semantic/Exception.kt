@@ -37,3 +37,5 @@ class BreakIsNotInLoopException(pos: Pos)
 
 class ContinueIsNotInLoopException(pos: Pos)
     : SemanticException("continue is not in a loop at $pos")
+
+
