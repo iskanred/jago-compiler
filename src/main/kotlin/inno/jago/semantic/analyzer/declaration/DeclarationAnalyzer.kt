@@ -43,6 +43,7 @@ private fun ConstDeclarationNode.toSemanticEntity(scope: ScopeNode): SemanticEnt
     }
 }
 
+@Suppress("ThrowsCount")
 private fun VarDeclarationNode.toSemanticEntity(scope: ScopeNode): SemanticEntity {
     val entityType = if (expression == null && type == null) {
         throw VarDeclMustPresentTypeOrExpressionException(varIdentifier = identifier, pos = pos)

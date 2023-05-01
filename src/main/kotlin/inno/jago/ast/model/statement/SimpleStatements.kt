@@ -27,7 +27,7 @@ class AssignmentNode (
 ) : SimpleStatementNode(pos = pos)
 
 
-sealed class AssignOperatorNode()
+sealed class AssignOperatorNode
 
 object SimpleAssignOperatorNode : AssignOperatorNode()
 class AddOpSimpleAssignOperatorNode(val addOperator: AddOperator) : AssignOperatorNode()

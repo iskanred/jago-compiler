@@ -16,10 +16,10 @@ import inno.jago.ast.converter.expression.toMulOperators
 import inno.jago.ast.model.expression.binary_expression.AddOperator
 import inno.jago.ast.model.expression.binary_expression.MulOperator
 import inno.jago.ast.model.statement.AddOpSimpleAssignOperatorNode
-import inno.jago.ast.model.statement.AssignOperatorNode
 import inno.jago.ast.model.statement.MulOpSimpleAssignOperatorNode
 import inno.jago.ast.model.statement.SimpleAssignOperatorNode
 
+@Suppress("ReturnCount")
 fun GoParser.SimpleStmtContext.toSimpleStatementNode(): SimpleStatementNode {
     incDecStmt()?.let {
         return it.toIncDecStatementNode()
