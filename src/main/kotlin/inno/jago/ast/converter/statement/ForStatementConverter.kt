@@ -17,7 +17,7 @@ fun GoParser.ForStmtContext.toForStatementNode(): ForStatementNode {
         return ForClauseStatementNode(
             pos = toPos(),
             block = block().toBlockStatementNode(),
-            initStatementNode = it.initStmt()?.toBlockStatementNode(),
+            initStatementNode = it.initStmt()?.toSimpleStatementNode(),
             condition = it.condition()?.expression()?.toExpressionNode(),
             postStatementNode =  it.postStmt()?.toSimpleStatementNode()
         )

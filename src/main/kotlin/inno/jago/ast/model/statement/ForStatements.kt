@@ -17,7 +17,7 @@ class ConditionalForStatementNode(
 class ForClauseStatementNode(
     pos: Pos,
     block: BlockStatementNode,
-    var initStatementNode: BlockStatementNode?,
+    var initStatementNode: SimpleStatementNode?,
     var condition: ExpressionNode?,
     var postStatementNode: SimpleStatementNode?
 ) : ForStatementNode(pos = pos, block = block)
