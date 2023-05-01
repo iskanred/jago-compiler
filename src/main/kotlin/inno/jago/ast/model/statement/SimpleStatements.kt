@@ -1,6 +1,8 @@
 package inno.jago.ast.model.statement
 
 import inno.jago.ast.model.expression.ExpressionNode
+import inno.jago.ast.model.expression.binary_expression.AddOperator
+import inno.jago.ast.model.expression.binary_expression.MulOperator
 import inno.jago.lexer.Pos
 
 sealed class SimpleStatementNode (pos: Pos) : StatementNode(pos = pos)
@@ -21,7 +23,16 @@ class AssignmentNode (
     pos: Pos,
     val leftExpressions: List<ExpressionNode>,
     val rightExpressions: List<ExpressionNode>,
+    val assignOperator: AssignOperatorNode
 ) : SimpleStatementNode(pos = pos)
+
+
+sealed class AssignOperatorNode()
+
+object SimpleAssignOperatorNode : AssignOperatorNode()
+class AddOpSimpleAssignOperatorNode(val addOperator: AddOperator) : AssignOperatorNode()
+
+class MulOpSimpleAssignOperatorNode(val mulOperator: MulOperator) : AssignOperatorNode()
 
 class ShortVarDeclNode (
     pos: Pos,
