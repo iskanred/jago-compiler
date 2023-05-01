@@ -15,6 +15,7 @@ import inno.jago.common.JaGoException
 import inno.jago.common.UnreachableCodeException
 import inno.jago.semantic.NoSuchEntityInCurrentScopeException
 import inno.jago.semantic.NonCastableTypeException
+import inno.jago.semantic.SemanticException
 import inno.jago.semantic.model.EntityType
 import inno.jago.semantic.WrongTypeException
 import inno.jago.semantic.model.ScopeNode
@@ -98,12 +99,14 @@ fun ApplicationExpressionNode.toSemanticEntity(scope: ScopeNode): SemanticEntity
         is Type.FuncType -> {
             // длина
             if (function.type.paramTypes.size != args.size) {
-                throw JaGoException("number of params is not equal to arguments number")
+                throw SemanticException(
+                    "Number of params is not equal to number of arguments of function '${function.identifier}' at $pos"
+                )
             }
             // проверка соответствия типов
-            for (i in 0..args.size) {
-                if (!function.type.paramTypes[i].equals(args[i])) {
-                    throw WrongTypeException(function.type.paramTypes[i], actual = args[i])
+            args.forEachIndexed { i, argEntity ->
+                if (function.type.paramTypes[i] != argEntity.type) {
+                    throw WrongTypeException(function.type.paramTypes[i], actual = argEntity)
                 }
             }
 
@@ -114,7 +117,6 @@ fun ApplicationExpressionNode.toSemanticEntity(scope: ScopeNode): SemanticEntity
                 entityType = EntityType.EXPRESSION,
             )
         }
-
         else -> throw WrongTypeException(Type.FuncType(args.map { it.type }, Type.AnyType), actual = function)
     }
 }
