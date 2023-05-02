@@ -5,19 +5,19 @@ import inno.jago.lexer.Pos
 import inno.jago.ast.model.type.TypeNode
 import inno.jago.ast.model.ASTNode
 
-sealed class UnaryOrPrimaryExpression(
+sealed class UnaryOrPrimaryExpressionNode(
     pos: Pos
 ) : ExpressionNode(pos)
 
 class UnaryExpressionNode(
     pos: Pos,
     val operator: UnaryOperatorNode?,
-    val unaryOrPrimaryExpression: UnaryOrPrimaryExpression
-) : UnaryOrPrimaryExpression(pos)
+    val unaryOrPrimaryExpression: UnaryOrPrimaryExpressionNode
+) : UnaryOrPrimaryExpressionNode(pos)
 
 open class PrimaryExpressionNode(
     pos: Pos,
-) : UnaryOrPrimaryExpression(pos)
+) : UnaryOrPrimaryExpressionNode(pos)
 
 
 // Primary expressions:

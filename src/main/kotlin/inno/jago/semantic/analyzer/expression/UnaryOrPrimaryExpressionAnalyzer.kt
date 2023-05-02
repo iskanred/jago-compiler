@@ -7,7 +7,7 @@ import inno.jago.ast.model.expression.unary_expression.IndexExpressionNode
 import inno.jago.ast.model.expression.unary_expression.PrimaryExpressionNode
 import inno.jago.ast.model.expression.unary_expression.UnaryExpressionNode
 import inno.jago.ast.model.expression.unary_expression.UnaryOperators
-import inno.jago.ast.model.expression.unary_expression.UnaryOrPrimaryExpression
+import inno.jago.ast.model.expression.unary_expression.UnaryOrPrimaryExpressionNode
 import inno.jago.ast.model.expression.unary_expression.primary_expression.operand.OperandNode
 import inno.jago.common.EntityNotSupportedException
 import inno.jago.common.JaGoException
@@ -20,7 +20,7 @@ import inno.jago.semantic.model.ScopeNode
 import inno.jago.semantic.model.Type
 import inno.jago.semantic.model.toType
 
-fun UnaryOrPrimaryExpression.toSemanticEntity(scope: ScopeNode): ExpressionEntity = when (this) {
+fun UnaryOrPrimaryExpressionNode.toSemanticEntity(scope: ScopeNode): ExpressionEntity = when (this) {
     is UnaryExpressionNode -> toSemanticEntity(scope)
     is PrimaryExpressionNode -> toSemanticEntity(scope)
 }
