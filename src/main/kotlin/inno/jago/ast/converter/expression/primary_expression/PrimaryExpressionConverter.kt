@@ -25,7 +25,7 @@ fun GoParser.PrimaryExprContext.toPrimaryExpressionNode(): PrimaryExpressionNode
     }
 
     selector()?.let {
-        throw EntityNotSupportedException("Methods")
+        throw EntityNotSupportedException("Methods and Imports")
     }
 
     index()?.let {

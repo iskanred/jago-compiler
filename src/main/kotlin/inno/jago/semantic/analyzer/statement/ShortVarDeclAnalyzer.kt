@@ -5,6 +5,7 @@ import inno.jago.common.JaGoException
 import inno.jago.common.UnreachableCodeException
 import inno.jago.common.WrongNumberOfExpressionsException
 import inno.jago.semantic.WrongTypeException
+import inno.jago.semantic.analyzer.expression.toSemanticEntity
 import inno.jago.semantic.model.ScopeNode
 import inno.jago.semantic.model.StatementEntity
 import inno.jago.semantic.model.Type
@@ -13,7 +14,7 @@ import inno.jago.semantic.model.VarEntity
 // ShortVarDecl = IdentifierList ":=" ExpressionList
 @Suppress("LongMethod", "ThrowsCount")
 fun ShortVarDeclNode.toSemanticEntity(scope: ScopeNode): StatementEntity {
-    val semanticEntities = expression.map { toSemanticEntity(scope) }
+    val semanticEntities = expression.map { it.toSemanticEntity(scope) }
 
     // a, b := someFun(); someFun return > 1 elements
     if (semanticEntities.any { it.type is Type.TupleType } ) {
@@ -46,7 +47,7 @@ fun ShortVarDeclNode.toSemanticEntity(scope: ScopeNode): StatementEntity {
                     pos = pos
                 )
             } else if (visibleEntity.type != type) {
-                throw WrongTypeException(type, actualType = visibleEntity.type, pos = pos)
+                throw WrongTypeException(visibleEntity.type, actualType = type, pos = pos)
             }
         }
     } else { // a, b := 3, true. No tuple in semanticEntities.
@@ -69,7 +70,7 @@ fun ShortVarDeclNode.toSemanticEntity(scope: ScopeNode): StatementEntity {
                     pos = pos
                 )
             } else if (visibleEntity.type != type) {
-                throw WrongTypeException(type, actualType = visibleEntity.type, pos = pos)
+                throw WrongTypeException(visibleEntity.type, actualType = type, pos = pos)
             }
         }
     }

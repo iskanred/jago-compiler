@@ -18,7 +18,7 @@ fun main() {
 
     @Suppress("UNUSED_VARIABLE")
     val sourceFileNode = parser.sourceFile().toSourceFileNode()
-//    TypeChecker(sourceFileNode = sourceFileNode).startTypeCheck()
+    TypeChecker(sourceFileNode = sourceFileNode).startTypeCheck()
 
     if (parser.numberOfSyntaxErrors == 0) {
         println("The input GO program is syntactically correct")

@@ -12,10 +12,10 @@ import inno.jago.ast.converter.declaration.toFunctionDeclarationNode
 import inno.jago.common.EntityNotSupportedException
 
 fun GoParser.SourceFileContext.toSourceFileNode(): SourceFileNode {
+    importDecl()?.toImportDeclNodes()
     return SourceFileNode(
         pos = toPos(),
         packageName = packageClause().toPackageNode(),
-        importNodes = importDecl().toImportDeclNodes(),
         topLevelDecls = topLevelDecl().toTopLevelDeclarationNodes()
     )
 }
@@ -25,16 +25,8 @@ fun GoParser.PackageClauseContext.toPackageNode(): PackageNode = PackageNode(
     name = packageName().text
 )
 
-fun List<GoParser.ImportDeclContext>.toImportDeclNodes(): List<ImportNode> = flatMap { importDeclContext ->
-    val importSpec = importDeclContext.importSpec()
-    importSpec.map {
-        ImportNode(
-            pos = it.toPos(),
-            alias = it.packageName()?.IDENTIFIER()?.text,
-            path = it.importPath().STRING_LIT().text,
-            importAll = (it.DOT() != null)
-        )
-    }
+fun List<GoParser.ImportDeclContext>.toImportDeclNodes(): List<ImportNode> = map {
+    throw EntityNotSupportedException("Imports")
 }
 
 fun List<GoParser.TopLevelDeclContext>.toTopLevelDeclarationNodes(): List<TopLevelDeclNode> = flatMap {

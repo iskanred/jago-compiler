@@ -7,6 +7,5 @@ import inno.jago.lexer.Pos
 class SourceFileNode(
     pos: Pos,
     val packageName: PackageNode,
-    val importNodes: List<ImportNode>,
     val topLevelDecls: List<TopLevelDeclNode>
 ) : ASTNode(pos = pos)

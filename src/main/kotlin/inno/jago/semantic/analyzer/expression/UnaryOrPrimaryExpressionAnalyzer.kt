@@ -8,9 +8,6 @@ import inno.jago.ast.model.expression.unary_expression.PrimaryExpressionNode
 import inno.jago.ast.model.expression.unary_expression.UnaryExpressionNode
 import inno.jago.ast.model.expression.unary_expression.UnaryOperators
 import inno.jago.ast.model.expression.unary_expression.UnaryOrPrimaryExpression
-import inno.jago.ast.model.expression.unary_expression.primary_expression.operand.ExpressionOperandNode
-import inno.jago.ast.model.expression.unary_expression.primary_expression.operand.LiteralOperandNode
-import inno.jago.ast.model.expression.unary_expression.primary_expression.operand.OperandNameNode
 import inno.jago.ast.model.expression.unary_expression.primary_expression.operand.OperandNode
 import inno.jago.common.EntityNotSupportedException
 import inno.jago.common.JaGoException
@@ -70,12 +67,9 @@ fun UnaryExpressionNode.toSemanticEntity(scope: ScopeNode): ExpressionEntity = w
 
 @Suppress("CyclomaticComplexMethod")
 fun PrimaryExpressionNode.toSemanticEntity(scope: ScopeNode): ExpressionEntity = when (this) {
-    is ExpressionOperandNode -> toSemanticEntity(scope)
     is ConversionNode -> toSemanticEntity(scope)
     is IndexExpressionNode -> toSemanticEntity(scope)
     is ApplicationExpressionNode -> toSemanticEntity(scope)
-    is LiteralOperandNode -> toSemanticEntity(scope)
-    is OperandNameNode -> toSemanticEntity(scope)
     is OperandNode -> toSemanticEntity(scope)
     else -> throw UnreachableCodeException()
 }
@@ -136,7 +130,7 @@ fun ApplicationExpressionNode.toSemanticEntity(scope: ScopeNode): ExpressionEnti
             }
 
             // возвращаем то, что вернула функция
-            return ExpressionEntity(type = functionEntity.type.returnType,)
+            return ExpressionEntity(type = functionEntity.type.returnType)
         }
         else -> throw WrongTypeException(
             Type.FuncType(args.map { it.type }, Type.AnyType),

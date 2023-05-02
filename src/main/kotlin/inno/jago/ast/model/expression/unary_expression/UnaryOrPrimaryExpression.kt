@@ -33,17 +33,10 @@ open class IndexExpressionNode(
     val expression: ExpressionNode,
 ) : PrimaryExpressionNode(pos)
 
-open class MethodExpressionNode(
-    pos: Pos,
-    val methodName: String,
-    val receiverType: TypeNode,
-) : PrimaryExpressionNode(pos)
-
 open class UnaryOperatorNode(
     pos: Pos,
     val operator: UnaryOperators
 ) : ASTNode(pos)
-
 
 class ApplicationExpressionNode(
     pos: Pos,
