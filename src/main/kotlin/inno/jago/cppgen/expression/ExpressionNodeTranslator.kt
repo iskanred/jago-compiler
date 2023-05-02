@@ -7,7 +7,7 @@ import inno.jago.common.UnreachableCodeException
 import inno.jago.cppgen.expression.binary_expression.translateToCode
 import inno.jago.cppgen.expression.unary_or_primary_expression.translateToCode
 
-fun ExpressionNode.translateToCode(): String = when(this) {
+fun ExpressionNode.translateToCode(): String = when (this) {
     is UnaryOrPrimaryExpression -> translateToCode()
     is BinaryExpression -> translateToCode()
     else -> throw UnreachableCodeException()

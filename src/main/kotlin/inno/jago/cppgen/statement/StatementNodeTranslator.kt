@@ -13,31 +13,39 @@ import inno.jago.ast.model.statement.StatementNode
 import inno.jago.common.UnreachableCodeException
 import inno.jago.cppgen.declaration.translateToCode
 
-fun StatementNode.translateToCode(): String = when(this) {
+fun StatementNode.translateToCode(): String = when (this) {
     is BlockStatementNode -> {
-        "{ ${block.map { translateToCode() }.joinToString{ " " }} }"
+        "{ ${block.map { translateToCode() }.joinToString { " " }} }"
     }
+
     is DeclarationStatementNode -> {
         translateToCode()
     }
+
     is ReturnStatementNode -> {
         translateToCode()
     }
+
     is BreakStatementNode -> {
         "break;"
     }
+
     is ContinueStatementNode -> {
         "continue;"
     }
+
     is IfStatementNode -> {
         translateToCode()
     }
+
     is ElseStatementNode -> {
         translateToCode()
     }
+
     is ForStatementNode -> {
         translateToCode()
     }
+
     is SimpleStatementNode -> {
         translateToCode()
     }
