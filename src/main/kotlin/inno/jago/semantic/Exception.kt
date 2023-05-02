@@ -32,5 +32,5 @@ class BreakIsNotInLoopException(pos: Pos)
 class ContinueIsNotInLoopException(pos: Pos)
     : SemanticException("continue is not in a loop at $pos")
 
-class NonAddressableExpression(expression: ExpressionNode)
-    : SemanticException("${expression.javaClass.simpleName} is not addressable at ${expression.pos}")
+class IsNotAssignableExpression(expression: ExpressionNode)
+    : SemanticException("${expression.javaClass.simpleName} is not assignable at ${expression.pos}")
