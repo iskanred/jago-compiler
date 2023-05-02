@@ -15,10 +15,6 @@ fun OperandNode.translateToCode(): String = when (this) {
     is ExpressionOperandNode -> translateToCode()
 }
 
-fun LiteralOperandNode.translateToCode(): String {
-    TODO()
-}
-
 fun OperandNameNode.translateToCode(): String {
     TODO()
 }
