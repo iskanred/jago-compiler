@@ -1,6 +1,6 @@
 package inno.jago.ast.converter.expression.primary_expression.operand.literal
 
-import inno.jago.ast.ASTBuildException
+import inno.jago.ast.ArrayLengthNotIntegerLiteralException
 import inno.jago.common.UnreachableCodeException
 import inno.jago.ast.model.expression.unary_expression.primary_expression.operand.literal_operand.BasicLiteralNode
 import inno.jago.ast.model.expression.unary_expression.primary_expression.operand.literal_operand.CompositeLiteralNode
@@ -71,8 +71,10 @@ fun GoParser.LiteralTypeContext.toArrayTypeNode(): ArrayTypeNode {
     arrayType()?.let {
         return ArrayTypeNode(
             pos = toPos(),
-            length = (it.arrayLength().expression().toExpressionNode() as? IntegerLiteralNode)
-                ?: throw ASTBuildException("Length of array must be integer literal constant"),
+            length = it.arrayLength().expression().toExpressionNode().let { exprNode ->
+                (exprNode as? IntegerLiteralNode)
+                    ?: throw ArrayLengthNotIntegerLiteralException(expressionNode = exprNode)
+            },
             elementType = it.elementType().type().toTypeNode()
         )
     }

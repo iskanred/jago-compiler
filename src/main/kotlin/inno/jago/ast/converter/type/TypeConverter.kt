@@ -1,6 +1,7 @@
 package inno.jago.ast.converter.type
 
 import GoParser
+import inno.jago.ast.ArrayLengthNotIntegerLiteralException
 import inno.jago.ast.UnknownTypeException
 import inno.jago.common.UnreachableCodeException
 import inno.jago.ast.model.type.ArrayTypeNode
@@ -18,6 +19,7 @@ import inno.jago.common.STRING_TYPE_NAME
 import inno.jago.ast.converter.common.toPos
 import inno.jago.ast.converter.expression.toExpressionNode
 import inno.jago.ast.converter.signature.toSignatureNode
+import inno.jago.ast.model.expression.unary_expression.primary_expression.operand.literal_operand.IntegerLiteralNode
 import inno.jago.common.EntityNotSupportedException
 import inno.jago.lexer.Pos
 
@@ -64,7 +66,9 @@ fun GoParser.TypeLitContext?.toTypeNode(): TypeNode? = this?.let { typeLitContex
 
 fun GoParser.ArrayTypeContext.toArrayTypeNode() = ArrayTypeNode(
     pos = toPos(),
-    length = arrayLength().expression().toExpressionNode(),
+    length = arrayLength().expression().toExpressionNode().let {
+        (it as? IntegerLiteralNode) ?: throw ArrayLengthNotIntegerLiteralException(expressionNode = it)
+    },
     elementType = elementType().type().toTypeNode()
 )
 
