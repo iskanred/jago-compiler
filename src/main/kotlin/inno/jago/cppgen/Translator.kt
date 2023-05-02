@@ -23,15 +23,17 @@ fun compile(root: SourceFileNode, name: String) : OutputProgram {
     val program = OutputProgram(name, "")
     for (decl in root.topLevelDecls) {
         var instruction = ""
-        when (decl) {
+        instruction = when (decl) {
             is FunctionDeclarationNode -> {
-                instruction = decl.translateToCode()
+                decl.translateToCode()
             }
+
             is ConstDeclarationNode -> {
-                instruction = decl.translateToCode()
+                decl.translateToCode()
             }
+
             is VarDeclarationNode -> {
-                instruction = decl.translateToCode()
+                decl.translateToCode()
             }
         }
         program.AddInstruction(instruction)
