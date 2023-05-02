@@ -5,7 +5,7 @@ import inno.jago.ast.model.expression.unary_expression.UnaryExpressionNode
 import inno.jago.ast.model.expression.unary_expression.UnaryOrPrimaryExpressionNode
 
 fun UnaryOrPrimaryExpressionNode.translateToCode(): String = when (this) {
-    is UnaryExpressionNode -> { TODO() }
-    is PrimaryExpressionNode -> { TODO() }
+    is UnaryExpressionNode -> translateToCode()
+    is PrimaryExpressionNode -> translateToCode()
 }
 
