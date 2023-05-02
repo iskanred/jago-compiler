@@ -1,8 +1,7 @@
-package inno.jago.cppgen.expression.unary_or_primary_expression.primary
+package inno.jago.cppgen.expression.unary_or_primary_expression
 
 import inno.jago.ast.model.expression.unary_expression.ApplicationExpressionNode
 import inno.jago.cppgen.expression.translateToCode
-import inno.jago.cppgen.expression.unary_or_primary_expression.translateToCode
 import java.lang.StringBuilder
 
 fun ApplicationExpressionNode.translateToCode(): String {
