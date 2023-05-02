@@ -9,6 +9,7 @@ import inno.jago.ast.model.expression.unary_expression.primary_expression.operan
 import inno.jago.ast.model.expression.unary_expression.primary_expression.operand.OperandNode
 import inno.jago.ast.model.expression.unary_expression.primary_expression.operand.QualifiedIdentifierOperandNode
 import inno.jago.ast.model.expression.unary_expression.primary_expression.operand.SimpleIdentifierOperandNode
+import inno.jago.common.EntityNotSupportedException
 import inno.jago.common.UnreachableCodeException
 import inno.jago.cppgen.expression.translateToCode
 import inno.jago.cppgen.expression.unary_or_primary_expression.translateToCode
@@ -31,7 +32,7 @@ fun SimpleIdentifierOperandNode.translateToCode(): String {
 
 // по идее тут надо кидать ошибку, но пока что так
 fun QualifiedIdentifierOperandNode.translateToCode(): String {
-    TODO()
+    throw EntityNotSupportedException("QualifiedIdentifierOperandNode")
 }
 fun ExpressionOperandNode.translateToCode(): String {
     return expression.translateToCode()
