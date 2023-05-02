@@ -5,7 +5,10 @@ import inno.jago.ast.model.expression.unary_expression.IndexExpressionNode
 import inno.jago.ast.model.expression.unary_expression.UnaryExpressionNode
 import inno.jago.ast.model.expression.unary_expression.UnaryOperators
 import inno.jago.ast.model.expression.unary_expression.primary_expression.operand.OperandNameNode
+import inno.jago.ast.model.statement.AddOpSimpleAssignOperatorNode
 import inno.jago.ast.model.statement.AssignmentNode
+import inno.jago.ast.model.statement.MulOpSimpleAssignOperatorNode
+import inno.jago.ast.model.statement.SimpleAssignOperatorNode
 import inno.jago.common.WrongNumberOfExpressionsException
 import inno.jago.semantic.IsNotAssignableExpression
 import inno.jago.semantic.WrongTypeException
@@ -20,18 +23,37 @@ fun AssignmentNode.toSemanticEntity(scope: ScopeNode): StatementEntity {
         throw WrongNumberOfExpressionsException(leftExpressions.size, rightExpressions.size, pos)
     }
 
-    leftExpressions.forEachIndexed { idx, leftExpression ->
-        val rightExpression = rightExpressions[idx]
+    when(assignOperator) {
+        is SimpleAssignOperatorNode -> {
+            leftExpressions.forEachIndexed { idx, leftExpression ->
+                val rightExpression = rightExpressions[idx]
 
-        val leftSemanticEntity = leftExpression.toSemanticEntity(scope)
-        val rightSemanticEntity = rightExpression.toSemanticEntity(scope)
+                val leftSemanticEntity = leftExpression.toSemanticEntity(scope)
+                val rightSemanticEntity = rightExpression.toSemanticEntity(scope)
 
-        if (!canBeReassigned(leftExpression, leftSemanticEntity, scope)) {
-            throw IsNotAssignableExpression(leftExpression)
+                if (!canBeReassigned(leftExpression, leftSemanticEntity, scope)) {
+                    throw IsNotAssignableExpression(leftExpression)
+                }
+
+                if (leftSemanticEntity.type != rightSemanticEntity.type) {
+                    throw WrongTypeException(leftSemanticEntity.type, actualType = rightSemanticEntity.type, pos = pos)
+                }
+            }
         }
+        is AddOpSimpleAssignOperatorNode, is MulOpSimpleAssignOperatorNode -> {
+            if (leftExpressions.size != 1) {
+                throw WrongNumberOfExpressionsException(1, leftExpressions.size, pos)
+            }
+            val leftSemanticEntity = leftExpressions[0].toSemanticEntity(scope)
+            val rightSemanticEntity = rightExpressions[0].toSemanticEntity(scope)
 
-        if (leftSemanticEntity.type != rightSemanticEntity.type) {
-            throw WrongTypeException(leftSemanticEntity.type, actualType = rightSemanticEntity.type, pos = pos)
+            if (!canBeReassigned(leftExpressions[0], leftSemanticEntity, scope)) {
+                throw IsNotAssignableExpression(leftExpressions[0])
+            }
+
+            if (leftSemanticEntity.type != rightSemanticEntity.type) {
+                throw WrongTypeException(leftSemanticEntity.type, actualType = rightSemanticEntity.type, pos = pos)
+            }
         }
     }
 
