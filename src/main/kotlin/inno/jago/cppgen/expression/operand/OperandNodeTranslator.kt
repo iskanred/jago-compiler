@@ -10,6 +10,7 @@ import inno.jago.ast.model.expression.unary_expression.primary_expression.operan
 import inno.jago.ast.model.expression.unary_expression.primary_expression.operand.QualifiedIdentifierOperandNode
 import inno.jago.ast.model.expression.unary_expression.primary_expression.operand.SimpleIdentifierOperandNode
 import inno.jago.common.UnreachableCodeException
+import inno.jago.cppgen.expression.translateToCode
 import inno.jago.cppgen.expression.unary_or_primary_expression.translateToCode
 
 fun OperandNode.translateToCode(): String = when (this) {
@@ -33,5 +34,5 @@ fun QualifiedIdentifierOperandNode.translateToCode(): String {
     TODO()
 }
 fun ExpressionOperandNode.translateToCode(): String {
-    TODO()
+    return expression.translateToCode()
 }
