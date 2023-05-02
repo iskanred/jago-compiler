@@ -20,5 +20,9 @@ fun ConditionalForStatementNode.translateToCode(): String {
 }
 
 fun ForClauseStatementNode.translateToCode(): String {
-    return "for (${initStatementNode?.translateToCode() ?: ""}; ${condition.translateToCode()}; ${postStatementNode?.translateToCode() ?: ""}) ${block.translateToCode()}"
+    if (initStatementNode == null && condition == null && postStatementNode == null) {
+        return "while (true) ${block.translateToCode()}"
+    }
+
+    return "for (${initStatementNode?.translateToCode() ?: ""}; ${condition?.translateToCode() ?: ""}; ${postStatementNode?.translateToCode() ?: ""}) ${block.translateToCode()}"
 }
