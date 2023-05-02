@@ -21,6 +21,7 @@ class OutputProgram (
 
 fun compile(root: SourceFileNode, name: String) : OutputProgram {
     val program = OutputProgram(name, "")
+    program.AddInstruction(getIncludes())
     for (decl in root.topLevelDecls) {
         var instruction = ""
         instruction = when (decl) {
@@ -39,4 +40,25 @@ fun compile(root: SourceFileNode, name: String) : OutputProgram {
         program.AddInstruction(instruction)
     }
     return program
+}
+
+fun getIncludes(): String{
+    return "#include <stdio.h>\n" +
+            "#include <cstdio>\n" +
+            "#include <algorithm>\n" +
+            "#include <iostream>\n" +
+            "#include <string>\n" +
+            "#include <vector>\n" +
+            "#include <queue>\n" +
+            "#include <stack>\n" +
+            "#include <math.h>\n" +
+            "#include <cmath>\n" +
+            "#include <map>\n" +
+            "#include <set>\n" +
+            "#include <cstdlib>\n" +
+            "#include <utility>\n" +
+            "#include <iomanip>\n" +
+            "#include <cstring>\n" +
+            "\n" +
+            "using namespace std;"
 }
