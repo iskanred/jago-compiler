@@ -2,6 +2,7 @@ package inno.jago.cppgen.declaration
 
 import inno.jago.ast.model.decl.FunctionDeclarationNode
 import inno.jago.ast.model.signature.ParameterNode
+import inno.jago.ast.model.type.TypeNode
 import inno.jago.cppgen.statement.translateToCode
 import inno.jago.cppgen.type.translateToCode
 import inno.jago.semantic.model.toType
@@ -10,22 +11,7 @@ fun FunctionDeclarationNode.translateToCode(): String {
     var functionInstruction = ""
 
     // return type
-    var returnType = this.signature.resultNode
-
-    var instructionOfReturnType = ""
-    if (returnType.isEmpty()) { // no return type
-        instructionOfReturnType = "void"
-    } else if (returnType.size == 1) { // one return type
-        instructionOfReturnType = returnType[0].toType().translateToCode()
-    } else { // more than one return type
-        instructionOfReturnType = "tuple<"
-        for (i in 0 until returnType.size) {
-            instructionOfReturnType += returnType[i].toType().translateToCode()
-            if (i != returnType.size - 1) {
-                instructionOfReturnType = "$instructionOfReturnType, "
-            }
-        }
-    }
+    var instructionOfReturnType = translateResultNodeToCode(this.signature.resultNode)
     functionInstruction += instructionOfReturnType
 
     // function name
@@ -60,4 +46,33 @@ fun ParameterNode.translateToCode(): String {
     var instructionOfType = this.type.toType().translateToCode()
     instruction = instruction + instructionOfType + " " + this.identifier
     return instruction
+}
+
+fun translateResultNodeToCode(typeNodes: List<TypeNode>): String {
+    var instructionOfReturnType = ""
+    if (typeNodes.isEmpty()) { // no return type
+        instructionOfReturnType = "void"
+    } else if (typeNodes.size == 1) { // one return type
+        instructionOfReturnType = typeNodes[0].toType().translateToCode()
+    } else { // more than one return type
+        instructionOfReturnType = "tuple<"
+        for (i in 0 until typeNodes.size) {
+            instructionOfReturnType += typeNodes[i].toType().translateToCode()
+            if (i != typeNodes.size - 1) {
+                instructionOfReturnType = "$instructionOfReturnType, "
+            }
+        }
+    }
+    return instructionOfReturnType
+}
+
+fun translateParameterNodesToCode(parameterNodes: List<ParameterNode>): String {
+    var instructionOfParameters = ""
+    for (i in 0 until parameterNodes.size) {
+        instructionOfParameters += parameterNodes[i].translateToCode()
+        if (i != parameterNodes.size - 1) {
+            instructionOfParameters = "$instructionOfParameters, "
+        }
+    }
+    return instructionOfParameters
 }

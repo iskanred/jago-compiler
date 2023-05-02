@@ -1,6 +1,12 @@
 package inno.jago.cppgen.type
 
+import inno.jago.ast.model.type.TypeNode
 import inno.jago.semantic.model.Type
+import inno.jago.semantic.model.toType
+
+fun TypeNode.translateToCode(): String {
+    return this.toType().translateToCode()
+}
 
 fun Type.translateToCode(): String{
     when (this){
