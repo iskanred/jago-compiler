@@ -6,6 +6,7 @@ import inno.jago.ast.model.type.TypeNode
 import inno.jago.cppgen.statement.translateToCode
 import inno.jago.cppgen.type.translateToCode
 import inno.jago.semantic.model.toType
+import kotlin.random.Random
 
 fun FunctionDeclarationNode.translateToCode(): String {
     var functionInstruction = ""
@@ -36,7 +37,7 @@ fun ParameterNode.translateToCode(): String {
     var instruction = ""
     var instructionOfType = this.type.toType().translateToCode()
     if (this.identifier == null) {
-        return instructionOfType + "nullArg"
+        return instructionOfType + "nullArg_N" + "${Random.nextInt(1000000)}"
     }
     return  instructionOfType + " " + this.identifier
 }
