@@ -19,14 +19,14 @@ fun FunctionDeclarationNode.translateToCode(): String {
     } else {
         instructionOfReturnType = "tuple<"
         for (i in 0..returnType.size - 1) {
-            instructionOfReturnType = instructionOfReturnType + returnType[i].toString()
+            instructionOfReturnType += returnType[i].toString()
             if (i != returnType.size - 1) {
-                instructionOfReturnType = instructionOfReturnType + ", "
+                instructionOfReturnType = "$instructionOfReturnType, "
             }
         }
-        instructionOfReturnType = instructionOfReturnType + ">"
+        instructionOfReturnType = "$instructionOfReturnType>"
     }
-    functionInstruction = functionInstruction + instructionOfReturnType
+    functionInstruction += instructionOfReturnType
 
     // function name
     functionInstruction = functionInstruction + " " + this.functionName + "("
@@ -48,8 +48,6 @@ fun FunctionDeclarationNode.translateToCode(): String {
     for (statement in functionBody) {
         functionInstruction += statement.translateToCode()
     }
-
-
 
     return functionInstruction
 }
