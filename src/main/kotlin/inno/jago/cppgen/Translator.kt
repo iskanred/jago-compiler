@@ -8,7 +8,7 @@ import inno.jago.cppgen.declaration.translateToCode
 
 /*
 * Convert AST of Go code to C++ code
-* */
+*/
 
 class OutputProgram (
     val name: String,
