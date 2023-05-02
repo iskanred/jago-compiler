@@ -35,10 +35,10 @@ fun StatementNode.translateToCode(): String {
             translateToCode()
         }
         is ForStatementNode -> {
-            TODO()
+            translateToCode()
         }
         is SimpleStatementNode -> {
-            TODO()
+            translateToCode()
         }
         else -> ""
     }
