@@ -6,11 +6,26 @@ import inno.jago.ast.model.statement.ExpressionStatementNode
 import inno.jago.ast.model.statement.IncDecStatementNode
 import inno.jago.ast.model.statement.ShortVarDeclNode
 import inno.jago.ast.model.statement.SimpleStatementNode
+import inno.jago.cppgen.expression.translateToCode
 
 fun SimpleStatementNode.translateToCode(): String = when (this) {
-    is AssignmentNode -> TODO()
-    is EmptyStatementNode -> TODO()
-    is ExpressionStatementNode -> TODO()
-    is IncDecStatementNode -> TODO()
-    is ShortVarDeclNode -> TODO()
+    is AssignmentNode -> translateToCode()
+    is EmptyStatementNode -> ";"
+    is ExpressionStatementNode -> expression.translateToCode()
+    is IncDecStatementNode -> translateToCode()
+    is ShortVarDeclNode -> translateToCode()
 }
+
+fun AssignmentNode.translateToCode(): String {
+
+}
+
+fun IncDecStatementNode.translateToCode(): String = when (type) {
+    IncDecStatementNode.IncDec.INC -> "${expression.translateToCode()}++"
+    IncDecStatementNode.IncDec.DEC -> "${expression.translateToCode()}--"
+}
+
+fun ShortVarDeclNode.translateToCode(): String {
+
+}
+
