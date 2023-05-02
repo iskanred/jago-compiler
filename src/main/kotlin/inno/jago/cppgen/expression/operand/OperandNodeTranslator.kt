@@ -22,8 +22,8 @@ fun OperandNode.translateToCode(): String = when (this) {
 
 fun OperandNameNode.translateToCode(): String {
     return when(this.name) {
-        is SimpleIdentifierOperandNode -> this.name.translateToCode()
-        is QualifiedIdentifierOperandNode -> this.name.translateToCode()
+        is SimpleIdentifierOperandNode -> translateToCode()
+        is QualifiedIdentifierOperandNode -> translateToCode()
     }
 }
 fun SimpleIdentifierOperandNode.translateToCode(): String {
