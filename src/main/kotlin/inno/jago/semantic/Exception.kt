@@ -1,5 +1,6 @@
 package inno.jago.semantic
 
+import inno.jago.ast.model.expression.ExpressionNode
 import inno.jago.common.JaGoException
 import inno.jago.lexer.Pos
 import inno.jago.semantic.model.SemanticEntity
@@ -32,4 +33,5 @@ class BreakIsNotInLoopException(pos: Pos)
 class ContinueIsNotInLoopException(pos: Pos)
     : SemanticException("continue is not in a loop at $pos")
 
-
+class NonAddressableExpression(expression: ExpressionNode)
+    : SemanticException("${expression.javaClass.simpleName} is not addressable at ${expression.pos}")

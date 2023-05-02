@@ -7,6 +7,8 @@ import inno.jago.ast.model.expression.unary_expression.UnaryOperators
 import inno.jago.ast.model.expression.unary_expression.primary_expression.operand.OperandNameNode
 import inno.jago.ast.model.statement.AssignmentNode
 import inno.jago.common.WrongNumberOfExpressionsException
+import inno.jago.semantic.NonAddressableExpression
+import inno.jago.semantic.WrongTypeException
 import inno.jago.semantic.analyzer.expression.toSemanticEntity
 import inno.jago.semantic.model.EntityType
 import inno.jago.semantic.model.ScopeNode
@@ -25,10 +27,11 @@ fun AssignmentNode.toSemanticEntity(scope: ScopeNode): SemanticEntity {
         val rightSemanticEntity = rightExpression.toSemanticEntity(scope)
 
         if (!canBeReassigned(leftExpression, scope)) {
+            throw NonAddressableExpression(leftExpression)
         }
 
         if (leftSemanticEntity.type != rightSemanticEntity.type) {
-
+            throw WrongTypeException(leftSemanticEntity.type, actual = rightSemanticEntity)
         }
     }
 
