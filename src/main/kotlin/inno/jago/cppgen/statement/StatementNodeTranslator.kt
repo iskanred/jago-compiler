@@ -12,8 +12,7 @@ import inno.jago.ast.model.statement.SimpleStatementNode
 import inno.jago.ast.model.statement.StatementNode
 
 fun StatementNode.translateToCode(): String {
-    var instruction = ""
-    when (this) {
+    val instruction = when (this) {
         is BlockStatementNode -> {
             TODO()
         }
@@ -24,25 +23,26 @@ fun StatementNode.translateToCode(): String {
             TODO()
         }
         is BreakStatementNode -> {
-            TODO()
+            "break;"
         }
         is ContinueStatementNode -> {
-            TODO()
+            "continue;"
         }
         is IfStatementNode -> {
             TODO()
         }
         is ElseStatementNode -> {
-            TODO()
+            translateToCode()
         }
         is ForStatementNode -> {
-            TODO()
+            translateToCode()
         }
         is SimpleStatementNode -> {
-            TODO()
+            translateToCode()
         }
-
+        else -> ""
     }
+
     return instruction
 }
 

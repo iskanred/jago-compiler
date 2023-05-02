@@ -16,6 +16,7 @@ import inno.jago.semantic.NonCastableTypeException
 import inno.jago.semantic.SemanticException
 import inno.jago.semantic.WrongTypeException
 import inno.jago.semantic.model.ExpressionEntity
+import inno.jago.semantic.model.NamedEntity
 import inno.jago.semantic.model.ScopeNode
 import inno.jago.semantic.model.Type
 import inno.jago.semantic.model.toType
@@ -55,9 +56,9 @@ fun UnaryExpressionNode.toSemanticEntity(scope: ScopeNode): ExpressionEntity = w
                     }
                 }
                 UnaryOperators.AMPERSAND -> { // TODO: Здесь нужно проверить, что справа от амерасанда стоит переменная
-                    if (it.type !is Type.EquatableTypes) {
-                        throw WrongTypeException(Type.EquatableTypes, actualType = it.type, pos = pos)
-                    }
+//                    if (it is NamedEntity) {
+//                        throw WrongTypeException(Type.EquatableTypes, actualType = it.type, pos = pos)
+//                    }
                 }
                 UnaryOperators.RECEIVE -> throw EntityNotSupportedException("Unary operator <-")
             }
