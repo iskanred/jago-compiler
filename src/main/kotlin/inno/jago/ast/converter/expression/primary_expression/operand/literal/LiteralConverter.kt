@@ -18,6 +18,7 @@ import inno.jago.ast.converter.expression.toExpressionNode
 import inno.jago.ast.converter.statement.toBlockStatementNode
 import inno.jago.ast.converter.signature.toSignatureNode
 import inno.jago.ast.converter.type.toTypeNode
+import inno.jago.ast.model.expression.unary_expression.primary_expression.operand.LiteralOperandNode
 import inno.jago.common.EntityNotSupportedException
 
 @Suppress("ReturnCount")
@@ -72,14 +73,14 @@ fun GoParser.LiteralTypeContext.toArrayTypeNode(): ArrayTypeNode {
         return ArrayTypeNode(
             pos = toPos(),
             length = it.arrayLength().expression().toExpressionNode().let { exprNode ->
-                (exprNode as? IntegerLiteralNode)
+                ((exprNode as? LiteralOperandNode)?.literalNode as? IntegerLiteralNode)
                     ?: throw ArrayLengthNotIntegerLiteralException(expressionNode = exprNode)
             },
             elementType = it.elementType().type().toTypeNode()
         )
     }
     structType()?.let {
-        throw EntityNotSupportedException("StructType")
+        throw EntityNotSupportedException("Structures")
     }
 
     throw UnreachableCodeException()

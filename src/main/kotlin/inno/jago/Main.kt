@@ -3,7 +3,6 @@ package inno.jago
 import GoLexer
 import GoParser
 import inno.jago.ast.converter.toSourceFileNode
-import inno.jago.codegen.GoCodegen
 import inno.jago.semantic.TypeChecker
 import org.antlr.v4.runtime.CharStreams
 import org.antlr.v4.runtime.CommonTokenStream
@@ -14,7 +13,7 @@ fun main() {
     val lexer = GoLexer(cs)
     val stream = CommonTokenStream(lexer)
     val parser = GoParser(stream)
-    val codegen = GoCodegen()
+//    val codegen = GoCodegen()
 
     @Suppress("UNUSED_VARIABLE")
     val sourceFileNode = parser.sourceFile().toSourceFileNode()
@@ -27,6 +26,4 @@ fun main() {
             "The input GO program has " + parser.numberOfSyntaxErrors + " syntax errors"
         )
     }
-
-//    codegen.compile(sourceFileNode, "123")
 }

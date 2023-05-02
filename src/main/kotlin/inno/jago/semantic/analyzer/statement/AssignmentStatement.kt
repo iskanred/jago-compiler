@@ -18,9 +18,14 @@ import inno.jago.semantic.model.ScopeNode
 import inno.jago.semantic.model.SemanticEntity
 import inno.jago.semantic.model.StatementEntity
 
+@Suppress("ThrowsCount")
 fun AssignmentNode.toSemanticEntity(scope: ScopeNode): StatementEntity {
     if (leftExpressions.size != rightExpressions.size) {
-        throw WrongNumberOfExpressionsException(leftExpressions.size, rightExpressions.size, pos)
+        throw WrongNumberOfExpressionsException(
+            expected = leftExpressions.size,
+            actual = rightExpressions.size,
+            pos = pos
+        )
     }
 
     when(assignOperator) {
@@ -42,13 +47,13 @@ fun AssignmentNode.toSemanticEntity(scope: ScopeNode): StatementEntity {
         }
         is AddOpSimpleAssignOperatorNode, is MulOpSimpleAssignOperatorNode -> {
             if (leftExpressions.size != 1) {
-                throw WrongNumberOfExpressionsException(1, leftExpressions.size, pos)
+                throw WrongNumberOfExpressionsException(expected = 1, actual = leftExpressions.size, pos = pos)
             }
-            val leftSemanticEntity = leftExpressions[0].toSemanticEntity(scope)
-            val rightSemanticEntity = rightExpressions[0].toSemanticEntity(scope)
+            val leftSemanticEntity = leftExpressions.first().toSemanticEntity(scope)
+            val rightSemanticEntity = rightExpressions.first().toSemanticEntity(scope)
 
-            if (!canBeReassigned(leftExpressions[0], leftSemanticEntity, scope)) {
-                throw IsNotAssignableExpression(leftExpressions[0])
+            if (!canBeReassigned(leftExpressions.first(), leftSemanticEntity, scope)) {
+                throw IsNotAssignableExpression(leftExpressions.first())
             }
 
             if (leftSemanticEntity.type != rightSemanticEntity.type) {
@@ -60,6 +65,7 @@ fun AssignmentNode.toSemanticEntity(scope: ScopeNode): StatementEntity {
     return StatementEntity()
 }
 
+@Suppress("ReturnCount")
 fun canBeReassigned(expression: ExpressionNode, semanticEntity: SemanticEntity, scope: ScopeNode): Boolean {
     when (expression) {
         is OperandNameNode -> {

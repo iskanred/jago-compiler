@@ -43,12 +43,12 @@ private fun StringLiteralNode.toSemanticEntity() = ExpressionEntity(type = Type.
 private fun BoolLiteralNode.toSemanticEntity() = ExpressionEntity(type = Type.BoolType)
 
 private fun CompositeLiteralNode.toSemanticEntity(scope: ScopeNode): ExpressionEntity {
-    val isAllIntElements = literalValue.elements
+    val isAllElementsOfCorrectType = literalValue.elements
         .flatMap { it.toSemanticEntities(scope) }
-        .all { it.type == Type.IntegerType }
+        .all { it.type == literal.elementType.toType() }
 
-    if (!isAllIntElements) {
-        throw SemanticException("All array elements must be of type int")
+    if (!isAllElementsOfCorrectType) {
+        throw SemanticException("All array elements must be of type ${literal.elementType.toType()} at $pos")
     }
 
     return ExpressionEntity(type = literal.toType())

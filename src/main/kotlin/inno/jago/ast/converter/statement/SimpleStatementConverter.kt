@@ -64,17 +64,9 @@ fun GoParser.AssignmentContext.toAssignmentNode(): AssignmentNode = AssignmentNo
 )
 
 fun GoParser.Assign_opContext.toAssignOperatorNode() = when {
-    mul_op() == null -> {
-        MulOpSimpleAssignOperatorNode(MulOperator(toPos(), mul_op().toMulOperators()))
-    }
-
-    add_op() == null -> {
-        AddOpSimpleAssignOperatorNode(AddOperator(toPos(), add_op().toAddOperators()))
-    }
-
-    else -> {
-        SimpleAssignOperatorNode
-    }
+    mul_op() != null -> MulOpSimpleAssignOperatorNode(MulOperator(toPos(), mul_op().toMulOperators()))
+    add_op() != null -> AddOpSimpleAssignOperatorNode(AddOperator(toPos(), add_op().toAddOperators()))
+    else -> SimpleAssignOperatorNode
 }
 
 fun GoParser.ShortVarDeclContext.toShortVarDeclNode(): ShortVarDeclNode = ShortVarDeclNode(

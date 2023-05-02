@@ -115,7 +115,7 @@ fun IndexExpressionNode.toSemanticEntity(scope: ScopeNode): ExpressionEntity {
         throw WrongTypeException(Type.ArrayType(0, Type.AnyType), actualType = exprEntity.type, pos = pos)
     }
 
-    return ExpressionEntity(type = exprEntity.type)
+    return ExpressionEntity(type = exprEntity.type.elementType)
 }
 
 fun ApplicationExpressionNode.toSemanticEntity(scope: ScopeNode): ExpressionEntity {

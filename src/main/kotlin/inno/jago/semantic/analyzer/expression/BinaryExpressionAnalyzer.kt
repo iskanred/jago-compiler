@@ -23,15 +23,13 @@ fun BinaryExpression.toSemanticEntity(scope: ScopeNode): ExpressionEntity {
         is RelationOperator -> {
             listOf(left, right).forEach {
                 when (binaryOperator.operator) {
-                    RelationOperators.EQUALS, RelationOperators.NOT_EQUALS ->
-                        if (!it.type.isEquatable()) {
-                            throw WrongTypeException(Type.EquatableTypes, actualType = it.type, pos = pos)
-                        }
+                    RelationOperators.EQUALS, RelationOperators.NOT_EQUALS -> if (!it.type.isEquatable()) {
+                        throw WrongTypeException(Type.EquatableTypes, actualType = it.type, pos = pos)
+                    }
 
-                    else ->
-                        if (!it.type.isComparable()) {
-                            throw WrongTypeException(Type.ComparableTypes, actualType = it.type, pos = pos)
-                        }
+                    else -> if (!it.type.isComparable()) {
+                        throw WrongTypeException(Type.ComparableTypes, actualType = it.type, pos = pos)
+                    }
                 }
             }
 
@@ -39,7 +37,7 @@ fun BinaryExpression.toSemanticEntity(scope: ScopeNode): ExpressionEntity {
                 throw WrongTypeException(left.type, actualType = right.type, pos = pos)
             }
 
-            return ExpressionEntity(type = left.type)
+            return ExpressionEntity(type = Type.BoolType)
         }
 
 //        *    product                integers, floats
