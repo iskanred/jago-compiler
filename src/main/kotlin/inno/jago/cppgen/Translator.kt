@@ -22,20 +22,19 @@ class OutputProgram (
 fun compile(root: SourceFileNode, name: String) : OutputProgram {
     val program = OutputProgram(name, "")
     for (decl in root.topLevelDecls) {
+        var instruction = ""
         when (decl) {
             is FunctionDeclarationNode -> {
-                var instruction = decl.translateToCode()
-                program.AddInstruction("}")
+                instruction = decl.translateToCode()
             }
-
             is ConstDeclarationNode -> {
-                program.AddInstruction("const ${decl.identifier} = ${decl.expression};")
+                instruction = decl.translateToCode()
             }
-
             is VarDeclarationNode -> {
-                program.AddInstruction("auto ${decl.identifier} = ${decl.expression};")
+                instruction = decl.translateToCode()
             }
         }
+        program.AddInstruction(instruction)
     }
     return program
 }
