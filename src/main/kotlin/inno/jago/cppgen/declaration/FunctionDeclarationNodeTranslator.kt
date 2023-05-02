@@ -23,9 +23,11 @@ fun FunctionDeclarationNode.translateToCode(): String {
 
     // function body
     var functionBody = this.functionBody.block
+    functionInstruction += "{"
     for (statement in functionBody) {
-        functionInstruction += statement.translateToCode()
+        functionInstruction += "\n"+ statement.translateToCode()
     }
+    functionInstruction += "\n}"
 
     return functionInstruction
 }
