@@ -7,13 +7,13 @@ fun ReturnStatementNode.translateToCode(): String {
     if (expressions.isEmpty()) {
         return "return;"
     }
-    var returnInstruction = "return "
 
+    var returnInstruction = "return "
     if (expressions.size == 1) {
         returnInstruction += expressions[0].translateToCode() + ";"
     } else {
         returnInstruction += "make_tuple("
-        for (i in 0 until expressions.size) {
+        for (i in expressions.indices) {
             returnInstruction += expressions[i].translateToCode()
             if (i != expressions.size - 1) {
                 returnInstruction += ", "
