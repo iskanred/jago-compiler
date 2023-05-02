@@ -1,4 +1,4 @@
-package inno.jago.codogen_to_cpp.type
+package inno.jago.cppgen.type
 
 import inno.jago.semantic.model.Type
 

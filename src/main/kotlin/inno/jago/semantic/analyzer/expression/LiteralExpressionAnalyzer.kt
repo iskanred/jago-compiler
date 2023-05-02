@@ -31,3 +31,7 @@ fun DoubleLiteralNode.toSemanticEntity() = ExpressionEntity(type = Type.DoubleTy
 fun StringLiteralNode.toSemanticEntity() = ExpressionEntity(type = Type.StringType)
 
 fun BoolLiteralNode.toSemanticEntity() = ExpressionEntity(type = Type.BoolType)
+
+fun CompositeLiteralNode.toSemanticEntity(): ExpressionEntity {
+
+}

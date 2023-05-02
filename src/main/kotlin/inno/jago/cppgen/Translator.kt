@@ -1,10 +1,10 @@
-package inno.jago.codogen_to_cpp
+package inno.jago.cppgen
 
 import inno.jago.ast.model.decl.ConstDeclarationNode
 import inno.jago.ast.model.decl.FunctionDeclarationNode
 import inno.jago.ast.model.decl.VarDeclarationNode
 import inno.jago.ast.model.global.SourceFileNode
-import inno.jago.codogen_to_cpp.declaration.translateToCode
+import inno.jago.cppgen.declaration.translateToCode
 
 /*
 * Convert AST of Go code to C++ code
