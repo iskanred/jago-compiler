@@ -10,12 +10,10 @@ import inno.jago.common.WrongNumberOfExpressionsException
 import inno.jago.semantic.NonAddressableExpression
 import inno.jago.semantic.WrongTypeException
 import inno.jago.semantic.analyzer.expression.toSemanticEntity
-import inno.jago.semantic.model.EntityType
 import inno.jago.semantic.model.ScopeNode
-import inno.jago.semantic.model.SemanticEntity
-import inno.jago.semantic.model.Type
+import inno.jago.semantic.model.StatementEntity
 
-fun AssignmentNode.toSemanticEntity(scope: ScopeNode): SemanticEntity {
+fun AssignmentNode.toSemanticEntity(scope: ScopeNode): StatementEntity {
     if (leftExpressions.size != rightExpressions.size) {
         throw WrongNumberOfExpressionsException(leftExpressions.size, rightExpressions.size, pos)
     }
@@ -31,21 +29,17 @@ fun AssignmentNode.toSemanticEntity(scope: ScopeNode): SemanticEntity {
         }
 
         if (leftSemanticEntity.type != rightSemanticEntity.type) {
-            throw WrongTypeException(leftSemanticEntity.type, actual = rightSemanticEntity)
+            throw WrongTypeException(leftSemanticEntity.type, actualType = rightSemanticEntity.type, pos = pos)
         }
     }
 
-    return SemanticEntity(
-        type = Type.UnitType,
-        pos = pos,
-        entityType = EntityType.NO_IDENTIFIER
-    )
+    return StatementEntity()
 }
 
 fun canBeReassigned(expression: ExpressionNode, scope: ScopeNode): Boolean {
     when (expression) {
         is OperandNameNode -> {
-            // TODO: проверить, что переменная не константа
+            TODO("проверить, что переменная не константа")
             return true
         }
         is UnaryExpressionNode -> {

@@ -11,40 +11,36 @@ import inno.jago.semantic.analyzer.expression.toSemanticEntity
 import inno.jago.semantic.analyzer.statement.toSemanticEntity
 import inno.jago.semantic.analyzer.signature.toSemanticEntity
 import inno.jago.semantic.analyzer.signature.toType
-import inno.jago.semantic.model.EntityType
+import inno.jago.semantic.model.ConstEntity
+import inno.jago.semantic.model.FuncEntity
+import inno.jago.semantic.model.NamedEntity
 import inno.jago.semantic.model.ScopeNode
-import inno.jago.semantic.model.SemanticEntity
 import inno.jago.semantic.model.Type
+import inno.jago.semantic.model.VarEntity
 import inno.jago.semantic.model.toType
 
-fun TopLevelDeclNode.toSemanticEntity(scope: ScopeNode): SemanticEntity = when(this) {
+fun TopLevelDeclNode.toSemanticEntity(scope: ScopeNode): NamedEntity = when(this) {
     is FunctionDeclarationNode -> toSemanticEntity(scope)
     is ConstDeclarationNode -> toSemanticEntity(scope)
     is VarDeclarationNode -> toSemanticEntity(scope)
 }
 
-private fun ConstDeclarationNode.toSemanticEntity(scope: ScopeNode): SemanticEntity {
+private fun ConstDeclarationNode.toSemanticEntity(scope: ScopeNode): ConstEntity {
     val expressionEntity = expression!!.toSemanticEntity(scope)
 
     type?.toType()?.let { expectedType ->
         if (expressionEntity.type != expectedType) {
-            throw WrongTypeException(expectedType, actual = expressionEntity)
+            throw WrongTypeException(expectedType, actualType = expressionEntity.type, pos = pos)
         }
     }
 
-    return SemanticEntity(
-        type = expressionEntity.type,
-        pos = pos,
-        entityType = EntityType.VAR,
-        identifier = identifier
-    ).also { entity ->
-        // add const to current scope
-        scope.addUniqueEntity(entity)
+    return ConstEntity(type = expressionEntity.type, identifier = identifier).also {
+        scope.addUniqueEntity(entity = it, pos = pos)
     }
 }
 
 @Suppress("ThrowsCount")
-private fun VarDeclarationNode.toSemanticEntity(scope: ScopeNode): SemanticEntity {
+private fun VarDeclarationNode.toSemanticEntity(scope: ScopeNode): VarEntity {
     val entityType = if (expression == null && type == null) {
         throw VarDeclMustPresentTypeOrExpressionException(varIdentifier = identifier, pos = pos)
     } else if (expression == null && type != null) {
@@ -67,39 +63,34 @@ private fun VarDeclarationNode.toSemanticEntity(scope: ScopeNode): SemanticEntit
 
         type?.toType()?.let { expectedType ->
             if (expressionType != expectedType) {
-                throw WrongTypeException(expectedType, actual = expressionEntity)
+                throw WrongTypeException(expectedType, actualType = expressionEntity.type, pos = pos)
             }
         }
 
         expressionType
     }
 
-    return SemanticEntity(
-        type = entityType,
-        pos = pos,
-        entityType = EntityType.VAR,
-        identifier = identifier
-    ).also { entity ->
-        // add var to current scope
-        scope.addUniqueEntity(entity)
+    return VarEntity(type = entityType, identifier = identifier).also {
+        scope.addUniqueEntity(entity = it, pos = pos)
     }
 }
 
-fun FunctionDeclarationNode.toSemanticEntity(scope: ScopeNode) = SemanticEntity(
+fun FunctionDeclarationNode.toSemanticEntity(scope: ScopeNode) = FuncEntity(
     type = signature.toType(),
-    pos = pos,
-    entityType = EntityType.VAR,
     identifier = functionName
 ).also { entity ->
     // add function to parent scope
-    scope.addUniqueEntity(entity)
+    scope.addUniqueEntity(entity = entity, pos = pos)
+
     // create scope for function
     val functionScope = scope.createNewFuncScope(
-        name = "Function $functionName in [${scope.name}]",
+        functionName = functionName,
         expectedReturnType = (entity.type as Type.FuncType).returnType
     )
 
+    // analyze parameters
     signature.parameterNodes.forEach { it.toSemanticEntity(functionScope) }
+
     functionBody.block.forEach { statementNode ->
         statementNode.toSemanticEntity(functionScope)
     }

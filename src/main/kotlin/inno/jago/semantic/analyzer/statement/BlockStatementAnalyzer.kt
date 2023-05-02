@@ -1,23 +1,10 @@
 package inno.jago.semantic.analyzer.statement
 
 import inno.jago.ast.model.statement.BlockStatementNode
-import inno.jago.semantic.model.EntityType
 import inno.jago.semantic.model.ScopeNode
-import inno.jago.semantic.model.SemanticEntity
-import inno.jago.semantic.model.Type
+import inno.jago.semantic.model.StatementEntity
 
-fun BlockStatementNode.eachStatementToSemanticEntity(scope: ScopeNode) {
-    block.forEach {
-        it.toSemanticEntity(scope)
-    }
-}
-
-fun BlockStatementNode.toSemanticEntity(scope: ScopeNode): SemanticEntity {
-    val blockScope = scope.createNewSimpleBlockScope("'block' scope in ${scope.name}")
-    eachStatementToSemanticEntity(blockScope)
-    return SemanticEntity(
-        type = Type.UnitType,
-        pos = pos,
-        entityType = EntityType.NO_IDENTIFIER
-    )
+fun BlockStatementNode.toSemanticEntity(scope: ScopeNode) = StatementEntity().also {
+    val blockScope = scope.createNewSimpleBlockScope()
+    block.forEach { it.toSemanticEntity(blockScope) }
 }

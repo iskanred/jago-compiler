@@ -1,6 +1,5 @@
 package inno.jago.ast.converter.declaration
 
-import inno.jago.ast.EntityNotSupportedException
 import inno.jago.common.UnreachableCodeException
 import inno.jago.ast.model.decl.ConstDeclarationNode
 import inno.jago.ast.model.decl.DeclarationNode
@@ -11,6 +10,7 @@ import inno.jago.ast.converter.expression.toExpressionNode
 import inno.jago.ast.converter.statement.toBlockStatementNode
 import inno.jago.ast.converter.signature.toSignatureNode
 import inno.jago.ast.converter.type.toTypeNode
+import inno.jago.common.EntityNotSupportedException
 import inno.jago.common.WrongNumberOfExpressionsException
 
 fun GoParser.DeclarationContext.toDeclarationNodes(): List<DeclarationNode> {

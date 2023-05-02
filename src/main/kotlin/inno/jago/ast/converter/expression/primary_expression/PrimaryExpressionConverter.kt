@@ -1,6 +1,5 @@
 package inno.jago.ast.converter.expression.primary_expression
 
-import inno.jago.ast.EntityNotSupportedException
 import inno.jago.common.UnreachableCodeException
 import inno.jago.ast.model.expression.ExpressionNode
 import inno.jago.ast.model.expression.unary_expression.ApplicationExpressionNode
@@ -9,7 +8,9 @@ import inno.jago.ast.model.expression.unary_expression.PrimaryExpressionNode
 import inno.jago.ast.converter.common.toPos
 import inno.jago.ast.converter.expression.toExpressionNode
 import inno.jago.ast.converter.expression.primary_expression.operand.toOperandNode
+import inno.jago.common.EntityNotSupportedException
 
+@Suppress("ReturnCount", "ThrowsCount")
 fun GoParser.PrimaryExprContext.toPrimaryExpressionNode(): PrimaryExpressionNode {
     operand()?.let {
         return it.toOperandNode()
@@ -20,11 +21,11 @@ fun GoParser.PrimaryExprContext.toPrimaryExpressionNode(): PrimaryExpressionNode
     }
 
     methodExpr()?.let {
-        throw EntityNotSupportedException("MethodExpression")
+        throw EntityNotSupportedException("Methods")
     }
 
     selector()?.let {
-        throw EntityNotSupportedException("MethodExpression")
+        throw EntityNotSupportedException("Methods")
     }
 
     index()?.let {

@@ -5,6 +5,7 @@ import inno.jago.ast.model.expression.unary_expression.UnaryOperatorNode
 import inno.jago.ast.model.expression.unary_expression.UnaryOperators
 import inno.jago.ast.converter.common.toPos
 
+@Suppress("ReturnCount")
 fun GoParser.Unary_opContext.toUnaryOperator(): UnaryOperatorNode {
     PLUS()?.let {
         return UnaryOperatorNode(

@@ -15,14 +15,13 @@ import inno.jago.ast.model.statement.ReturnStatementNode
 import inno.jago.ast.model.statement.ShortVarDeclNode
 import inno.jago.ast.model.statement.StatementNode
 import inno.jago.common.UnreachableCodeException
-import inno.jago.semantic.ReturnInGlobalScopeException
+import inno.jago.semantic.ReturnInWrongScopeException
 import inno.jago.semantic.WrongTypeException
 import inno.jago.semantic.analyzer.expression.toSemanticEntity
-import inno.jago.semantic.model.EntityType
 import inno.jago.semantic.model.ScopeNode
 import inno.jago.semantic.model.SemanticEntity
+import inno.jago.semantic.model.StatementEntity
 import inno.jago.semantic.model.Type
-import inno.jago.semantic.toType
 
 fun StatementNode.toSemanticEntity(scope: ScopeNode): SemanticEntity = when (this) {
     is AssignmentNode -> toSemanticEntity(scope)
@@ -40,31 +39,19 @@ fun StatementNode.toSemanticEntity(scope: ScopeNode): SemanticEntity = when (thi
     is ElseStatementNode -> throw UnreachableCodeException() // NOT NEEDED
 }
 
-private fun IncDecStatementNode.toSemanticEntity(scope: ScopeNode): SemanticEntity {
+private fun IncDecStatementNode.toSemanticEntity(scope: ScopeNode) = StatementEntity().also {
     val expressionEntity = expression.toSemanticEntity(scope)
     if (expressionEntity.type !is Type.NumberType) {
-        throw WrongTypeException(Type.NumberType(), actual = expressionEntity)
-    }
-    return SemanticEntity(
-        type = expressionEntity.type,
-        pos = pos,
-        entityType = EntityType.NO_IDENTIFIER
-    )
-}
-
-private fun ReturnStatementNode.toSemanticEntity(scope: ScopeNode) = SemanticEntity(
-    type = expressions.toType { it.toSemanticEntity(scope).type },
-    pos = pos,
-    entityType = EntityType.NO_IDENTIFIER
-).also { entity ->
-    val expectedReturnType: Type = scope.getExpectedReturnType() ?: throw ReturnInGlobalScopeException(pos)
-    if (expectedReturnType != entity.type) {
-        throw WrongTypeException(expectedReturnType, actual = entity)
+        throw WrongTypeException(Type.NumberType(), actualType = expressionEntity.type, pos = pos)
     }
 }
 
-private fun EmptyStatementNode.toSemanticEntity() = SemanticEntity (
-    type = Type.AnyType,
-    pos = pos,
-    entityType = EntityType.NO_IDENTIFIER,
-)
+private fun ReturnStatementNode.toSemanticEntity(scope: ScopeNode) = StatementEntity().also {
+    val expectedReturnType: Type = scope.findExpectedReturnType()
+        ?: throw ReturnInWrongScopeException(pos)
+    if (expectedReturnType != it.type) {
+        throw WrongTypeException(expectedReturnType, actualType = it.type, pos = pos)
+    }
+}
+
+private fun EmptyStatementNode.toSemanticEntity() = StatementEntity()

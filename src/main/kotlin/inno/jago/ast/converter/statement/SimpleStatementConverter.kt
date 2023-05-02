@@ -1,7 +1,6 @@
 package inno.jago.ast.converter.statement
 
 import GoParser
-import inno.jago.ast.EntityNotSupportedException
 import inno.jago.common.UnreachableCodeException
 import inno.jago.ast.model.statement.AssignmentNode
 import inno.jago.ast.model.statement.EmptyStatementNode
@@ -18,6 +17,7 @@ import inno.jago.ast.model.expression.binary_expression.MulOperator
 import inno.jago.ast.model.statement.AddOpSimpleAssignOperatorNode
 import inno.jago.ast.model.statement.MulOpSimpleAssignOperatorNode
 import inno.jago.ast.model.statement.SimpleAssignOperatorNode
+import inno.jago.common.EntityNotSupportedException
 
 @Suppress("ReturnCount")
 fun GoParser.SimpleStmtContext.toSimpleStatementNode(): SimpleStatementNode {

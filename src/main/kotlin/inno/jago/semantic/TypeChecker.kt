@@ -3,9 +3,8 @@ package inno.jago.semantic
 import inno.jago.ast.model.global.ImportNode
 import inno.jago.ast.model.global.SourceFileNode
 import inno.jago.semantic.analyzer.declaration.toSemanticEntity
-import inno.jago.semantic.model.EntityType
+import inno.jago.semantic.model.ImportEntity
 import inno.jago.semantic.model.ScopeNode
-import inno.jago.semantic.model.SemanticEntity
 import inno.jago.semantic.model.Type
 
 class TypeChecker(
@@ -18,12 +17,10 @@ class TypeChecker(
         topLevelDecls.forEach { it.toSemanticEntity(scope) }
     }
 
-    private fun ImportNode.toSemanticEntity(scope: ScopeNode) = SemanticEntity(
+    private fun ImportNode.toSemanticEntity(scope: ScopeNode) = ImportEntity(
         type = Type.ImportType,
-        pos = pos,
-        entityType = EntityType.IMPORT,
         identifier = name
-    ).also { entity ->
-        scope.addUniqueEntity(entity)
+    ).also {
+        scope.addUniqueEntity(entity = it, pos = pos)
     }
 }

@@ -14,6 +14,7 @@ import inno.jago.ast.converter.common.toPos
 import inno.jago.ast.converter.expression.primary_expression.operand.literal.toLiteralNode
 import inno.jago.ast.converter.expression.toExpressionNode
 
+@Suppress("ReturnCount")
 fun GoParser.OperandContext.toOperandNode(): OperandNode {
     literal()?.let {
         return LiteralOperandNode(pos = toPos(), literalNode = it.toLiteralNode())

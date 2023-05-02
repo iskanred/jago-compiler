@@ -1,7 +1,6 @@
 package inno.jago.ast.converter.type
 
 import GoParser
-import inno.jago.ast.EntityNotSupportedException
 import inno.jago.ast.UnknownTypeException
 import inno.jago.common.UnreachableCodeException
 import inno.jago.ast.model.type.ArrayTypeNode
@@ -19,6 +18,7 @@ import inno.jago.common.STRING_TYPE_NAME
 import inno.jago.ast.converter.common.toPos
 import inno.jago.ast.converter.expression.toExpressionNode
 import inno.jago.ast.converter.signature.toSignatureNode
+import inno.jago.common.EntityNotSupportedException
 import inno.jago.lexer.Pos
 
 fun GoParser.TypeContext.toTypeNode(): TypeNode =

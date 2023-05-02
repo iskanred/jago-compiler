@@ -5,14 +5,14 @@ import inno.jago.common.JaGoException
 import inno.jago.common.UnreachableCodeException
 import inno.jago.common.WrongNumberOfExpressionsException
 import inno.jago.semantic.WrongTypeException
-import inno.jago.semantic.model.EntityType
 import inno.jago.semantic.model.ScopeNode
+import inno.jago.semantic.model.StatementEntity
 import inno.jago.semantic.model.Type
-import inno.jago.semantic.model.SemanticEntity
+import inno.jago.semantic.model.VarEntity
 
 // ShortVarDecl = IdentifierList ":=" ExpressionList
 @Suppress("LongMethod", "ThrowsCount")
-fun ShortVarDeclNode.toSemanticEntity(scope: ScopeNode): SemanticEntity {
+fun ShortVarDeclNode.toSemanticEntity(scope: ScopeNode): StatementEntity {
     val semanticEntities = expression.map { toSemanticEntity(scope) }
 
     // a, b := someFun(); someFun return > 1 elements
@@ -39,15 +39,14 @@ fun ShortVarDeclNode.toSemanticEntity(scope: ScopeNode): SemanticEntity {
             val visibleEntity = scope.findVisibleEntity(identifier)
             if (visibleEntity == null) {
                 scope.addUniqueEntity(
-                    SemanticEntity(
+                    entity = VarEntity(
                         type = type,
-                        pos = pos,
-                        entityType = EntityType.VAR,
                         identifier = identifier
-                    )
+                    ),
+                    pos = pos
                 )
             } else if (visibleEntity.type != type) {
-                throw WrongTypeException(type, actual = visibleEntity)
+                throw WrongTypeException(type, actualType = visibleEntity.type, pos = pos)
             }
         }
     } else { // a, b := 3, true. No tuple in semanticEntities.
@@ -59,26 +58,21 @@ fun ShortVarDeclNode.toSemanticEntity(scope: ScopeNode): SemanticEntity {
             )
         }
 
-        identifierList.zip(semanticEntities).forEach { (identifier, type) ->
+        identifierList.zip(semanticEntities.map { it.type }).forEach { (identifier, type) ->
             val visibleEntity = scope.findVisibleEntity(identifier)
             if (visibleEntity == null) {
                 scope.addUniqueEntity(
-                    SemanticEntity(
-                        type = type.type,
-                        pos = pos,
-                        entityType = EntityType.VAR,
+                    entity = VarEntity(
+                        type = type,
                         identifier = identifier
-                    )
+                    ),
+                    pos = pos
                 )
-            } else if (visibleEntity.type != type.type) {
-                throw WrongTypeException(type.type, actual = visibleEntity)
+            } else if (visibleEntity.type != type) {
+                throw WrongTypeException(type, actualType = visibleEntity.type, pos = pos)
             }
         }
     }
 
-    return SemanticEntity(
-        type = Type.UnitType,
-        pos = pos,
-        entityType = EntityType.NO_IDENTIFIER
-    )
+    return StatementEntity()
 }

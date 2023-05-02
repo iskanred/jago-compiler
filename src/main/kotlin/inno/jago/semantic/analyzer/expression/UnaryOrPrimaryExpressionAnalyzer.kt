@@ -17,20 +17,19 @@ import inno.jago.common.JaGoException
 import inno.jago.common.UnreachableCodeException
 import inno.jago.semantic.NonCastableTypeException
 import inno.jago.semantic.SemanticException
-import inno.jago.semantic.model.EntityType
 import inno.jago.semantic.WrongTypeException
+import inno.jago.semantic.model.ExpressionEntity
 import inno.jago.semantic.model.ScopeNode
-import inno.jago.semantic.model.SemanticEntity
 import inno.jago.semantic.model.Type
 import inno.jago.semantic.model.toType
 
-fun UnaryOrPrimaryExpression.toSemanticEntity(scope: ScopeNode): SemanticEntity = when (this) {
+fun UnaryOrPrimaryExpression.toSemanticEntity(scope: ScopeNode): ExpressionEntity = when (this) {
     is UnaryExpressionNode -> toSemanticEntity(scope)
     is PrimaryExpressionNode -> toSemanticEntity(scope)
 }
 
 @Suppress("CyclomaticComplexMethod")
-fun UnaryExpressionNode.toSemanticEntity(scope: ScopeNode): SemanticEntity = when (this.unaryOrPrimaryExpression) {
+fun UnaryExpressionNode.toSemanticEntity(scope: ScopeNode): ExpressionEntity = when (this.unaryOrPrimaryExpression) {
     is PrimaryExpressionNode -> this.unaryOrPrimaryExpression.toSemanticEntity(scope)
     is UnaryExpressionNode -> {
         if (operator == null) {
@@ -40,27 +39,27 @@ fun UnaryExpressionNode.toSemanticEntity(scope: ScopeNode): SemanticEntity = whe
             when (operator.operator) {
                 UnaryOperators.PLUS, UnaryOperators.MINUS -> {
                     if (it.type !is Type.NumberType) {
-                        throw WrongTypeException(Type.NumberType(), actual = it)
+                        throw WrongTypeException(Type.NumberType(), actualType = it.type, pos = pos)
                     }
                 }
                 UnaryOperators.EXCLAMATION -> {
                     if (it.type !is Type.BoolType) {
-                        throw WrongTypeException(Type.BoolType, actual = it)
+                        throw WrongTypeException(Type.BoolType, actualType = it.type, pos = pos)
                     }
                 }
                 UnaryOperators.CARET -> {
                     if (it.type !is Type.IntegerType) {
-                        throw WrongTypeException(Type.IntegerType, actual = it)
+                        throw WrongTypeException(Type.IntegerType, actualType = it.type, pos = pos)
                     }
                 }
                 UnaryOperators.ASTERISK -> {
                     if (it.type !is Type.PointerType) {
-                        throw WrongTypeException(Type.PointerType(Type.AnyType), actual = it)
+                        throw WrongTypeException(Type.PointerType(Type.AnyType), actualType = it.type, pos = pos)
                     }
                 }
                 UnaryOperators.AMPERSAND -> { // TODO: Здесь нужно проверить, что справа от амерасанда стоит переменная
                     if (it.type !is Type.EquatableTypes) {
-                        throw WrongTypeException(Type.EquatableTypes, actual = it)
+                        throw WrongTypeException(Type.EquatableTypes, actualType = it.type, pos = pos)
                     }
                 }
                 UnaryOperators.RECEIVE -> throw EntityNotSupportedException("Unary operator <-")
@@ -70,7 +69,7 @@ fun UnaryExpressionNode.toSemanticEntity(scope: ScopeNode): SemanticEntity = whe
 }
 
 @Suppress("CyclomaticComplexMethod")
-fun PrimaryExpressionNode.toSemanticEntity(scope: ScopeNode): SemanticEntity = when (this) {
+fun PrimaryExpressionNode.toSemanticEntity(scope: ScopeNode): ExpressionEntity = when (this) {
     is ExpressionOperandNode -> toSemanticEntity(scope)
     is ConversionNode -> toSemanticEntity(scope)
     is IndexExpressionNode -> toSemanticEntity(scope)
@@ -81,7 +80,7 @@ fun PrimaryExpressionNode.toSemanticEntity(scope: ScopeNode): SemanticEntity = w
     else -> throw UnreachableCodeException()
 }
 
-fun ConversionNode.toSemanticEntity(scope: ScopeNode): SemanticEntity {
+fun ConversionNode.toSemanticEntity(scope: ScopeNode): ExpressionEntity {
     val expressionEntity = expression.toSemanticEntity(scope)
     val conversionType = type.toType()
 
@@ -93,56 +92,56 @@ fun ConversionNode.toSemanticEntity(scope: ScopeNode): SemanticEntity {
                 pos = pos
             )
         }
-        return SemanticEntity(
-            type = conversionType,
-            pos = pos,
-            entityType = EntityType.NO_IDENTIFIER
-        )
+        return ExpressionEntity(type = conversionType)
     }
     return expressionEntity
 }
 
-fun IndexExpressionNode.toSemanticEntity(scope: ScopeNode): SemanticEntity {
+fun IndexExpressionNode.toSemanticEntity(scope: ScopeNode): ExpressionEntity {
     val exprEntity = primaryExpression.toSemanticEntity(scope)
     val indexEntity = expression.toSemanticEntity(scope)
 
     if (indexEntity.type !is Type.IntegerType) {
-        throw WrongTypeException(Type.IntegerType, actual = indexEntity)
+        throw WrongTypeException(Type.IntegerType, actualType = indexEntity.type, pos = pos)
     }
 
     if (exprEntity.type !is Type.ArrayType) {
-        throw WrongTypeException(Type.ArrayType(0, Type.AnyType), actual = exprEntity)
+        throw WrongTypeException(Type.ArrayType(0, Type.AnyType), actualType = exprEntity.type, pos = pos)
     }
 
-    return SemanticEntity(exprEntity.type, pos, EntityType.NO_IDENTIFIER)
+    return ExpressionEntity(type = exprEntity.type)
 }
 
-fun ApplicationExpressionNode.toSemanticEntity(scope: ScopeNode): SemanticEntity {
-    val function = leftExpression.toSemanticEntity(scope)
+fun ApplicationExpressionNode.toSemanticEntity(scope: ScopeNode): ExpressionEntity {
+    val functionEntity = leftExpression.toSemanticEntity(scope)
     val args = expressions.map { it.toSemanticEntity(scope) }
 
-    when (function.type) {
+    when (functionEntity.type) {
         is Type.FuncType -> {
             // длина
-            if (function.type.paramTypes.size != args.size) {
+            if (functionEntity.type.paramTypes.size != args.size) {
                 throw SemanticException(
-                    "Number of params is not equal to number of arguments of function '${function.identifier}' at $pos"
+                    "Number of arguments does not match number of parameters at $pos"
                 )
             }
             // проверка соответствия типов
             args.forEachIndexed { i, argEntity ->
-                if (function.type.paramTypes[i] != argEntity.type) {
-                    throw WrongTypeException(function.type.paramTypes[i], actual = argEntity)
+                if (functionEntity.type.paramTypes[i] != argEntity.type) {
+                    throw WrongTypeException(
+                        functionEntity.type.paramTypes[i],
+                        actualType = functionEntity.type,
+                        pos = pos
+                    )
                 }
             }
 
             // возвращаем то, что вернула функция
-            return SemanticEntity(
-                type = function.type.returnType,
-                pos = pos,
-                entityType = EntityType.NO_IDENTIFIER,
-            )
+            return ExpressionEntity(type = functionEntity.type.returnType,)
         }
-        else -> throw WrongTypeException(Type.FuncType(args.map { it.type }, Type.AnyType), actual = function)
+        else -> throw WrongTypeException(
+            Type.FuncType(args.map { it.type }, Type.AnyType),
+            actualType = functionEntity.type,
+            pos = pos
+        )
     }
 }

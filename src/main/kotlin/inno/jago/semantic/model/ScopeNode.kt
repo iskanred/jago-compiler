@@ -1,45 +1,55 @@
 package inno.jago.semantic.model
 
-import inno.jago.common.JaGoException
-import inno.jago.semantic.EntityAlreadyExistsException
+import inno.jago.lexer.Pos
+import inno.jago.semantic.NamedEntityAlreadyExistsException
 
 sealed class ScopeNode(
     val name: String,
     private val parent: ScopeNode?,
 ) {
-    private val table = mutableMapOf<String, SemanticEntity>()
+    private val table = mutableMapOf<String, NamedEntity>()
 
-    fun createNewFuncScope(name: String, expectedReturnType: Type? = null): ScopeNode =
-        FuncScopeNode(name = name, parent = this, expectedReturnType = expectedReturnType)
+    fun createNewFuncScope(functionName: String, expectedReturnType: Type? = null) = FuncScopeNode(
+        name = "Function '$functionName' scope inside scope [$name]",
+        parent = this,
+        expectedReturnType = expectedReturnType
+    )
 
-    fun createNewForScope(name: String): ScopeNode =
-        ForScopeNode(name = name, parent = this)
+    fun createNewForScope() = ForScopeNode(
+        name = "'for' statement scope inside scope [$name]",
+        parent = this
+    )
 
-    fun createNewIfScope(name: String): ScopeNode =
-        IfScopeNode(name = name, parent = this)
+    fun createNewIfScope() = IfScopeNode(
+        name = "'if' statement scope inside scope [$name]",
+        parent = this
+    )
 
-    fun createNewSimpleBlockScope(name: String): ScopeNode =
-        SimpleBLockScopeNode(name = name, parent = this)
+    fun createNewSimpleBlockScope() = SimpleBLockScopeNode(
+        name = "Simple block scope inside scope [$name]",
+        parent = this
+    )
 
-    fun addUniqueEntity(entity: SemanticEntity): SemanticEntity {
-        entity.identifier
-            ?: throw JaGoException("Only entity with non-null can be added to symbol table")
-
-        val oldEntityType = table[entity.identifier]?.entityType
-
-        return if (oldEntityType == entity.entityType) {
-            throw EntityAlreadyExistsException(entity)
-        } else {
-            table[entity.identifier] = entity
-            entity
+    fun addUniqueEntity(entity: NamedEntity, pos: Pos): NamedEntity {
+        // ignore "_" identifier
+        if (entity.identifier == "_") {
+            return entity
         }
+
+        if (entity.identifier in table) {
+            throw NamedEntityAlreadyExistsException(identifier = entity.identifier, pos = pos)
+        }
+
+        table[entity.identifier] = entity
+
+        return entity
     }
 
     /**
      * Searches for visible entities by identifier
      * 'Visible' means in one of ancestor's scope
      */
-    fun findVisibleEntity(identifier: String): SemanticEntity? {
+    fun findVisibleEntity(identifier: String): NamedEntity? {
         var currentScopeNode: ScopeNode? = this
         while (currentScopeNode != null) {
             if (identifier in currentScopeNode.table) {
@@ -50,11 +60,11 @@ sealed class ScopeNode(
         return null
     }
 
-    fun getExpectedReturnType(): Type? {
+    fun findExpectedReturnType(): Type? {
         if (this is FuncScopeNode) {
             return expectedReturnType
         }
-        return parent?.getExpectedReturnType()
+        return parent?.findExpectedReturnType()
     }
 
     fun hasLoopScope(): Boolean {
@@ -68,6 +78,8 @@ sealed class ScopeNode(
         val globalScopeNode = GlobalScopeNode()
     }
 }
+
+class GlobalScopeNode : ScopeNode("GLOBAL", null)
 
 class SimpleBLockScopeNode(
     name: String,
@@ -101,5 +113,3 @@ class FuncScopeNode(
     name = name,
     parent = parent
 )
-
-class GlobalScopeNode : ScopeNode("GLOBAL", null)

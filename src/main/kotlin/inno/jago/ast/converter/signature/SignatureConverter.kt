@@ -1,13 +1,13 @@
 package inno.jago.ast.converter.signature
 
 import GoParser
-import inno.jago.ast.EntityNotSupportedException
 import inno.jago.ast.FunctionIdentifiersException
 import inno.jago.ast.converter.common.toPos
 import inno.jago.ast.model.signature.ParameterNode
 import inno.jago.ast.model.signature.SignatureNode
 import inno.jago.ast.model.type.TypeNode
 import inno.jago.ast.converter.type.toTypeNode
+import inno.jago.common.EntityNotSupportedException
 
 fun GoParser.SignatureContext.toSignatureNode() = SignatureNode(
     parameterNodes = parameters().toParameterNodes(),

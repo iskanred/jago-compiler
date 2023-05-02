@@ -9,13 +9,12 @@ import inno.jago.ast.model.expression.binary_expression.MulOperators
 import inno.jago.ast.model.expression.binary_expression.RelationOperator
 import inno.jago.ast.model.expression.binary_expression.RelationOperators
 import inno.jago.semantic.WrongTypeException
-import inno.jago.semantic.model.EntityType
+import inno.jago.semantic.model.ExpressionEntity
 import inno.jago.semantic.model.ScopeNode
-import inno.jago.semantic.model.SemanticEntity
 import inno.jago.semantic.model.Type
 
 @Suppress("ThrowsCount", "CyclomaticComplexMethod", "LongMethod", "NestedBlockDepth", "ReturnCount")
-fun BinaryExpression.toSemanticEntity(scope: ScopeNode): SemanticEntity {
+fun BinaryExpression.toSemanticEntity(scope: ScopeNode): ExpressionEntity {
     val left = leftExpression.toSemanticEntity(scope)
     val right = leftExpression.toSemanticEntity(scope)
 
@@ -26,21 +25,21 @@ fun BinaryExpression.toSemanticEntity(scope: ScopeNode): SemanticEntity {
                 when (binaryOperator.operator) {
                     RelationOperators.EQUALS, RelationOperators.NOT_EQUALS ->
                         if (!it.type.isEquatable()) {
-                            throw WrongTypeException(Type.EquatableTypes, actual = it)
+                            throw WrongTypeException(Type.EquatableTypes, actualType = it.type, pos = pos)
                         }
 
                     else ->
                         if (!it.type.isComparable()) {
-                            throw WrongTypeException(Type.ComparableTypes, actual = it)
+                            throw WrongTypeException(Type.ComparableTypes, actualType = it.type, pos = pos)
                         }
                 }
             }
 
             if (left.type != right.type) {
-                throw WrongTypeException(left.type, actual = right)
+                throw WrongTypeException(left.type, actualType = right.type, pos = pos)
             }
 
-            return SemanticEntity(type = left.type, pos = pos, entityType = EntityType.NO_IDENTIFIER)
+            return ExpressionEntity(type = left.type)
         }
 
 //        *    product                integers, floats
@@ -60,15 +59,15 @@ fun BinaryExpression.toSemanticEntity(scope: ScopeNode): SemanticEntity {
 
                 if (it.type !in expectedTypes) {
                     @Suppress("SpreadOperator")
-                    throw WrongTypeException(*expectedTypes.toTypedArray(), actual = it)
+                    throw WrongTypeException(*expectedTypes.toTypedArray(), actualType = it.type, pos = pos)
                 }
             }
 
             if (left.type != right.type) {
-                throw WrongTypeException(left.type, actual = right)
+                throw WrongTypeException(left.type, actualType = right.type, pos = pos)
             }
 
-            return SemanticEntity(type = left.type, pos = pos, entityType = EntityType.NO_IDENTIFIER)
+            return ExpressionEntity(type = left.type)
         }
 
 //        +    sum                    integers, floats, strings
@@ -86,15 +85,15 @@ fun BinaryExpression.toSemanticEntity(scope: ScopeNode): SemanticEntity {
 
                 if (it.type !in expectedTypes) {
                     @Suppress("SpreadOperator")
-                    throw WrongTypeException(*expectedTypes.toTypedArray(), actual = it)
+                    throw WrongTypeException(*expectedTypes.toTypedArray(), actualType = it.type, pos = pos)
                 }
             }
 
             if (left.type != right.type) {
-                throw WrongTypeException(left.type, actual = right)
+                throw WrongTypeException(left.type, actualType = right.type, pos = pos)
             }
 
-            return SemanticEntity(type = left.type, pos = pos, entityType = EntityType.NO_IDENTIFIER)
+            return ExpressionEntity(type = left.type)
         }
 
 //        &&    conditional AND    p && q  is  "if p then q else false"
@@ -103,11 +102,11 @@ fun BinaryExpression.toSemanticEntity(scope: ScopeNode): SemanticEntity {
         is LogicOperator -> {
             listOf(left, right).forEach {
                 if (it.type != Type.BoolType) {
-                    throw WrongTypeException(Type.BoolType, actual = it)
+                    throw WrongTypeException(Type.BoolType, actualType = it.type, pos = pos)
                 }
             }
 
-            return SemanticEntity(type = Type.BoolType, pos = pos, entityType = EntityType.NO_IDENTIFIER)
+            return ExpressionEntity(type = Type.BoolType)
         }
     }
 }
