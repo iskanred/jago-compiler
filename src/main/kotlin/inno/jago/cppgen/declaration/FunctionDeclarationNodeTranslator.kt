@@ -8,39 +8,42 @@ import inno.jago.semantic.model.toType
 
 fun FunctionDeclarationNode.translateToCode(): String {
     var functionInstruction = ""
-    // return type
 
+    // return type
     var returnType = this.signature.resultNode
+
     var instructionOfReturnType = ""
-    if (returnType.isEmpty()) {
+    if (returnType.isEmpty()) { // no return type
         instructionOfReturnType = "void"
-    } else if (returnType.size == 1) {
-        instructionOfReturnType = returnType[0].toString()
-    } else {
+    } else if (returnType.size == 1) { // one return type
+        instructionOfReturnType = returnType[0].toType().translateToCode()
+    } else { // more than one return type
         instructionOfReturnType = "tuple<"
-        for (i in 0..returnType.size - 1) {
-            instructionOfReturnType += returnType[i].toString()
+        for (i in 0 until returnType.size) {
+            instructionOfReturnType += returnType[i].toType().translateToCode()
             if (i != returnType.size - 1) {
                 instructionOfReturnType = "$instructionOfReturnType, "
             }
         }
-        instructionOfReturnType = "$instructionOfReturnType>"
     }
     functionInstruction += instructionOfReturnType
 
     // function name
-    functionInstruction = functionInstruction + " " + this.functionName + "("
+    functionInstruction += " " + this.functionName
 
     // arguments
-    var argumentsInstruction = ""
     var arguments = this.signature.parameterNodes
+
+    var argumentsInstruction = "("
     for (i in 0 until arguments.size) {
         argumentsInstruction += arguments[i].translateToCode()
         if (i != arguments.size - 1) {
             argumentsInstruction = "$argumentsInstruction, "
         }
     }
-    functionInstruction = "$functionInstruction$argumentsInstruction) {"
+    argumentsInstruction += ")"
+
+    functionInstruction += argumentsInstruction
 
     // function body
 
