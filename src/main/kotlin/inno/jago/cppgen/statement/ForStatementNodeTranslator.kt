@@ -6,13 +6,8 @@ import inno.jago.ast.model.statement.ForStatementNode
 import inno.jago.cppgen.expression.translateToCode
 
 fun ForStatementNode.translateToCode(): String = when (this) {
-    is ConditionalForStatementNode -> {
-        translateToCode()
-    }
-
-    is ForClauseStatementNode -> {
-        translateToCode()
-    }
+    is ConditionalForStatementNode -> translateToCode()
+    is ForClauseStatementNode -> translateToCode()
 }
 
 fun ConditionalForStatementNode.translateToCode(): String {
