@@ -1,4 +1,5 @@
 @file:Suppress("ThrowsCount")
+
 package inno.jago.semantic.analyzer.expression
 
 import inno.jago.ast.model.expression.unary_expression.ApplicationExpressionNode
@@ -32,36 +33,46 @@ fun UnaryExpressionNode.toSemanticEntity(scope: ScopeNode): ExpressionEntity = w
         if (operator == null) {
             throw JaGoException("Unary operator is null")
         }
-        this.unaryOrPrimaryExpression.toSemanticEntity(scope).also {
-            when (operator.operator) {
-                UnaryOperators.PLUS, UnaryOperators.MINUS -> {
-                    if (it.type !is Type.NumberType) {
-                        throw WrongTypeException(Type.NumberType(), actualType = it.type, pos = pos)
-                    }
+        val semanticEntity = this.unaryOrPrimaryExpression.toSemanticEntity(scope)
+
+        when (operator.operator) {
+            UnaryOperators.PLUS, UnaryOperators.MINUS -> {
+                if (semanticEntity.type !is Type.NumberType) {
+                    throw WrongTypeException(Type.NumberType(), actualType = semanticEntity.type, pos = pos)
                 }
-                UnaryOperators.EXCLAMATION -> {
-                    if (it.type !is Type.BoolType) {
-                        throw WrongTypeException(Type.BoolType, actualType = it.type, pos = pos)
-                    }
-                }
-                UnaryOperators.CARET -> {
-                    if (it.type !is Type.IntegerType) {
-                        throw WrongTypeException(Type.IntegerType, actualType = it.type, pos = pos)
-                    }
-                }
-                UnaryOperators.ASTERISK -> {
-                    if (it.type !is Type.PointerType) {
-                        throw WrongTypeException(Type.PointerType(Type.AnyType), actualType = it.type, pos = pos)
-                    }
-                }
-                UnaryOperators.AMPERSAND -> {
-                    TODO()
-//                    if (it is NamedEntity) {
-//                        throw WrongTypeException(Type.EquatableTypes, actualType = it.type, pos = pos)
-//                    }
-                }
-                UnaryOperators.RECEIVE -> throw EntityNotSupportedException("Unary operator <-")
+                semanticEntity
             }
+
+            UnaryOperators.EXCLAMATION -> {
+                if (semanticEntity.type !is Type.BoolType) {
+                    throw WrongTypeException(Type.BoolType, actualType = semanticEntity.type, pos = pos)
+                }
+                semanticEntity
+            }
+
+            UnaryOperators.CARET -> {
+                if (semanticEntity.type !is Type.IntegerType) {
+                    throw WrongTypeException(Type.IntegerType, actualType = semanticEntity.type, pos = pos)
+                }
+                semanticEntity
+            }
+
+            UnaryOperators.ASTERISK -> {
+                if (semanticEntity.type !is Type.PointerType) {
+                    throw WrongTypeException(
+                        Type.PointerType(Type.AnyType),
+                        actualType = semanticEntity.type,
+                        pos = pos
+                    )
+                }
+                ExpressionEntity(semanticEntity.type.baseType)
+            }
+
+            UnaryOperators.AMPERSAND -> {
+                ExpressionEntity(Type.PointerType(semanticEntity.type))
+            }
+
+            UnaryOperators.RECEIVE -> throw EntityNotSupportedException("Unary operator <-")
         }
     }
 }
@@ -133,6 +144,7 @@ fun ApplicationExpressionNode.toSemanticEntity(scope: ScopeNode): ExpressionEnti
             // возвращаем то, что вернула функция
             return ExpressionEntity(type = functionEntity.type.returnType)
         }
+
         else -> throw WrongTypeException(
             Type.FuncType(args.map { it.type }, Type.AnyType),
             actualType = functionEntity.type,
