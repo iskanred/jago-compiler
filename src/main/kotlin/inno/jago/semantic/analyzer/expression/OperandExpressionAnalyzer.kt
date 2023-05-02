@@ -15,13 +15,13 @@ import inno.jago.semantic.model.ScopeNode
 import inno.jago.semantic.model.Type
 
 fun OperandNode.toSemanticEntity(scope: ScopeNode): ExpressionEntity = when(this) {
-    is LiteralOperandNode -> toSemanticEntity()
+    is LiteralOperandNode -> toSemanticEntity(scope)
     is OperandNameNode -> toSemanticEntity(scope)
     is ExpressionOperandNode -> toSemanticEntity(scope)
 }
 
-private fun LiteralOperandNode.toSemanticEntity(): ExpressionEntity =
-    literalNode.toSemanticEntity()
+private fun LiteralOperandNode.toSemanticEntity(scope: ScopeNode): ExpressionEntity =
+    literalNode.toSemanticEntity(scope)
 
 private fun OperandNameNode.toSemanticEntity(scope: ScopeNode): ExpressionEntity =
     name.toSemanticEntity(scope)

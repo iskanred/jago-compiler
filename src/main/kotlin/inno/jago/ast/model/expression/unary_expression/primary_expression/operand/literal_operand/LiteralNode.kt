@@ -4,10 +4,10 @@ import inno.jago.ast.IncorrectNumberLiteral
 import inno.jago.ast.model.signature.SignatureNode
 import inno.jago.ast.model.statement.BlockStatementNode
 import inno.jago.ast.model.type.ArrayTypeNode
-import inno.jago.ast.model.ASTNode
+import inno.jago.ast.model.expression.ExpressionNode
 import inno.jago.lexer.Pos
 
-sealed class LiteralNode(pos: Pos) : ASTNode(pos = pos)
+sealed class LiteralNode(pos: Pos) : ExpressionNode(pos = pos)
 
 sealed class BasicLiteralNode(
     pos: Pos,

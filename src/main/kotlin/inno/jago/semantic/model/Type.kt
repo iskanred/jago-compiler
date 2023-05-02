@@ -41,7 +41,8 @@ sealed class Type {
     }
 
     object EquatableTypes : Type() {
-        override fun toString(): String = "$INT_TYPE_NAME or $DOUBLE_TYPE_NAME or $STRING_TYPE_NAME or $BOOL_TYPE_NAME " +
+        override fun toString(): String =
+            "$INT_TYPE_NAME or $DOUBLE_TYPE_NAME or$STRING_TYPE_NAME or $BOOL_TYPE_NAME " +
                 "or pointer or array (with equatable elements)"
     }
 
@@ -114,7 +115,7 @@ fun TypeNode.toType(): Type = when(this) {
     is DoubleTypeNode -> Type.DoubleType
     is StringTypeNode -> Type.StringType
     is BoolTypeNode -> Type.BoolType
-    is ArrayTypeNode -> Type.ArrayType(length = 1, elementType = elementType.toType())
     is FunctionTypeNode -> signature.toType()
     is PointerTypeNode -> Type.PointerType(baseType = baseType.toType())
+    is ArrayTypeNode -> Type.ArrayType(length = length.intValue, elementType = elementType.toType())
 }

@@ -89,7 +89,9 @@ fun FunctionDeclarationNode.toSemanticEntity(scope: ScopeNode) = FuncEntity(
     )
 
     // analyze parameters
-    signature.parameterNodes.forEach { it.toSemanticEntity(functionScope) }
+    signature.parameterNodes.forEach { paramNode ->
+        paramNode.toSemanticEntity(functionScope)
+    }
 
     functionBody.block.forEach { statementNode ->
         statementNode.toSemanticEntity(functionScope)

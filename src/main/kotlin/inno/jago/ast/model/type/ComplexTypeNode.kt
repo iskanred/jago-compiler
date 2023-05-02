@@ -1,6 +1,6 @@
 package inno.jago.ast.model.type
 
-import inno.jago.ast.model.expression.ExpressionNode
+import inno.jago.ast.model.expression.unary_expression.primary_expression.operand.literal_operand.IntegerLiteralNode
 import inno.jago.ast.model.signature.SignatureNode
 import inno.jago.lexer.Pos
 
@@ -14,7 +14,7 @@ sealed class ComplexTypeNode(
 
 class ArrayTypeNode(
     pos: Pos,
-    val length: ExpressionNode,
+    val length: IntegerLiteralNode,
     val elementType: TypeNode
 ) : ComplexTypeNode(
     pos = pos,
