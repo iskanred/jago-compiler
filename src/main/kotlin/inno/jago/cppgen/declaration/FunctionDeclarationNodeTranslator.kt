@@ -18,21 +18,10 @@ fun FunctionDeclarationNode.translateToCode(): String {
     functionInstruction += " " + this.functionName
 
     // arguments
-    var arguments = this.signature.parameterNodes
-
-    var argumentsInstruction = "("
-    for (i in 0 until arguments.size) {
-        argumentsInstruction += arguments[i].translateToCode()
-        if (i != arguments.size - 1) {
-            argumentsInstruction = "$argumentsInstruction, "
-        }
-    }
-    argumentsInstruction += ")"
-
+    var argumentsInstruction = "(" + translateParameterNodesToCode(this.signature.parameterNodes) + ")"
     functionInstruction += argumentsInstruction
 
     // function body
-
     var functionBody = this.functionBody.block
     for (statement in functionBody) {
         functionInstruction += statement.translateToCode()
@@ -44,8 +33,10 @@ fun FunctionDeclarationNode.translateToCode(): String {
 fun ParameterNode.translateToCode(): String {
     var instruction = ""
     var instructionOfType = this.type.toType().translateToCode()
-    instruction = instruction + instructionOfType + " " + this.identifier
-    return instruction
+    if (this.identifier == null) {
+        return instructionOfType + "nullArg"
+    }
+    return  instructionOfType + " " + this.identifier
 }
 
 fun translateResultNodeToCode(typeNodes: List<TypeNode>): String {
@@ -53,11 +44,11 @@ fun translateResultNodeToCode(typeNodes: List<TypeNode>): String {
     if (typeNodes.isEmpty()) { // no return type
         instructionOfReturnType = "void"
     } else if (typeNodes.size == 1) { // one return type
-        instructionOfReturnType = typeNodes[0].toType().translateToCode()
+        instructionOfReturnType = typeNodes[0].translateToCode()
     } else { // more than one return type
         instructionOfReturnType = "tuple<"
         for (i in 0 until typeNodes.size) {
-            instructionOfReturnType += typeNodes[i].toType().translateToCode()
+            instructionOfReturnType += typeNodes[i].translateToCode()
             if (i != typeNodes.size - 1) {
                 instructionOfReturnType = "$instructionOfReturnType, "
             }
