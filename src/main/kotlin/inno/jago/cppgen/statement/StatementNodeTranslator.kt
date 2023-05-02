@@ -15,13 +15,13 @@ import inno.jago.cppgen.declaration.translateToCode
 
 fun StatementNode.translateToCode(): String = when(this) {
     is BlockStatementNode -> {
-        TODO()
+        "{ ${block.map { translateToCode() }.joinToString{ " " }} }"
     }
     is DeclarationStatementNode -> {
         translateToCode()
     }
     is ReturnStatementNode -> {
-        TODO()
+        translateToCode()
     }
     is BreakStatementNode -> {
         "break;"
@@ -30,7 +30,7 @@ fun StatementNode.translateToCode(): String = when(this) {
         "continue;"
     }
     is IfStatementNode -> {
-        TODO()
+        translateToCode()
     }
     is ElseStatementNode -> {
         translateToCode()
