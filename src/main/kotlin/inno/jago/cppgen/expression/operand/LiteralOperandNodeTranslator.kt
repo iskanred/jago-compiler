@@ -8,7 +8,9 @@ import inno.jago.ast.model.expression.unary_expression.primary_expression.operan
 import inno.jago.ast.model.expression.unary_expression.primary_expression.operand.literal_operand.FunctionLiteralNode
 import inno.jago.ast.model.expression.unary_expression.primary_expression.operand.literal_operand.IntegerLiteralNode
 import inno.jago.ast.model.expression.unary_expression.primary_expression.operand.literal_operand.StringLiteralNode
+import inno.jago.cppgen.declaration.translateToCode
 import inno.jago.cppgen.expression.translateToCode
+import inno.jago.cppgen.statement.translateToCode
 import inno.jago.cppgen.type.translateToCode
 
 
@@ -29,6 +31,13 @@ fun LiteralOperandNode.translateToCode(): String {
         is CompositeLiteralNode -> {
             return it.literal.elementType.translateToCode() + "[" + it.literal.length.translateToCode() + "]{" + it.literalValue.elements.map { elem -> elem.translateToCode() } + "}";
         }
-        is FunctionLiteralNode -> TODO()
+        is FunctionLiteralNode -> {
+            return "[=](" +
+                    it.signature.parameterNodes.map {
+                            param -> "auto " + param.translateToCode() + ", " } +
+                    "){\n" +
+                        "return " + it.functionBody.translateToCode() +
+                    "}";
+        }
     }
 }
