@@ -1,9 +1,9 @@
-package inno.jago.codogen_to_cpp.declaration
+package inno.jago.cppgen.declaration
 
 import inno.jago.ast.model.decl.FunctionDeclarationNode
 import inno.jago.ast.model.signature.ParameterNode
-import inno.jago.codogen_to_cpp.statement.translateToCode
-import inno.jago.codogen_to_cpp.type.translateToCode
+import inno.jago.cppgen.statement.translateToCode
+import inno.jago.cppgen.type.translateToCode
 import inno.jago.semantic.model.toType
 
 fun FunctionDeclarationNode.translateToCode(): String {

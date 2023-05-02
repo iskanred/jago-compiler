@@ -1,4 +1,4 @@
-package inno.jago.codogen_to_cpp.statement
+package inno.jago.cppgen.statement
 
 import inno.jago.ast.model.statement.BlockStatementNode
 import inno.jago.ast.model.statement.BreakStatementNode
