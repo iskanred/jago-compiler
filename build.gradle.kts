@@ -21,15 +21,15 @@ dependencies {
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
 }
 
-tasks.test {
-    useJUnitPlatform()
-}
-
 application {
     mainClass.set("MainKt")
 }
 
 tasks {
+    test {
+        useJUnitPlatform()
+    }
+
     generateGrammarSource {
         outputDirectory = File("$buildDir/generated-src/antlr/main/inno/jago/")
         copy {
@@ -40,5 +40,9 @@ tasks {
             from("${buildDir}/generated-src/antlr/main/inno/jago/GoLexer.tokens")
             into("src/main/antlr/")
         }
+    }
+
+    compileKotlin {
+        dependsOn.add(generateGrammarSource)
     }
 }
