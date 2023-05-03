@@ -60,7 +60,7 @@ fun UnaryExpressionNode.toSemanticEntity(scope: ScopeNode): ExpressionEntity = w
             UnaryOperators.ASTERISK -> {
                 if (semanticEntity.type !is Type.PointerType) {
                     throw WrongTypeException(
-                        Type.PointerType(Type.AnyType),
+                        Type.PointerType(baseType = Type.AnyType),
                         actualType = semanticEntity.type,
                         pos = pos
                     )
@@ -135,7 +135,7 @@ fun ApplicationExpressionNode.toSemanticEntity(scope: ScopeNode): ExpressionEnti
                 if (functionEntity.type.paramTypes[i] != argEntity.type) {
                     throw WrongTypeException(
                         functionEntity.type.paramTypes[i],
-                        actualType = functionEntity.type,
+                        actualType = argEntity.type,
                         pos = pos
                     )
                 }

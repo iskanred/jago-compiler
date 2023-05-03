@@ -11,6 +11,8 @@ import inno.jago.ast.converter.expression.primary_expression.operand.toOperandNo
 import inno.jago.ast.converter.type.toTypeNode
 import inno.jago.ast.model.expression.unary_expression.ConversionNode
 import inno.jago.common.EntityNotSupportedException
+import inno.jago.semantic.model.Type
+import inno.jago.semantic.model.toType
 
 @Suppress("ReturnCount", "ThrowsCount")
 fun GoParser.PrimaryExprContext.toPrimaryExpressionNode(): PrimaryExpressionNode {
@@ -44,7 +46,7 @@ fun GoParser.PrimaryExprContext.toPrimaryExpressionNode(): PrimaryExpressionNode
         val rightExpressions = it.toExpressionNodes()
 
         primaryExpr.text.toTypeNode(primaryExpr.toPos()).also { typeNode ->
-            if (rightExpressions.size == 1 && typeNode != null) {
+            if (rightExpressions.size == 1 && typeNode != null && typeNode.toType() is Type.NumberType) {
                 return ConversionNode(
                     pos = toPos(),
                     type = typeNode,

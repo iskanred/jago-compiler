@@ -1,17 +1,15 @@
-package main
+package tests
 
-func good2() int {
-	for i, j := 0, 10; i < j; {
-
-		var b = ((i*i + 1) - 7) - (j * j * j)
-
-		i++
-		j--
-	}
-
-	return 0
+func good3(a int) float64 {
+    b := 0.0
+    for j := 0; ; j-- {
+        if int((b+float64(a))/(b-float64(a))) > j {
+            return float64(j)
+        }
+    }
+    return float64(-1) // or -1.0
 }
 
 func main() {
-	good2()
+    print(bool_to_string(true))
 }

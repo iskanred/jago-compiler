@@ -5,9 +5,7 @@ sealed class SemanticEntity(val type: Type)
 
 sealed class NamedEntity(type: Type, val identifier: String) : SemanticEntity(type)
 
-class ImportEntity(type: Type, identifier: String) : NamedEntity(type, identifier)
-
-class FuncEntity(type: Type, identifier: String) : NamedEntity(type, identifier)
+class FuncEntity(type: Type.FuncType, identifier: String) : NamedEntity(type, identifier)
 
 
 sealed class ObjectEntity(type: Type, identifier: String) : NamedEntity(type, identifier)
