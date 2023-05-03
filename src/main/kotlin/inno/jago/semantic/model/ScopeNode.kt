@@ -79,7 +79,20 @@ sealed class ScopeNode(
     }
 }
 
-class GlobalScopeNode : ScopeNode("GLOBAL", null)
+class GlobalScopeNode : ScopeNode("GLOBAL", null) {
+    init {
+        addUniqueEntity(
+            entity = FuncEntity(
+                type = Type.FuncType(
+                    paramTypes = listOf(Type.StringType),
+                    returnType = Type.UnitType
+                ),
+                identifier = "print"
+            ),
+            pos = Pos(line = 0, startIndex = 0, stopIndex = 0)
+        )
+    }
+}
 
 class SimpleBLockScopeNode(
     name: String,
