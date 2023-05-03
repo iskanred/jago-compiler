@@ -8,13 +8,13 @@ import inno.jago.semantic.model.ScopeNode
 import inno.jago.semantic.model.StatementEntity
 
 fun BreakStatementNode.toSemanticEntity(scope: ScopeNode) = StatementEntity().also {
-    if (scope.hasLoopScope()) {
+    if (!scope.hasLoopScope()) {
         throw BreakIsNotInLoopException(pos)
     }
 }
 
 fun ContinueStatementNode.toSemanticNode(scope: ScopeNode) = StatementEntity().also {
-    if (scope.hasLoopScope()) {
+    if (!scope.hasLoopScope()) {
         throw ContinueIsNotInLoopException(pos)
     }
 }
