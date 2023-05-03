@@ -20,8 +20,7 @@ fun main() {
     val sourceFileNode = parser.sourceFile().toSourceFileNode()
     TypeChecker(sourceFileNode = sourceFileNode).startTypeCheck()
 
-    val cpp = compile(sourceFileNode, "jopa")
-    println(cpp.file)
+    compile(root = sourceFileNode, fileName = "sample.cpp")
 
     if (parser.numberOfSyntaxErrors == 0) {
         println("The input GO program is syntactically correct")

@@ -12,22 +12,22 @@ fun FunctionDeclarationNode.translateToCode(): String {
     var functionInstruction = ""
 
     // return type
-    var instructionOfReturnType = translateResultNodeToCode(this.signature.resultNode)
-    if (this.functionName == "main") {
-        functionInstruction += "int"
+    val instructionOfReturnType = translateResultNodeToCode(this.signature.resultNode)
+    functionInstruction += if (this.functionName == "main") {
+        "int"
     } else {
-        functionInstruction += instructionOfReturnType
+        instructionOfReturnType
     }
 
     // function name
     functionInstruction += " " + this.functionName
 
     // arguments
-    var argumentsInstruction = "(" + translateParameterNodesToCode(this.signature.parameterNodes) + ")"
+    val argumentsInstruction = "(" + translateParameterNodesToCode(this.signature.parameterNodes) + ")"
     functionInstruction += argumentsInstruction
 
     // function body
-    var functionBody = this.functionBody.block
+    val functionBody = this.functionBody.block
     functionInstruction += "{"
     for (statement in functionBody) {
         functionInstruction += "\n"+ statement.translateToCode()
@@ -38,8 +38,7 @@ fun FunctionDeclarationNode.translateToCode(): String {
 }
 
 fun ParameterNode.translateToCode(): String {
-    var instruction = ""
-    var instructionOfType = this.type.toType().translateToCode()
+    val instructionOfType = this.type.toType().translateToCode()
     if (this.identifier == null) {
         return instructionOfType + "nullArg_N" + "${Random.nextInt(1000000)}"
     }
@@ -47,19 +46,20 @@ fun ParameterNode.translateToCode(): String {
 }
 
 fun translateResultNodeToCode(typeNodes: List<TypeNode>): String {
-    var instructionOfReturnType = ""
+    var instructionOfReturnType: String
     if (typeNodes.isEmpty()) { // no return type
         instructionOfReturnType = "void"
     } else if (typeNodes.size == 1) { // one return type
         instructionOfReturnType = typeNodes[0].translateToCode()
     } else { // more than one return type
         instructionOfReturnType = "tuple<"
-        for (i in 0 until typeNodes.size) {
-            instructionOfReturnType += typeNodes[i].translateToCode()
-            if (i != typeNodes.size - 1) {
-                instructionOfReturnType = "$instructionOfReturnType, "
-            }
-        }
+        instructionOfReturnType += typeNodes.joinToString { it.translateToCode() }
+//        for (i in typeNodes.indices) {
+//            instructionOfReturnType += typeNodes[i].translateToCode()
+//            if (i != typeNodes.size - 1) {
+//                instructionOfReturnType = "$instructionOfReturnType, "
+//            }
+//        }
         instructionOfReturnType += ">"
     }
     return instructionOfReturnType
@@ -67,7 +67,7 @@ fun translateResultNodeToCode(typeNodes: List<TypeNode>): String {
 
 fun translateParameterNodesToCode(parameterNodes: List<ParameterNode>): String {
     var instructionOfParameters = ""
-    for (i in 0 until parameterNodes.size) {
+    for (i in parameterNodes.indices) {
         instructionOfParameters += parameterNodes[i].translateToCode()
         if (i != parameterNodes.size - 1) {
             instructionOfParameters = "$instructionOfParameters, "

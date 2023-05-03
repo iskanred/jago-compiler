@@ -5,49 +5,53 @@ import inno.jago.ast.model.decl.FunctionDeclarationNode
 import inno.jago.ast.model.decl.VarDeclarationNode
 import inno.jago.ast.model.global.SourceFileNode
 import inno.jago.cppgen.declaration.translateToCode
+import java.io.File
 
 /*
 * Convert AST of Go code to C++ code
 */
 
-class OutputProgram(
-    val name: String,
-    var file: String
+class Translator(
+    var text: String
 ) {
     fun addInstruction(instruction: String) {
-        file = file + "\n" + instruction
+        text += "\n" + instruction
     }
 }
 
-fun compile(root: SourceFileNode, name: String): OutputProgram {
-    val program = OutputProgram(name, "")
+fun compile(root: SourceFileNode, fileName: String): File {
+    val program = Translator("")
     program.addInstruction(getIncludes())
     for (decl in root.topLevelDecls) {
-        var instruction = ""
-        instruction = when (decl) {
+        val instruction= when (decl) {
             is FunctionDeclarationNode -> {
                 decl.translateToCode()
             }
-
             is ConstDeclarationNode -> {
                 decl.translateToCode()
             }
-
             is VarDeclarationNode -> {
                 decl.translateToCode()
             }
         }
         program.addInstruction(instruction)
     }
-    return program
+    return createCppFile(fileName = fileName, text = program.text)
 }
 
-fun getIncludes(): String {
-    return  "#include <iostream>\n" +
-            "#include <string>\n" +
-            "#include <vector>\n" +
-            "#include <tuple>\n" +
-            "\n" +
-            "using namespace std;" +
-            "\n"
+fun createCppFile(fileName: String, text: String) = File(fileName).apply {
+    if (exists()) {
+        delete()
+    }
+    createNewFile()
+    writeText(text)
 }
+
+fun getIncludes(): String = """
+#include <iostream>
+#include <string>
+#include <vector>
+#include <tuple>
+using namespace std;
+
+""".trimIndent()

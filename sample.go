@@ -1,15 +1,22 @@
-package tests
+package name;
+func find(a int) (string) {
+    //ints := [10]int{0, 1, 2, 3, 4, 5, 6, 7, 8, 9}
+    strs := [10]string{"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"};
 
-func good3(a int) float64 {
-    b := 0.0
-    for j := 0; ; j-- {
-        if int((b+float64(a))/(b-float64(a))) > j {
-            return float64(j)
-        }
-    }
-    return float64(-1) // or -1.0
-}
+    if (a >= 0) && (a <= 9) {
+        return strs[a];
+    };
 
+    return "x";
+};
+func good1(a int) (string) {
+    var b string;
+    for a > 0 {
+        b += find(a % 10);
+        a /= 10;
+    };
+    return b;
+};
 func main() {
-    print(bool_to_string(true))
-}
+    good1(100);
+};
