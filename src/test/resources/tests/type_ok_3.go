@@ -7,7 +7,7 @@ func good3(a int) float64 {
             return float64(j)
         }
     }
-    return float64(-1)
+    return float64(-1) // or -1.0
 }
 
 func main() {

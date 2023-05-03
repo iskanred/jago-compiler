@@ -51,11 +51,7 @@ private fun ReturnStatementNode.toSemanticEntity(scope: ScopeNode) = StatementEn
     val expectedReturnType: Type = scope.findExpectedReturnType()
         ?: throw ReturnInWrongScopeException(pos)
 
-    val type = when(expressions.size) {
-        0 -> Type.UnitType
-        1 -> expressions.first().toSemanticEntity(scope).type
-        else -> expressions.toType { expr -> expr.toSemanticEntity(scope).type }
-    }
+    val type = expressions.toType { expr -> expr.toSemanticEntity(scope).type }
 
     if (expectedReturnType != type) {
         throw WrongTypeException(expectedReturnType, actualType = type, pos = pos)

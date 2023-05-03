@@ -1,4 +1,4 @@
-// Generated from /Users/tyakhshigulov/IdeaProjects/jago/src/main/antlr/GoLexer.g4 by ANTLR 4.12.0
+// Generated from /Users/i.nafikov/IdeaProjects/jago-compiler-kotlin/src/main/antlr/GoLexer.g4 by ANTLR 4.12.0
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.Token;

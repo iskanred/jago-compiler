@@ -8,6 +8,8 @@ import inno.jago.ast.model.expression.unary_expression.PrimaryExpressionNode
 import inno.jago.ast.converter.common.toPos
 import inno.jago.ast.converter.expression.toExpressionNode
 import inno.jago.ast.converter.expression.primary_expression.operand.toOperandNode
+import inno.jago.ast.converter.type.toTypeNode
+import inno.jago.ast.model.expression.unary_expression.ConversionNode
 import inno.jago.common.EntityNotSupportedException
 
 @Suppress("ReturnCount", "ThrowsCount")
@@ -37,10 +39,24 @@ fun GoParser.PrimaryExprContext.toPrimaryExpressionNode(): PrimaryExpressionNode
     }
 
     arguments()?.let {
+        val primaryExpr = primaryExpr()
+        val leftExprEntity = primaryExpr.toPrimaryExpressionNode()
+        val rightExpressions = it.toExpressionNodes()
+
+        primaryExpr.text.toTypeNode(primaryExpr.toPos()).also { typeNode ->
+            if (rightExpressions.size == 1 && typeNode != null) {
+                return ConversionNode(
+                    pos = toPos(),
+                    type = typeNode,
+                    expression = rightExpressions.first()
+                )
+            }
+        }
+
         return ApplicationExpressionNode(
             pos = toPos(),
-            leftExpression = primaryExpr().toPrimaryExpressionNode(),
-            expressions = it.toExpressionNodes()
+            leftExpression = leftExprEntity,
+            expressions = rightExpressions
         )
     }
 
