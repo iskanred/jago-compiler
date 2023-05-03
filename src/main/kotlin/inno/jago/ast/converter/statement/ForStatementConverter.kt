@@ -28,7 +28,17 @@ fun GoParser.ForStmtContext.toForStatementNode(): ForStatementNode {
             condition = it.expression().toExpressionNode()
         )
     }
-    throw EntityNotSupportedException("RangeClause")
+    rangeClause()?.let {
+        throw EntityNotSupportedException("RangeClause")
+    }
+
+    return ForClauseStatementNode(
+        pos = toPos(),
+        block = block().toBlockStatementNode(),
+        initStatementNode = null,
+        condition = null,
+        postStatementNode = null
+    )
 }
 
 private fun GoParser.InitStmtContext.toSimpleStatementNode(): SimpleStatementNode =

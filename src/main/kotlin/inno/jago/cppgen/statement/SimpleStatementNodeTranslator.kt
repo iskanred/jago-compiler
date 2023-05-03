@@ -11,11 +11,10 @@ import inno.jago.ast.model.statement.SimpleAssignOperatorNode
 import inno.jago.ast.model.statement.SimpleStatementNode
 import inno.jago.cppgen.expression.binary_expression.translateToCode
 import inno.jago.cppgen.expression.translateToCode
-
 fun SimpleStatementNode.translateToCode(): String = when (this) {
     is AssignmentNode -> translateToCode()
-    is EmptyStatementNode -> ";"
-    is ExpressionStatementNode -> expression.translateToCode()
+    is EmptyStatementNode -> ""
+    is ExpressionStatementNode -> expression.translateToCode() + ";"
     is IncDecStatementNode -> translateToCode()
     is ShortVarDeclNode -> translateToCode()
 }
@@ -25,11 +24,11 @@ fun AssignmentNode.translateToCode(): String {
         TODO("Сделать для кортежей")
     }
 
-    leftExpressions.map { translateToCode() }
-    rightExpressions.map { translateToCode() }
+    val translatedLeftExpressions = leftExpressions.map { it.translateToCode() }
+    val translatedRightExpressions = rightExpressions.map { it.translateToCode() }
 
     var res = ""
-    leftExpressions.zip(rightExpressions).forEach { (lhs, rhs) ->
+    translatedLeftExpressions.zip(translatedRightExpressions).forEach { (lhs, rhs) ->
         res += when (val it = assignOperator) {
             is SimpleAssignOperatorNode -> "$lhs = $rhs; "
             is AddOpSimpleAssignOperatorNode -> "$lhs ${it.addOperator.translateToCode()}= $rhs; "
@@ -51,7 +50,7 @@ fun ShortVarDeclNode.translateToCode(): String {
     }
 
     var res = ""
-    identifierList.zip(expression.map { translateToCode() }).forEach { (identifier, expressionCode) ->
+    identifierList.zip(expression.map { it.translateToCode() }).forEach { (identifier, expressionCode) ->
         if (identifier != "_") {
             res += "auto $identifier = $expressionCode; "
         }

@@ -8,12 +8,13 @@ import inno.jago.ast.model.expression.unary_expression.primary_expression.operan
 import inno.jago.common.UnreachableCodeException
 import inno.jago.cppgen.expression.operand.translateToCode
 import inno.jago.cppgen.expression.translateToCode
-
+import inno.jago.cppgen.expression.unary_or_primary_expression.translateToCode as translateIndexToCode
+import inno.jago.cppgen.expression.unary_or_primary_expression.translateToCode as translateApplicationToCode
 
 fun PrimaryExpressionNode.translateToCode(): String = when (this) {
-    is ApplicationExpressionNode -> translateToCode()
+    is ApplicationExpressionNode -> translateApplicationToCode()
     is ConversionNode -> translateToCode()
-    is IndexExpressionNode -> translateToCode()
+    is IndexExpressionNode -> translateIndexToCode()
     is OperandNode -> translateToCode()
     else -> throw UnreachableCodeException()
 }

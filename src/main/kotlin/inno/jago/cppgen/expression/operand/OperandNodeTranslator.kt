@@ -1,8 +1,5 @@
 package inno.jago.cppgen.expression.operand
 
-import inno.jago.ast.model.expression.unary_expression.ApplicationExpressionNode
-import inno.jago.ast.model.expression.unary_expression.ConversionNode
-import inno.jago.ast.model.expression.unary_expression.IndexExpressionNode
 import inno.jago.ast.model.expression.unary_expression.primary_expression.operand.ExpressionOperandNode
 import inno.jago.ast.model.expression.unary_expression.primary_expression.operand.LiteralOperandNode
 import inno.jago.ast.model.expression.unary_expression.primary_expression.operand.OperandNameNode
@@ -10,20 +7,21 @@ import inno.jago.ast.model.expression.unary_expression.primary_expression.operan
 import inno.jago.ast.model.expression.unary_expression.primary_expression.operand.QualifiedIdentifierOperandNode
 import inno.jago.ast.model.expression.unary_expression.primary_expression.operand.SimpleIdentifierOperandNode
 import inno.jago.common.EntityNotSupportedException
-import inno.jago.common.UnreachableCodeException
+import inno.jago.cppgen.expression.operand.translateToCode
 import inno.jago.cppgen.expression.translateToCode
-import inno.jago.cppgen.expression.unary_or_primary_expression.translateToCode
+import inno.jago.cppgen.expression.operand.translateToCode as translateLiteralNodeToCode
+import inno.jago.cppgen.expression.operand.translateToCode as translateOperandNameNodeToCode
 
 fun OperandNode.translateToCode(): String = when (this) {
-    is LiteralOperandNode -> translateToCode()
-    is OperandNameNode -> translateToCode()
+    is LiteralOperandNode -> translateLiteralNodeToCode()
+    is OperandNameNode -> translateOperandNameNodeToCode()
     is ExpressionOperandNode -> translateToCode()
 }
 
 fun OperandNameNode.translateToCode(): String {
     return when(this.name) {
-        is SimpleIdentifierOperandNode -> translateToCode()
-        is QualifiedIdentifierOperandNode -> translateToCode()
+        is SimpleIdentifierOperandNode -> this.name.translateToCode()
+        is QualifiedIdentifierOperandNode -> this.name.translateToCode()
     }
 }
 fun SimpleIdentifierOperandNode.translateToCode(): String {

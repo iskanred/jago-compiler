@@ -14,7 +14,7 @@ import inno.jago.common.UnreachableCodeException
 import inno.jago.cppgen.declaration.translateToCode
 
 fun StatementNode.translateToCode(): String = when (this) {
-    is BlockStatementNode -> "{ ${block.map { translateToCode() }.joinToString { " " }} }"
+    is BlockStatementNode -> "{ ${block.map { it.translateToCode() }.joinToString(separator = "") { it }} }"
 
     is DeclarationStatementNode -> declaration.translateToCode()
 

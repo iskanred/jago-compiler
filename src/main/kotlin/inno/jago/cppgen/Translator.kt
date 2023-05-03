@@ -10,18 +10,18 @@ import inno.jago.cppgen.declaration.translateToCode
 * Convert AST of Go code to C++ code
 */
 
-class OutputProgram (
+class OutputProgram(
     val name: String,
     var file: String
 ) {
-    fun AddInstruction(instruction: String) {
+    fun addInstruction(instruction: String) {
         file = file + "\n" + instruction
     }
 }
 
-fun compile(root: SourceFileNode, name: String) : OutputProgram {
+fun compile(root: SourceFileNode, name: String): OutputProgram {
     val program = OutputProgram(name, "")
-    program.AddInstruction(getIncludes())
+    program.addInstruction(getIncludes())
     for (decl in root.topLevelDecls) {
         var instruction = ""
         instruction = when (decl) {
@@ -37,28 +37,17 @@ fun compile(root: SourceFileNode, name: String) : OutputProgram {
                 decl.translateToCode()
             }
         }
-        program.AddInstruction(instruction)
+        program.addInstruction(instruction)
     }
     return program
 }
 
-fun getIncludes(): String{
-    return "#include <stdio.h>\n" +
-            "#include <cstdio>\n" +
-            "#include <algorithm>\n" +
-            "#include <iostream>\n" +
+fun getIncludes(): String {
+    return  "#include <iostream>\n" +
             "#include <string>\n" +
             "#include <vector>\n" +
-            "#include <queue>\n" +
-            "#include <stack>\n" +
-            "#include <math.h>\n" +
-            "#include <cmath>\n" +
-            "#include <map>\n" +
-            "#include <set>\n" +
-            "#include <cstdlib>\n" +
-            "#include <utility>\n" +
-            "#include <iomanip>\n" +
-            "#include <cstring>\n" +
+            "#include <tuple>\n" +
             "\n" +
-            "using namespace std;"
+            "using namespace std;" +
+            "\n"
 }

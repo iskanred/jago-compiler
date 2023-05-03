@@ -3,6 +3,7 @@ package inno.jago
 import GoLexer
 import GoParser
 import inno.jago.ast.converter.toSourceFileNode
+import inno.jago.cppgen.compile
 import inno.jago.semantic.TypeChecker
 import org.antlr.v4.runtime.CharStreams
 import org.antlr.v4.runtime.CommonTokenStream
@@ -18,6 +19,9 @@ fun main() {
     @Suppress("UNUSED_VARIABLE")
     val sourceFileNode = parser.sourceFile().toSourceFileNode()
     TypeChecker(sourceFileNode = sourceFileNode).startTypeCheck()
+
+    val cpp = compile(sourceFileNode, "jopa")
+    println(cpp.file)
 
     if (parser.numberOfSyntaxErrors == 0) {
         println("The input GO program is syntactically correct")

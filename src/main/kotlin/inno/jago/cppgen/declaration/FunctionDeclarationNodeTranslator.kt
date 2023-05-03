@@ -13,7 +13,11 @@ fun FunctionDeclarationNode.translateToCode(): String {
 
     // return type
     var instructionOfReturnType = translateResultNodeToCode(this.signature.resultNode)
-    functionInstruction += instructionOfReturnType
+    if (this.functionName == "main") {
+        functionInstruction += "int"
+    } else {
+        functionInstruction += instructionOfReturnType
+    }
 
     // function name
     functionInstruction += " " + this.functionName
@@ -56,6 +60,7 @@ fun translateResultNodeToCode(typeNodes: List<TypeNode>): String {
                 instructionOfReturnType = "$instructionOfReturnType, "
             }
         }
+        instructionOfReturnType += ">"
     }
     return instructionOfReturnType
 }

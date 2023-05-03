@@ -1,20 +1,17 @@
 package main
 
-func saveAbs(a float64) func() float64 {
-    if a >= 0 {
-        return func() float64 {
-            return a
-        }
-    }
-    return func() float64 {
-        return -a
-    }
+func good2() int {
+	for i, j := 0, 10; i < j; {
+
+		var b = ((i*i + 1) - 7) - (j * j * j)
+
+		i++
+		j--
+	}
+
+	return 0
 }
 
 func main() {
-    a := saveAbs(-2.123123)
-
-    b := a()*(-a())*(-a())/(func() float64 { return -a()*a() + 3 }()) - (-8)
-
-    b
+	good2()
 }
