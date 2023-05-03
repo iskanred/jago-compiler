@@ -10,10 +10,11 @@ import inno.jago.cppgen.expression.operand.translateToCode
 import inno.jago.cppgen.expression.translateToCode
 import inno.jago.cppgen.expression.unary_or_primary_expression.translateToCode as translateIndexToCode
 import inno.jago.cppgen.expression.unary_or_primary_expression.translateToCode as translateApplicationToCode
+import inno.jago.cppgen.expression.unary_or_primary_expression.translateToCode as translatedConversionToCode
 
 fun PrimaryExpressionNode.translateToCode(): String = when (this) {
     is ApplicationExpressionNode -> translateApplicationToCode()
-    is ConversionNode -> translateToCode()
+    is ConversionNode -> translatedConversionToCode()
     is IndexExpressionNode -> translateIndexToCode()
     is OperandNode -> translateToCode()
     else -> throw UnreachableCodeException()

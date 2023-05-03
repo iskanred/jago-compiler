@@ -18,5 +18,5 @@ func good1(a int) (string) {
     return b;
 };
 func main() {
-    good1(100);
-};
+	good1()
+}

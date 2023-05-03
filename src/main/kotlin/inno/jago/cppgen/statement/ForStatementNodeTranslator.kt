@@ -1,6 +1,7 @@
 package inno.jago.cppgen.statement
 
 import inno.jago.ast.model.statement.ConditionalForStatementNode
+import inno.jago.ast.model.statement.EmptyStatementNode
 import inno.jago.ast.model.statement.ForClauseStatementNode
 import inno.jago.ast.model.statement.ForStatementNode
 import inno.jago.cppgen.expression.translateToCode
@@ -19,5 +20,5 @@ fun ForClauseStatementNode.translateToCode(): String {
         return "while (true) ${block.translateToCode()}"
     }
 
-    return "for (${initStatementNode?.translateToCode() ?: ""}; ${condition?.translateToCode() ?: ""}; ${postStatementNode?.translateToCode() ?: ""}) ${block.translateToCode()}"
+    return "for (${initStatementNode?.translateToCode() ?: ""}" +"${condition?.translateToCode() ?: ""}; ${postStatementNode?.translateToCode()?.dropLast(1) ?: ""}) ${block.translateToCode()}"
 }

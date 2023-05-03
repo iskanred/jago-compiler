@@ -5,12 +5,12 @@ import inno.jago.cppgen.expression.translateToCode
 
 fun ReturnStatementNode.translateToCode(): String {
     if (expressions.isEmpty()) {
-        return "return;"
+        return "return"
     }
 
     var returnInstruction = "return "
     if (expressions.size == 1) {
-        returnInstruction += expressions[0].translateToCode() + ";"
+        returnInstruction += expressions[0].translateToCode()
     } else {
         returnInstruction += "make_tuple("
         for (i in expressions.indices) {
@@ -19,7 +19,7 @@ fun ReturnStatementNode.translateToCode(): String {
                 returnInstruction += ", "
             }
         }
-        returnInstruction += ");"
+        returnInstruction += ")"
     }
     return returnInstruction
 }

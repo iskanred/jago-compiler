@@ -5,6 +5,7 @@ import inno.jago.cppgen.expression.translateToCode
 import java.lang.StringBuilder
 
 fun ApplicationExpressionNode.translateToCode(): String {
+    val funcName = leftExpression.translateToCode()
     val args = StringBuilder()
     expressions.forEachIndexed { index, expressionNode ->
         args.append(expressionNode.translateToCode())
@@ -12,5 +13,9 @@ fun ApplicationExpressionNode.translateToCode(): String {
             args.append(", ")
         }
     }
-    return "${leftExpression.translateToCode()}($args)"
+    return if (funcName == "print") {
+        "cout << " + expressions.map { it.translateToCode() }.joinToString(separator = " << ") { it }
+    } else {
+        "${leftExpression.translateToCode()}($args)"
+    }
 }

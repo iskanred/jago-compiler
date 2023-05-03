@@ -37,7 +37,7 @@ fun LiteralNode.translateToCode(): String = when (this) {
     }
 
     is FunctionLiteralNode -> {
-        "[=](" + this.signature.parameterNodes.map { param -> "auto " + param.translateToCode() + ", " } + "){\n" + "return " + this.functionBody.translateToCode() + "}";
+        "[=](" + this.signature.parameterNodes.map { param -> param.translateToCode() }.joinToString() + ")" + this.functionBody.translateToCode();
     }
 }
 
