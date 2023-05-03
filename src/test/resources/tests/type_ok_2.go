@@ -1,6 +1,7 @@
 package main
 
-func good2() (b int) {
+func good2() (int) {
+    var b int
     for i, j := 0, 10; i < j; {
 
         b -= ((i*i + 1) - 7) - (j*j*j)
