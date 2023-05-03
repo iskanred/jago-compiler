@@ -14,7 +14,7 @@ func saveAbs(a float64) func() float64 {
 func main() {
     a := saveAbs(-2.123123)
 
-    b := a()*(-a())*(-a())/(func() float64 { return -a()*a() + 3 }()) - (-8)
+    b := a()*(-a())*(-a())/(func() float64 { return -a()*a() + float64(int(3)) }()) - (-8)
 
-    b
+    print(b)
 }
