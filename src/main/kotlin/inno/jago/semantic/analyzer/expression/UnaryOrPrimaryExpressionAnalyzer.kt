@@ -27,53 +27,50 @@ fun UnaryOrPrimaryExpressionNode.toSemanticEntity(scope: ScopeNode): ExpressionE
 }
 
 @Suppress("CyclomaticComplexMethod")
-fun UnaryExpressionNode.toSemanticEntity(scope: ScopeNode): ExpressionEntity = when (this.unaryOrPrimaryExpression) {
-    is PrimaryExpressionNode -> this.unaryOrPrimaryExpression.toSemanticEntity(scope)
-    is UnaryExpressionNode -> {
-        if (operator == null) {
-            throw JaGoException("Unary operator is null")
+fun UnaryExpressionNode.toSemanticEntity(scope: ScopeNode): ExpressionEntity {
+    if (operator == null) {
+        throw JaGoException("Unary operator is null")
+    }
+    val semanticEntity = this.unaryOrPrimaryExpression.toSemanticEntity(scope)
+
+    when (operator.operator) {
+        UnaryOperators.PLUS, UnaryOperators.MINUS -> {
+            if (semanticEntity.type !is Type.NumberType) {
+                throw WrongTypeException(Type.NumberType(), actualType = semanticEntity.type, pos = pos)
+            }
+            return semanticEntity
         }
-        val semanticEntity = this.unaryOrPrimaryExpression.toSemanticEntity(scope)
 
-        when (operator.operator) {
-            UnaryOperators.PLUS, UnaryOperators.MINUS -> {
-                if (semanticEntity.type !is Type.NumberType) {
-                    throw WrongTypeException(Type.NumberType(), actualType = semanticEntity.type, pos = pos)
-                }
-                semanticEntity
+        UnaryOperators.EXCLAMATION -> {
+            if (semanticEntity.type !is Type.BoolType) {
+                throw WrongTypeException(Type.BoolType, actualType = semanticEntity.type, pos = pos)
             }
-
-            UnaryOperators.EXCLAMATION -> {
-                if (semanticEntity.type !is Type.BoolType) {
-                    throw WrongTypeException(Type.BoolType, actualType = semanticEntity.type, pos = pos)
-                }
-                semanticEntity
-            }
-
-            UnaryOperators.CARET -> {
-                if (semanticEntity.type !is Type.IntegerType) {
-                    throw WrongTypeException(Type.IntegerType, actualType = semanticEntity.type, pos = pos)
-                }
-                semanticEntity
-            }
-
-            UnaryOperators.ASTERISK -> {
-                if (semanticEntity.type !is Type.PointerType) {
-                    throw WrongTypeException(
-                        Type.PointerType(baseType = Type.AnyType),
-                        actualType = semanticEntity.type,
-                        pos = pos
-                    )
-                }
-                ExpressionEntity(semanticEntity.type.baseType)
-            }
-
-            UnaryOperators.AMPERSAND -> {
-                ExpressionEntity(Type.PointerType(semanticEntity.type))
-            }
-
-            UnaryOperators.RECEIVE -> throw EntityNotSupportedException("Unary operator <-")
+            return semanticEntity
         }
+
+        UnaryOperators.CARET -> {
+            if (semanticEntity.type !is Type.IntegerType) {
+                throw WrongTypeException(Type.IntegerType, actualType = semanticEntity.type, pos = pos)
+            }
+            return semanticEntity
+        }
+
+        UnaryOperators.ASTERISK -> {
+            if (semanticEntity.type !is Type.PointerType) {
+                throw WrongTypeException(
+                    Type.PointerType(baseType = Type.AnyType),
+                    actualType = semanticEntity.type,
+                    pos = pos
+                )
+            }
+            return ExpressionEntity(semanticEntity.type.baseType)
+        }
+
+        UnaryOperators.AMPERSAND -> {
+            return ExpressionEntity(Type.PointerType(semanticEntity.type))
+        }
+
+        UnaryOperators.RECEIVE -> throw EntityNotSupportedException("Unary operator <-")
     }
 }
 
