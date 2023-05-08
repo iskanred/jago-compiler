@@ -1,7 +1,7 @@
 package main
 
 func foo(a int) int {
-	return 0
+	return a
 }
 
 func main() {
