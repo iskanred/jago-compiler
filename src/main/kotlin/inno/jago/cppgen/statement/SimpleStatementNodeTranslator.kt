@@ -48,22 +48,25 @@ fun IncDecStatementNode.translateToCode(): String = when (type) {
 }
 
 fun ShortVarDeclNode.translateToCode(): String {
-    if (identifierList.size != expression.size) {
-        TODO("Сделать для кортежей")
-//        uniqueName = UUID.randomUUID().toString();
-//        res += "auto $uniqueName = ${rightExpressions.first()}"
-//        for (i in 0 until this.leftExpressions.size) {
-//            res += ""
-//        }
-    }
-
     var res = ""
-    identifierList.zip(expression.map { it.translateToCode() }).forEach { (identifier, expressionCode) ->
-        if (identifier != "_") {
-            res += "auto $identifier = $expressionCode"
+    if (identifierList.size != expression.size) {
+        val uniqueName = "tuple_" + UUID.randomUUID().toString().replace("-", "");
+        res = "auto $uniqueName = ${expression.first().translateToCode()};\n"
+        for (i in 0 until this.identifierList.size) {
+            if (identifierList[i] == "_") {
+                continue
+            }
+
+            res += "auto ${identifierList[i]} = get<$i>($uniqueName);"
+        }
+    } else {
+        identifierList.zip(expression.map { it.translateToCode() }).forEach { (identifier, expressionCode) ->
+            if (identifier != "_") {
+                res += "auto $identifier = $expressionCode;"
+            }
         }
     }
 
-    return res
+    return res.dropLast(1)
 }
 
