@@ -128,4 +128,46 @@ class TypeCheckerTest {
         )
         assertDoesNotThrow { typeChecker.startTypeCheck() }
     }
+
+    @Test
+    fun `invalid type in var declaration 1`() {
+        val typeChecker = TypeChecker(
+            createAST("src/test/resources/tests/type_checker/variable/invalid_var_declaration_1.go")
+        )
+        assertThrows<WrongTypeException> { typeChecker.startTypeCheck() }
+    }
+
+    @Test
+    fun `invalid type in var declaration 2`() {
+        val typeChecker = TypeChecker(
+            createAST("src/test/resources/tests/type_checker/variable/invalid_var_declaration_2.go")
+        )
+        assertThrows<WrongTypeException> { typeChecker.startTypeCheck() }
+    }
+
+    @Test
+    fun `invalid type in var declaration 3`() {
+        val typeChecker = TypeChecker(
+            createAST("src/test/resources/tests/type_checker/variable/invalid_var_declaration_3.go")
+        )
+        assertThrows<WrongTypeException> { typeChecker.startTypeCheck() }
+    }
+
+    // test for pointer
+
+    @Test
+    fun `invalid type in assignment with pointer dereference`(){
+        val typeChecker = TypeChecker(
+            createAST("src/test/resources/tests/type_checker/pointer/invalid_pointer_dereference_1.go")
+        )
+        assertThrows<WrongTypeException> { typeChecker.startTypeCheck() }
+    }
+
+    @Test
+    fun `valid assignment with pointer dereference`(){
+        val typeChecker = TypeChecker(
+            createAST("src/test/resources/tests/type_checker/pointer/valid_pointer_dereference_1.go")
+        )
+        assertDoesNotThrow { typeChecker.startTypeCheck() }
+    }
 }
