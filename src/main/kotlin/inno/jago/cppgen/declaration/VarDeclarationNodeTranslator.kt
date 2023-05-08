@@ -9,9 +9,10 @@ import inno.jago.semantic.SemanticException
 // var a, b, c = someFunc()
 fun VarDeclarationNode.translateToCode(): String {
     if (expression != null) {
-        if (expression is ApplicationExpressionNode){
+        if (expression is ApplicationExpressionNode && this.positionInRow >= 0) {
             return "auto ${this.identifier} = get<${this.positionInRow}>(${this.expression.translateToCode()})"
         }
+
         return "auto ${this.identifier} = ${this.expression.translateToCode()}"
     }
     if (type != null) {
