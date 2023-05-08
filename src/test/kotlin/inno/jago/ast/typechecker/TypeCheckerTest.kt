@@ -88,6 +88,21 @@ class TypeCheckerTest {
         assertThrows<WrongTypeException> { typeChecker.startTypeCheck() }
     }
     @Test
+    fun `array from function different lengths`() {
+        val typeChecker = TypeChecker(createAST("src/test/resources/tests/type_checker/array/invalid_function_type.go"))
+        assertThrows<WrongTypeException> { typeChecker.startTypeCheck() }
+    }
+    @Test
+    fun `invalid assignment to array element`() {
+        val typeChecker = TypeChecker(createAST("src/test/resources/tests/type_checker/array/invalid_data_type.go"))
+        assertThrows<WrongTypeException> { typeChecker.startTypeCheck() }
+    }
+    @Test
+    fun `valid assignment with cast to array element`() {
+        val typeChecker = TypeChecker(createAST("src/test/resources/tests/type_checker/array/valid_data_type.go"))
+        assertDoesNotThrow { typeChecker.startTypeCheck() }
+    }
+    @Test
     fun `valid length of an array`() {
         val typeChecker = TypeChecker(createAST("src/test/resources/tests/type_checker/array/valid.go"))
         assertDoesNotThrow { typeChecker.startTypeCheck() }
