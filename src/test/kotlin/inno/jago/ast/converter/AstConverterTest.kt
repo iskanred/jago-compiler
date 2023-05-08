@@ -13,14 +13,9 @@ import inno.jago.ast.model.expression.unary_expression.primary_expression.operan
 import inno.jago.ast.model.expression.unary_expression.primary_expression.operand.SimpleIdentifierOperandNode
 import inno.jago.ast.model.expression.unary_expression.primary_expression.operand.literal_operand.BasicLiteralNode
 import inno.jago.ast.model.expression.unary_expression.primary_expression.operand.literal_operand.BoolLiteralNode
-import inno.jago.ast.model.expression.unary_expression.primary_expression.operand.literal_operand.FunctionLiteralNode
-import inno.jago.ast.model.expression.unary_expression.primary_expression.operand.literal_operand.LiteralNode
-import inno.jago.ast.model.global.SourceFileNode
-import inno.jago.ast.model.statement.BlockStatementNode
 import inno.jago.ast.model.statement.EmptyStatementNode
 import inno.jago.ast.model.statement.ExpressionStatementNode
 import inno.jago.ast.model.statement.ForClauseStatementNode
-import inno.jago.ast.model.statement.ForStatementNode
 import inno.jago.ast.model.statement.IfStatementNode
 import inno.jago.ast.model.statement.ReturnStatementNode
 import inno.jago.ast.model.statement.IncDecStatementNode
@@ -28,9 +23,6 @@ import inno.jago.ast.model.statement.ShortVarDeclNode
 import inno.jago.ast.model.statement.SimpleElseStatementNode
 import inno.jago.ast.model.type.IntegerTypeNode
 import inno.jago.createAST
-import inno.jago.ast.model.statement.SimpleStatementNode
-import org.antlr.v4.runtime.CharStreams
-import org.antlr.v4.runtime.CommonTokenStream
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test

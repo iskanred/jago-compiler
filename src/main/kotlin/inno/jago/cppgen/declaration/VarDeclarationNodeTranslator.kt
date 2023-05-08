@@ -8,6 +8,10 @@ import inno.jago.semantic.SemanticException
 
 // var a, b, c = someFunc()
 fun VarDeclarationNode.translateToCode(): String {
+    if (this.identifier == "_") {
+        return ""
+    }
+
     if (expression != null) {
         if (expression is ApplicationExpressionNode && this.positionInRow >= 0) {
             return "auto ${this.identifier} = get<${this.positionInRow}>(${this.expression.translateToCode()})"
