@@ -59,6 +59,7 @@ class TypeCheckerTest {
         )
         assertThrows<SemanticException> { typeChecker.startTypeCheck() }
     }
+
     @Test
     fun `invalid elems in an array initialisation - double`() {
         val typeChecker = TypeChecker(
@@ -66,6 +67,7 @@ class TypeCheckerTest {
         )
         assertThrows<SemanticException> { typeChecker.startTypeCheck() }
     }
+
     @Test
     fun `non-castable error`() {
         val typeChecker = TypeChecker(
@@ -73,6 +75,7 @@ class TypeCheckerTest {
         )
         assertThrows<NonCastableTypeException> { typeChecker.startTypeCheck() }
     }
+
     @Test
     fun `values casted correctly`() {
         val typeChecker = TypeChecker(
@@ -80,6 +83,7 @@ class TypeCheckerTest {
         )
         assertDoesNotThrow { typeChecker.startTypeCheck() }
     }
+
     @Test
     fun `implicit cast`() {
         val typeChecker = TypeChecker(
@@ -87,26 +91,31 @@ class TypeCheckerTest {
         )
         assertThrows<WrongTypeException> { typeChecker.startTypeCheck() }
     }
+
     @Test
     fun `array from function different lengths`() {
         val typeChecker = TypeChecker(createAST("src/test/resources/tests/type_checker/array/invalid_function_type.go"))
         assertThrows<WrongTypeException> { typeChecker.startTypeCheck() }
     }
+
     @Test
     fun `invalid assignment to array element`() {
         val typeChecker = TypeChecker(createAST("src/test/resources/tests/type_checker/array/invalid_data_type.go"))
         assertThrows<WrongTypeException> { typeChecker.startTypeCheck() }
     }
+
     @Test
     fun `valid assignment with cast to array element`() {
         val typeChecker = TypeChecker(createAST("src/test/resources/tests/type_checker/array/valid_data_type.go"))
         assertDoesNotThrow { typeChecker.startTypeCheck() }
     }
+
     @Test
     fun `valid length of an array`() {
         val typeChecker = TypeChecker(createAST("src/test/resources/tests/type_checker/array/valid.go"))
         assertDoesNotThrow { typeChecker.startTypeCheck() }
     }
+
     @Test
     fun `explicit cast that does nothing`() {
         val typeChecker = TypeChecker(
@@ -114,6 +123,7 @@ class TypeCheckerTest {
         )
         assertDoesNotThrow { typeChecker.startTypeCheck() }
     }
+
     @Test
     fun `explicit casts`() {
         val typeChecker = TypeChecker(
@@ -121,6 +131,7 @@ class TypeCheckerTest {
         )
         assertDoesNotThrow { typeChecker.startTypeCheck() }
     }
+
     @Test
     fun `implicit cast that works`() {
         val typeChecker = TypeChecker(
@@ -162,14 +173,38 @@ class TypeCheckerTest {
     }
 
     @Test
-    fun `invalid type in var declaration 3`() {
+    fun `expected 1 but got 2 types in var declaration`() {
         val typeChecker = TypeChecker(
             createAST("src/test/resources/tests/type_checker/variable/invalid_var_declaration_3.go")
         )
         assertThrows<WrongNumberOfExpressionsException> { typeChecker.startTypeCheck() }
     }
 
-    // test for pointer
+    @Test
+    fun `expected 2 but got 1 type in var declaration`() {
+        val typeChecker = TypeChecker(
+            createAST("src/test/resources/tests/type_checker/variable/invalid_var_declaration_3.go")
+        )
+        assertThrows<WrongNumberOfExpressionsException> { typeChecker.startTypeCheck() }
+    }
+
+    @Test
+    fun `valid var declaration with tuple`() {
+        val typeChecker = TypeChecker(
+            createAST("src/test/resources/tests/type_checker/variable/valid_var_declaration_tuple.go")
+        )
+        assertDoesNotThrow { typeChecker.startTypeCheck() }
+    }
+
+    @Test
+    fun `expected 1 but got 0 types in var declaration`() {
+        val typeChecker = TypeChecker(
+            createAST("src/test/resources/tests/type_checker/variable/invalid_var_declaration_5.go")
+        )
+        assertThrows<WrongTypeException> { typeChecker.startTypeCheck() }
+    }
+
+    /* TODO: test for pointers */
 
     @Test
     fun `invalid type in assignment with pointer dereference`(){
