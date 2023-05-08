@@ -1,13 +1,16 @@
 package inno.jago.semantic.model
 
 import inno.jago.lexer.Pos
+import inno.jago.semantic.FuncEntityAlreadyExistsException
 import inno.jago.semantic.NamedEntityAlreadyExistsException
 
+@Suppress("TooManyFunctions")
 sealed class ScopeNode(
     val name: String,
     private val parent: ScopeNode?,
 ) {
-    private val table = mutableMapOf<String, NamedEntity>()
+    private val objectEntities = mutableMapOf<String, ObjectEntity>()
+    private val funcEntities = mutableSetOf<FuncEntity>()
 
     fun createNewFuncScope(functionName: String, expectedReturnType: Type? = null) = FuncScopeNode(
         name = "Function '$functionName' scope inside scope [$name]",
@@ -35,29 +38,60 @@ sealed class ScopeNode(
         if (entity.identifier == "_") {
             return entity
         }
+        return when(entity) {
+            is ObjectEntity -> addUniqueObjectEntity(objectEntity = entity, pos = pos)
+            is FuncEntity -> addUniqueFuncEntity(funcEntity = entity, pos = pos)
+        }
+    }
 
-        if (entity.identifier in table) {
-            throw NamedEntityAlreadyExistsException(identifier = entity.identifier, pos = pos)
+    private fun addUniqueObjectEntity(objectEntity: ObjectEntity, pos: Pos): ObjectEntity =
+        if (
+            objectEntity.identifier in objectEntities ||
+            funcEntities.any { it.identifier == objectEntity.identifier }
+        ) {
+            throw NamedEntityAlreadyExistsException(identifier = objectEntity.identifier, pos = pos)
+        } else {
+            objectEntity.apply {
+                objectEntities[identifier] = this
+            }
         }
 
-        table[entity.identifier] = entity
-
-        return entity
-    }
+    private fun addUniqueFuncEntity(funcEntity: FuncEntity, pos: Pos): FuncEntity =
+        if (funcEntity in funcEntities || funcEntity.identifier in objectEntities) {
+            throw FuncEntityAlreadyExistsException(
+                identifier = funcEntity.identifier,
+                type = funcEntity.type as Type.FuncType,
+                pos = pos
+            )
+        } else {
+            funcEntity.apply {
+                funcEntities.add(this)
+            }
+        }
 
     /**
      * Searches for visible entities by identifier
      * 'Visible' means in one of ancestor's scope
      */
-    fun findVisibleEntity(identifier: String): NamedEntity? {
+    fun findVisibleObjectEntity(identifier: String): NamedEntity? {
         var currentScopeNode: ScopeNode? = this
         while (currentScopeNode != null) {
-            if (identifier in currentScopeNode.table) {
-                return currentScopeNode.table[identifier]
+            if (identifier in currentScopeNode.objectEntities) {
+                return currentScopeNode.objectEntities[identifier]
             }
             currentScopeNode = currentScopeNode.parent
         }
         return null
+    }
+
+    fun findVisibleFuncEntities(identifier: String): List<FuncEntity> {
+        val funcEntities = mutableListOf<FuncEntity>()
+        var currentScopeNode: ScopeNode? = this
+        while (currentScopeNode != null) {
+            funcEntities += currentScopeNode.funcEntities.filter { it.identifier == identifier }
+            currentScopeNode = currentScopeNode.parent
+        }
+        return funcEntities
     }
 
     fun findExpectedReturnType(): Type? {

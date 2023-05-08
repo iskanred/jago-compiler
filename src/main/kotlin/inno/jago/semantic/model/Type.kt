@@ -52,14 +52,6 @@ sealed class Type {
 
     /**
      * Implementation specific type that is not presented in language syntax
-     * It represents import and is needed only for semantic analysis
-     *
-     * Example: [import "fmt"] is of type ImportType
-     */
-    object ImportType : Type()
-
-    /**
-     * Implementation specific type that is not presented in language syntax
      * It represents function that does not return anything
      *
      * Example:
@@ -107,6 +99,14 @@ sealed class Type {
 
     data class PointerType(
         val baseType: Type
+    ) : Type()
+
+    /**
+     * Implementation specific type.
+     * I
+     */
+    data class FuncTypesSumType(
+        val funcTypes: List<FuncType>
     ) : Type()
 }
 

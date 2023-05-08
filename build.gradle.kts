@@ -3,6 +3,7 @@ plugins {
     antlr
     application
     java
+//    `cpp-application`
 }
 
 group = "inno.jago"

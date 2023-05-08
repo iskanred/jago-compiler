@@ -11,6 +11,7 @@ import inno.jago.common.EntityNotSupportedException
 import inno.jago.semantic.NoSuchEntityInCurrentScopeException
 import inno.jago.semantic.model.ExpressionEntity
 import inno.jago.semantic.model.ScopeNode
+import inno.jago.semantic.model.Type
 
 fun OperandNode.toSemanticEntity(scope: ScopeNode): ExpressionEntity = when(this) {
     is LiteralOperandNode -> toSemanticEntity(scope)
@@ -34,6 +35,11 @@ private fun IdentifierOperandNode.toSemanticEntity(scope: ScopeNode): Expression
 
 private fun SimpleIdentifierOperandNode.toSemanticEntity(scope: ScopeNode): ExpressionEntity =
     ExpressionEntity(
-        type = scope.findVisibleEntity(identifier)?.type
+        type = scope.findVisibleObjectEntity(identifier)?.type
+            ?: scope.findVisibleFuncEntities(identifier).takeIf { it.isNotEmpty() }?.let { funcEntities ->
+                Type.FuncTypesSumType(
+                    funcTypes = funcEntities.map { it.type as Type.FuncType }
+                )
+            }
             ?: throw NoSuchEntityInCurrentScopeException(identifier = identifier, pos = pos)
     )

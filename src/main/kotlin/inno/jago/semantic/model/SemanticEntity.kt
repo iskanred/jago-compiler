@@ -1,11 +1,24 @@
 package inno.jago.semantic.model
 
+import java.util.*
+
 sealed class SemanticEntity(val type: Type)
 
 
-sealed class NamedEntity(type: Type, val identifier: String) : SemanticEntity(type)
+sealed class NamedEntity(type: Type, val identifier: String) : SemanticEntity(type) {
+    override fun equals(other: Any?): Boolean =
+        other != null && other is NamedEntity && other.identifier == identifier
 
-class FuncEntity(type: Type.FuncType, identifier: String) : NamedEntity(type, identifier)
+    override fun hashCode(): Int = identifier.hashCode()
+}
+
+class FuncEntity(type: Type.FuncType, identifier: String) : NamedEntity(type, identifier) {
+    override fun equals(other: Any?): Boolean =
+        other != null && other is FuncEntity && other.identifier == identifier
+                && (other.type as Type.FuncType).paramTypes == (type as Type.FuncType).paramTypes
+
+    override fun hashCode(): Int = Objects.hash(identifier, (type as Type.FuncType).paramTypes)
+}
 
 
 sealed class ObjectEntity(type: Type, identifier: String) : NamedEntity(type, identifier)
