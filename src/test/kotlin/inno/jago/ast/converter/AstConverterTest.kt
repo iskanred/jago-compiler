@@ -1,0 +1,88 @@
+package inno.jago.ast.converter
+
+import GoLexer
+import GoParser
+import inno.jago.ast.model.ASTNode
+import inno.jago.ast.model.decl.FunctionDeclarationNode
+import inno.jago.ast.model.expression.unary_expression.ApplicationExpressionNode
+import inno.jago.ast.model.expression.unary_expression.primary_expression.operand.LiteralOperandNode
+import inno.jago.ast.model.expression.unary_expression.primary_expression.operand.literal_operand.BoolLiteralNode
+import inno.jago.ast.model.global.SourceFileNode
+import inno.jago.ast.model.statement.EmptyStatementNode
+import inno.jago.ast.model.statement.ExpressionStatementNode
+import inno.jago.ast.model.statement.IfStatementNode
+import inno.jago.ast.model.statement.ShortVarDeclNode
+import inno.jago.ast.model.statement.SimpleElseStatementNode
+import org.antlr.v4.runtime.CharStreams
+import org.antlr.v4.runtime.CommonTokenStream
+import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Test
+import java.util.*
+import kotlin.test.assertNotNull
+
+class AstConverterTest {
+    @Test
+    fun `empty main fun must have only empty stmt`() {
+        val astRoot = createAST("src/test/resources/tests/ast/empty_main.go")
+
+        assertEquals("main", astRoot.packageName.name, "Unexpected package name")
+        assertEquals(1, astRoot.topLevelDecls.size, "Unexpected number of toplevel decls")
+        assertEquals(FunctionDeclarationNode::class.java, astRoot.topLevelDecls[0].javaClass, "Unexpected top level decl")
+
+        val funDecl = astRoot.topLevelDecls[0] as FunctionDeclarationNode
+        checkMainFun(funDecl)
+
+        assertEquals(1, funDecl.functionBody.block.size, "Unexpected number of stmts in function block")
+        assertEquals(EmptyStatementNode::class.java, funDecl.functionBody.block[0].javaClass, "Unexpected number of stmts in function block")
+    }
+
+    @Test
+    fun `if node with decl must contain else branch`() {
+        val astRoot = createAST("src/test/resources/tests/ast/simple_if.go")
+
+        assertEquals("main", astRoot.packageName.name, "Unexpected package name")
+        assertEquals(1, astRoot.topLevelDecls.size, "Unexpected number of toplevel decls")
+        assertEquals(FunctionDeclarationNode::class.java, astRoot.topLevelDecls[0].javaClass, "Unexpected top level decl")
+
+        val funDecl = astRoot.topLevelDecls[0] as FunctionDeclarationNode
+        checkMainFun(funDecl)
+
+        assertEquals(2, funDecl.functionBody.block.size, "Unexpected number of stmts in function block")
+        assertEquals(IfStatementNode::class.java, funDecl.functionBody.block[0].javaClass, "Expected if stmt in fun block")
+        assertEquals(EmptyStatementNode::class.java, funDecl.functionBody.block[1].javaClass, "Expected empty statement in fun block")
+
+        val ifStmtNode = funDecl.functionBody.block[0] as IfStatementNode
+        Assertions.assertNotNull(ifStmtNode.simpleStatement, "Expected not null simple stmt in if")
+        assertEquals(ShortVarDeclNode::class.java, ifStmtNode.simpleStatement!!.javaClass, "Expected short var decl in if stmt declaration")
+        assertEquals("a", (ifStmtNode.simpleStatement!! as ShortVarDeclNode).identifierList[0], "Unexpected variable name")
+
+        assertEquals(LiteralOperandNode::class.java, ifStmtNode.expression.javaClass, "Expected literal operand in if condition expression")
+        assertEquals(BoolLiteralNode::class.java, (ifStmtNode.expression as LiteralOperandNode).literalNode.javaClass, "Unexpected literal type in if condition expression")
+
+        assertEquals(2, ifStmtNode.block.block.size, "Unexpected number of stmts in if block")
+
+        assertNotNull(ifStmtNode.elseBranch, "Expected not null else branch")
+        assertEquals(SimpleElseStatementNode::class.java, ifStmtNode.elseBranch!!.javaClass, "Expected simple else branch in if")
+        assertEquals(2, (ifStmtNode.elseBranch!! as SimpleElseStatementNode).block.block.size, "Unexpected number of stmts in block of simple else")
+    }
+
+    private fun checkMainFun(funDecl: FunctionDeclarationNode) {
+        assertEquals("main", funDecl.functionName, "Unexpected fun name")
+        assertEquals(0, funDecl.signature.parameterNodes.size, "Unexpected number of parameters of fun")
+        assertEquals(0, funDecl.signature.resultNode.size, "Unexpected number of returns parameters of fun")
+    }
+
+    @Throws(InputMismatchException::class)
+    private fun createAST(inputFilePath: String): SourceFileNode {
+        val cs = CharStreams.fromFileName(inputFilePath)
+        val lexer = GoLexer(cs)
+        val tokenStream = CommonTokenStream(lexer)
+        val parser = GoParser(tokenStream)
+        val sourceFile = parser.sourceFile()
+        if (parser.numberOfSyntaxErrors != 0) {
+            throw InputMismatchException()
+        }
+        return sourceFile.toSourceFileNode()
+    }
+}
