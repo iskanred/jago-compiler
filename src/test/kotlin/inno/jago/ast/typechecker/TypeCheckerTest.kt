@@ -28,6 +28,12 @@ class TypeCheckerTest {
     }
 
     @Test
+    fun `short var decl mismatched type`() {
+        val typeChecker = TypeChecker(createAST("src/test/resources/tests/type_checker/if/invalid_if_short_decl_type.go"))
+        assertThrows<WrongTypeException> { typeChecker.startTypeCheck() }
+    }
+
+    @Test
     fun `non-bool if condition`() {
         val typeChecker = TypeChecker(createAST("src/test/resources/tests/type_checker/if/invalid_if_condition.go"))
         assertThrows<WrongTypeException> { typeChecker.startTypeCheck() }
