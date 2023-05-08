@@ -32,11 +32,12 @@ fun AssignmentNode.translateToCode(): String {
     } else {
         translatedLeftExpressions.zip(translatedRightExpressions).forEach { (lhs, rhs) ->
             res += when (val it = assignOperator) {
-                is SimpleAssignOperatorNode -> "$lhs = $rhs"
-                is AddOpSimpleAssignOperatorNode -> "$lhs ${it.addOperator.translateToCode()}= $rhs"
-                is MulOpSimpleAssignOperatorNode -> "$lhs ${it.mulOperator.translateToCode()}= $rhs"
+                is SimpleAssignOperatorNode -> "$lhs = $rhs;"
+                is AddOpSimpleAssignOperatorNode -> "$lhs ${it.addOperator.translateToCode()}= $rhs;"
+                is MulOpSimpleAssignOperatorNode -> "$lhs ${it.mulOperator.translateToCode()}= $rhs;"
             }
         }
+        res = res.dropLast(0);
     }
 
     return res
