@@ -49,7 +49,7 @@ private fun VarDeclarationNode.toSemanticEntity(scope: ScopeNode): VarEntity {
         val expressionEntity = expression!!.toSemanticEntity(scope)
         val expressionType = if (expressionEntity.type is Type.TupleType) {
             // проверка кол-ва переменных слева и выражений для присвоения справа
-            if (positionInRow + 1 >= expressionEntity.type.elementTypes.size) {
+            if (positionInRow > expressionEntity.type.elementTypes.size) {
                 throw WrongNumberOfExpressionsException(
                     expected = positionInRow + 1,
                     actual = expressionEntity.type.elementTypes.size,
