@@ -9,7 +9,7 @@ import org.antlr.v4.runtime.CommonTokenStream
 import java.util.InputMismatchException
 
 @Throws(InputMismatchException::class)
-public fun createAST(inputFilePath: String): SourceFileNode {
+fun createAST(inputFilePath: String): SourceFileNode {
     val cs = CharStreams.fromFileName(inputFilePath)
     val lexer = GoLexer(cs)
     val tokenStream = CommonTokenStream(lexer)

@@ -1,7 +1,7 @@
 package inno.jago.ast.typechecker
 
-import inno.jago.common.WrongNumberOfExpressionsException
 import inno.jago.createAST
+import inno.jago.semantic.NoSuchFunctionException
 import inno.jago.semantic.NonCastableTypeException
 import inno.jago.semantic.SemanticException
 import inno.jago.semantic.TypeChecker
@@ -26,6 +26,12 @@ class TypeCheckerTest {
     @Test
     fun `call function with invalid argument type`() {
         val typeChecker = TypeChecker(createAST("src/test/resources/tests/type_checker/fun/invalid_argument_type.go"))
+        assertThrows<NoSuchFunctionException> { typeChecker.startTypeCheck() }
+    }
+
+    @Test
+    fun `short var decl mismatched type`() {
+        val typeChecker = TypeChecker(createAST("src/test/resources/tests/type_checker/if/invalid_if_short_decl_type.go"))
         assertThrows<WrongTypeException> { typeChecker.startTypeCheck() }
     }
 
@@ -78,6 +84,18 @@ class TypeCheckerTest {
     @Test
     fun `implicit cast that works`() {
         val typeChecker = TypeChecker(createAST("src/test/resources/tests/type_checker/conversion/implicit_cast_that_works.go"))
+        assertDoesNotThrow { typeChecker.startTypeCheck() }
+    }
+
+    @Test
+    fun `valid short var decl`() {
+        val typeChecker = TypeChecker(createAST("src/test/resources/tests/type_checker/if/valid_if_short_decl_type.go"))
+        assertDoesNotThrow { typeChecker.startTypeCheck() }
+    }
+
+    @Test
+    fun `valid bool if condition`() {
+        val typeChecker = TypeChecker(createAST("src/test/resources/tests/type_checker/if/valid_if_condition.go"))
         assertDoesNotThrow { typeChecker.startTypeCheck() }
     }
 

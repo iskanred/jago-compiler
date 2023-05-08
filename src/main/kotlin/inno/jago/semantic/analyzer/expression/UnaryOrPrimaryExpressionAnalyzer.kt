@@ -1,5 +1,4 @@
 @file:Suppress("ThrowsCount")
-
 package inno.jago.semantic.analyzer.expression
 
 import inno.jago.ast.model.expression.unary_expression.ApplicationExpressionNode
@@ -13,6 +12,7 @@ import inno.jago.ast.model.expression.unary_expression.primary_expression.operan
 import inno.jago.common.EntityNotSupportedException
 import inno.jago.common.JaGoException
 import inno.jago.common.UnreachableCodeException
+import inno.jago.semantic.NoSuchFunctionException
 import inno.jago.semantic.NonCastableTypeException
 import inno.jago.semantic.SemanticException
 import inno.jago.semantic.WrongTypeException
@@ -26,7 +26,7 @@ fun UnaryOrPrimaryExpressionNode.toSemanticEntity(scope: ScopeNode): ExpressionE
     is PrimaryExpressionNode -> toSemanticEntity(scope)
 }
 
-@Suppress("CyclomaticComplexMethod")
+@Suppress("CyclomaticComplexMethod", "ReturnCount")
 fun UnaryExpressionNode.toSemanticEntity(scope: ScopeNode): ExpressionEntity {
     if (operator == null) {
         throw JaGoException("Unary operator is null")
@@ -117,33 +117,41 @@ fun IndexExpressionNode.toSemanticEntity(scope: ScopeNode): ExpressionEntity {
 
 fun ApplicationExpressionNode.toSemanticEntity(scope: ScopeNode): ExpressionEntity {
     val functionEntity = leftExpression.toSemanticEntity(scope)
-    val args = expressions.map { it.toSemanticEntity(scope) }
+    val argTypes = expressions.map { it.toSemanticEntity(scope) }.map { it.type }
 
     when (functionEntity.type) {
         is Type.FuncType -> {
             // длина
-            if (functionEntity.type.paramTypes.size != args.size) {
+            if (functionEntity.type.paramTypes.size != argTypes.size) {
                 throw SemanticException(
                     "Number of arguments does not match number of parameters at $pos"
                 )
             }
             // проверка соответствия типов
-            args.forEachIndexed { i, argEntity ->
-                if (functionEntity.type.paramTypes[i] != argEntity.type) {
+            argTypes.forEachIndexed { i, argType ->
+                if (functionEntity.type.paramTypes[i] != argType) {
                     throw WrongTypeException(
                         functionEntity.type.paramTypes[i],
-                        actualType = argEntity.type,
+                        actualType = argType,
                         pos = pos
                     )
                 }
             }
-
             // возвращаем то, что вернула функция
             return ExpressionEntity(type = functionEntity.type.returnType)
         }
-
+        is Type.FuncTypesSumType -> {
+            return functionEntity.type.funcTypes.firstOrNull { funcType ->
+                argTypes.size == funcType.paramTypes.size &&
+                        argTypes
+                            .zip(funcType.paramTypes)
+                            .all { (argType, paramType) -> argType == paramType }
+            }?.returnType?.let {
+                ExpressionEntity(type = it)
+            } ?: throw NoSuchFunctionException(argTypes = argTypes, pos = pos)
+        }
         else -> throw WrongTypeException(
-            Type.FuncType(args.map { it.type }, Type.AnyType),
+            Type.FuncType(argTypes, Type.AnyType),
             actualType = functionEntity.type,
             pos = pos
         )

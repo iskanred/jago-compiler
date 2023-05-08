@@ -3,6 +3,7 @@ plugins {
     antlr
     application
     java
+//    `cpp-application`
 }
 
 group = "inno.jago"
@@ -18,6 +19,7 @@ dependencies {
     antlr("org.antlr:antlr4:4.12.0")
     testImplementation(kotlin("test"))
     testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
+    testImplementation("org.junit.jupiter:junit-jupiter-params:5.0.0-M4")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
 }
 

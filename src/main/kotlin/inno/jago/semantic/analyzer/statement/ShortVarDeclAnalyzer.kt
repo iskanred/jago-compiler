@@ -37,7 +37,7 @@ fun ShortVarDeclNode.toSemanticEntity(scope: ScopeNode): StatementEntity {
         }
 
         identifierList.zip(tupleElements).forEach { (identifier, type) ->
-            val visibleEntity = scope.findVisibleEntity(identifier)
+            val visibleEntity = scope.findVisibleObjectEntity(identifier)
             if (visibleEntity == null) {
                 scope.addUniqueEntity(
                     entity = VarEntity(
@@ -60,7 +60,7 @@ fun ShortVarDeclNode.toSemanticEntity(scope: ScopeNode): StatementEntity {
         }
 
         identifierList.zip(semanticEntities.map { it.type }).forEach { (identifier, type) ->
-            val visibleEntity = scope.findVisibleEntity(identifier)
+            val visibleEntity = scope.findVisibleObjectEntity(identifier)
             if (visibleEntity == null) {
                 scope.addUniqueEntity(
                     entity = VarEntity(

@@ -11,7 +11,10 @@ class WrongTypeException(vararg expectedType: Type, actualType: Type, pos: Pos)
     : SemanticException("Expected [${expectedType.joinToString()}] type but got [$actualType] at $pos")
 
 class NamedEntityAlreadyExistsException(identifier: String, pos: Pos)
-    : SemanticException("'$identifier' already exists at $pos")
+    : SemanticException("Entity '$identifier' already exists at $pos")
+
+class FuncEntityAlreadyExistsException(identifier: String, type: Type.FuncType, pos: Pos)
+    : SemanticException("Function $identifier(${type.paramTypes.joinToString()}) at $pos")
 
 class VarDeclMustPresentTypeOrExpressionException(varIdentifier: String, pos: Pos) : SemanticException(
     "The variable declaration '$varIdentifier' must specify the type or the assigned expression at $pos"
@@ -21,7 +24,10 @@ class ReturnInWrongScopeException(pos : Pos)
     : SemanticException("Return statement at $pos must be inside function scope")
 
 class NoSuchEntityInCurrentScopeException(identifier: String, pos : Pos)
-    : SemanticException("No such variable '$identifier' at $pos")
+    : SemanticException("No such entity '$identifier' at $pos")
+
+class NoSuchFunctionException(argTypes: List<Type>, pos : Pos)
+    : SemanticException("No such function with argument types (${argTypes.joinToString()}) at $pos")
 
 class NonCastableTypeException(from: Type, to: Type, pos: Pos)
     : SemanticException("Cannot cast from $from to $to at $pos")
