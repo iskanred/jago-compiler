@@ -5,11 +5,18 @@ import GoParser
 import inno.jago.ast.model.decl.FunctionDeclarationNode
 import inno.jago.ast.model.decl.VarDeclarationNode
 import inno.jago.ast.model.expression.binary_expression.BinaryExpression
+import inno.jago.ast.model.expression.binary_expression.RelationOperator
+import inno.jago.ast.model.expression.binary_expression.RelationOperators
 import inno.jago.ast.model.expression.unary_expression.ApplicationExpressionNode
 import inno.jago.ast.model.expression.unary_expression.primary_expression.operand.LiteralOperandNode
 import inno.jago.ast.model.expression.unary_expression.primary_expression.operand.OperandNameNode
+import inno.jago.ast.model.expression.unary_expression.primary_expression.operand.SimpleIdentifierOperandNode
+import inno.jago.ast.model.expression.unary_expression.primary_expression.operand.literal_operand.BasicLiteralNode
 import inno.jago.ast.model.expression.unary_expression.primary_expression.operand.literal_operand.BoolLiteralNode
+import inno.jago.ast.model.expression.unary_expression.primary_expression.operand.literal_operand.FunctionLiteralNode
+import inno.jago.ast.model.expression.unary_expression.primary_expression.operand.literal_operand.LiteralNode
 import inno.jago.ast.model.global.SourceFileNode
+import inno.jago.ast.model.statement.BlockStatementNode
 import inno.jago.ast.model.statement.EmptyStatementNode
 import inno.jago.ast.model.statement.ExpressionStatementNode
 import inno.jago.ast.model.statement.ForClauseStatementNode
@@ -20,6 +27,7 @@ import inno.jago.ast.model.statement.IncDecStatementNode
 import inno.jago.ast.model.statement.ShortVarDeclNode
 import inno.jago.ast.model.statement.SimpleElseStatementNode
 import inno.jago.ast.model.type.IntegerTypeNode
+import inno.jago.ast.model.statement.SimpleStatementNode
 import org.antlr.v4.runtime.CharStreams
 import org.antlr.v4.runtime.CommonTokenStream
 import org.junit.jupiter.api.Assertions
@@ -45,20 +53,52 @@ class AstConverterTest {
         assertEquals(ForClauseStatementNode::class.java, funDecl.functionBody.block[0].javaClass, "Unexpected number of stmts in function block")
         assertEquals(EmptyStatementNode::class.java, funDecl.functionBody.block[1].javaClass, "Unexpected number of stmts in function block")
 
-        var forClause = funDecl.functionBody.block[0] as ForClauseStatementNode
+        val forClause = funDecl.functionBody.block[0] as ForClauseStatementNode
 
-//        assertEquals(2, funDecl.functionBody.block.size, "Unexpected number of stmts in function block")
         assertEquals(ShortVarDeclNode::class.java, forClause.initStatementNode?.javaClass, "Unexpected type of for init statement")
 
-
-        var shortVarDecl = forClause.initStatementNode
-
+        val shortVarDecl = forClause.initStatementNode as ShortVarDeclNode
+        assertEquals(1, shortVarDecl.identifierList.size, "Unexpected length of for init statement")
+        assertEquals("i", shortVarDecl.identifierList[0], "Unexpected name of variable for init statement")
 
         assertEquals(BinaryExpression::class.java, forClause.condition?.javaClass, "Unexpected type of for condition")
+        val condition = forClause.condition as BinaryExpression
+        assertEquals(RelationOperators.LESS, (condition.binaryOperator as RelationOperator).operator, "Unexpected relation operator")
+        assertEquals(OperandNameNode::class.java, condition.leftExpression.javaClass, "Unexpected left relation operand")
+        assertEquals("i", ((condition.leftExpression as OperandNameNode).name as SimpleIdentifierOperandNode).identifier, "Unexpected left relation operand value")
+        assertEquals(LiteralOperandNode::class.java, condition.rightExpression.javaClass, "Unexpected right relation operand")
+        assertEquals("3", ((condition.rightExpression as LiteralOperandNode).literalNode as BasicLiteralNode).value, "Unexpected right relation operand value")
+
         assertEquals(IncDecStatementNode::class.java, forClause.postStatementNode?.javaClass, "Unexpected type of for post statement")
+        val post = (forClause.postStatementNode as IncDecStatementNode)
+        assertEquals("i", ((post.expression as OperandNameNode).name as SimpleIdentifierOperandNode).identifier, "Unexpected left relation operand value")
+        assertEquals(IncDecStatementNode.IncDec.INC, post.type, "Unexpected left relation operand value")
 
 
-//        println("" + forClause.initStatementNode + forClause.condition + forClause.postStatementNode)
+        val block = forClause.block.block
+
+        assertEquals(3, block.size, "unexpected length of statements")
+        assertEquals(IfStatementNode::class.java, block[0].javaClass, "unexpected first statement")
+        val ifStmt = block[0] as IfStatementNode
+        assertEquals(null, ifStmt.simpleStatement, "unexpected simple statement")
+        assertEquals(null, ifStmt.elseBranch, "unexpected else branch")
+        assertEquals(2, ifStmt.block.block.size, "unexpected size of statements inside of if")
+        assertEquals(ReturnStatementNode::class.java, ifStmt.block.block[0].javaClass, "unexpected first statement inside of if")
+        assertEquals(EmptyStatementNode::class.java, ifStmt.block.block[1].javaClass, "unexpected second statement inside of if")
+
+
+        assertEquals(ExpressionStatementNode::class.java, block[1].javaClass, "unexpected type of the second statement")
+        val printExpr = block[1] as ExpressionStatementNode
+        assertEquals(ApplicationExpressionNode::class.java, printExpr.expression.javaClass, "unexpected type of the second statement")
+        val print = printExpr.expression as ApplicationExpressionNode
+        assertEquals(OperandNameNode::class.java, print.leftExpression.javaClass, "да показывает же где")
+        assertEquals("print", ((print.leftExpression as OperandNameNode).name as SimpleIdentifierOperandNode).identifier)
+
+        assertEquals(1, print.expressions.size)
+        assertEquals(LiteralOperandNode::class.java, print.expressions[0].javaClass)
+        assertEquals("\"hi!\"", (((print.expressions[0] as LiteralOperandNode).literalNode) as BasicLiteralNode).value)
+
+        assertEquals(EmptyStatementNode::class.java, block[2].javaClass, "unexpected type of the third statement")
     }
 
     @Test

@@ -5,6 +5,6 @@ func main() {
         if i == 2 {
             return
         }
-        print(i)
+        print("hi!")
     }
 }
