@@ -16,7 +16,7 @@ import inno.jago.semantic.model.Type
 @Suppress("ThrowsCount", "CyclomaticComplexMethod", "LongMethod", "NestedBlockDepth", "ReturnCount")
 fun BinaryExpression.toSemanticEntity(scope: ScopeNode): ExpressionEntity {
     val left = leftExpression.toSemanticEntity(scope)
-    val right = leftExpression.toSemanticEntity(scope)
+    val right = rightExpression.toSemanticEntity(scope)
 
     when (binaryOperator) {
 //      EQUALS, NOT_EQUALS, LESS, LESS_OR_EQUALS, GREATER, GREATER_OR_EQUALS

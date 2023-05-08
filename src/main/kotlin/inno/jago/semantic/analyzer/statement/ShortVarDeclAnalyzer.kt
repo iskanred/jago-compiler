@@ -4,7 +4,6 @@ import inno.jago.ast.model.statement.ShortVarDeclNode
 import inno.jago.common.JaGoException
 import inno.jago.common.UnreachableCodeException
 import inno.jago.common.WrongNumberOfExpressionsException
-import inno.jago.semantic.WrongTypeException
 import inno.jago.semantic.analyzer.expression.toSemanticEntity
 import inno.jago.semantic.model.ScopeNode
 import inno.jago.semantic.model.StatementEntity
@@ -37,18 +36,13 @@ fun ShortVarDeclNode.toSemanticEntity(scope: ScopeNode): StatementEntity {
         }
 
         identifierList.zip(tupleElements).forEach { (identifier, type) ->
-            val visibleEntity = scope.findVisibleObjectEntity(identifier)
-            if (visibleEntity == null) {
-                scope.addUniqueEntity(
-                    entity = VarEntity(
-                        type = type,
-                        identifier = identifier
-                    ),
-                    pos = pos
-                )
-            } else if (visibleEntity.type != type) {
-                throw WrongTypeException(visibleEntity.type, actualType = type, pos = pos)
-            }
+            scope.addUniqueEntity(
+                entity = VarEntity(
+                    type = type,
+                    identifier = identifier
+                ),
+                pos = pos
+            )
         }
     } else { // a, b := 3, true. No tuple in semanticEntities.
         if (semanticEntities.size != identifierList.size) {
@@ -60,18 +54,13 @@ fun ShortVarDeclNode.toSemanticEntity(scope: ScopeNode): StatementEntity {
         }
 
         identifierList.zip(semanticEntities.map { it.type }).forEach { (identifier, type) ->
-            val visibleEntity = scope.findVisibleObjectEntity(identifier)
-            if (visibleEntity == null) {
-                scope.addUniqueEntity(
-                    entity = VarEntity(
-                        type = type,
-                        identifier = identifier
-                    ),
-                    pos = pos
-                )
-            } else if (visibleEntity.type != type) {
-                throw WrongTypeException(visibleEntity.type, actualType = type, pos = pos)
-            }
+            scope.addUniqueEntity(
+                entity = VarEntity(
+                    type = type,
+                    identifier = identifier
+                ),
+                pos = pos
+            )
         }
     }
 
