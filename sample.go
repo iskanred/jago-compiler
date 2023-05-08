@@ -5,5 +5,5 @@ func good1() (string, int) {
 }
 
 func main() {
-    a, b, c := good1(), 3
+    var a, b = good1()
 }

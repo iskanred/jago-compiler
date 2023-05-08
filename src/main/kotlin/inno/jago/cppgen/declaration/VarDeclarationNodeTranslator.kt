@@ -1,6 +1,7 @@
 package inno.jago.cppgen.declaration
 
 import inno.jago.ast.model.decl.VarDeclarationNode
+import inno.jago.ast.model.expression.unary_expression.ApplicationExpressionNode
 import inno.jago.cppgen.expression.translateToCode
 import inno.jago.cppgen.type.translateToCode
 import inno.jago.semantic.SemanticException
@@ -8,6 +9,9 @@ import inno.jago.semantic.SemanticException
 // var a, b, c = someFunc()
 fun VarDeclarationNode.translateToCode(): String {
     if (expression != null) {
+        if (expression is ApplicationExpressionNode){
+            return "auto ${this.identifier} = get<${this.positionInRow}>(${this.expression.translateToCode()})"
+        }
         return "auto ${this.identifier} = ${this.expression.translateToCode()}"
     }
     if (type != null) {
