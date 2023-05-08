@@ -19,7 +19,7 @@ class Translator(
     }
 }
 
-fun compile(root: SourceFileNode, fileName: String): File {
+fun compile(root: SourceFileNode): String {
     val program = Translator("")
     program.addInstruction(getIncludes())
     for (decl in root.topLevelDecls) {
@@ -36,7 +36,7 @@ fun compile(root: SourceFileNode, fileName: String): File {
         }
         program.addInstruction(instruction)
     }
-    return createCppFile(fileName = fileName, text = program.text)
+    return program.text
 }
 
 fun createCppFile(fileName: String, text: String) = File(fileName).apply {
