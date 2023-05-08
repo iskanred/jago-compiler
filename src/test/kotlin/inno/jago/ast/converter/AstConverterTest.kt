@@ -27,6 +27,7 @@ import inno.jago.ast.model.statement.IncDecStatementNode
 import inno.jago.ast.model.statement.ShortVarDeclNode
 import inno.jago.ast.model.statement.SimpleElseStatementNode
 import inno.jago.ast.model.type.IntegerTypeNode
+import inno.jago.createAST
 import inno.jago.ast.model.statement.SimpleStatementNode
 import org.antlr.v4.runtime.CharStreams
 import org.antlr.v4.runtime.CommonTokenStream
@@ -201,16 +202,4 @@ class AstConverterTest {
         assertEquals(0, funDecl.signature.resultNode.size, "Unexpected number of returns parameters of fun")
     }
 
-    @Throws(InputMismatchException::class)
-    private fun createAST(inputFilePath: String): SourceFileNode {
-        val cs = CharStreams.fromFileName(inputFilePath)
-        val lexer = GoLexer(cs)
-        val tokenStream = CommonTokenStream(lexer)
-        val parser = GoParser(tokenStream)
-        val sourceFile = parser.sourceFile()
-        if (parser.numberOfSyntaxErrors != 0) {
-            throw InputMismatchException()
-        }
-        return sourceFile.toSourceFileNode()
-    }
 }
