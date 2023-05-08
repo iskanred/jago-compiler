@@ -107,10 +107,6 @@ sealed class ScopeNode(
         }
         return parent?.hasLoopScope() ?: false
     }
-
-    companion object {
-        val globalScopeNode = GlobalScopeNode()
-    }
 }
 
 class GlobalScopeNode : ScopeNode("GLOBAL", null) {

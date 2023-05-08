@@ -1,6 +1,7 @@
 package inno.jago.ast.typechecker
 
 import inno.jago.createAST
+import inno.jago.semantic.NoSuchFunctionException
 import inno.jago.semantic.SemanticException
 import inno.jago.semantic.TypeChecker
 import inno.jago.semantic.WrongTypeException
@@ -24,7 +25,7 @@ class TypeCheckerTest {
     @Test
     fun `call function with invalid argument type`() {
         val typeChecker = TypeChecker(createAST("src/test/resources/tests/type_checker/fun/invalid_argument_type.go"))
-        assertThrows<WrongTypeException> { typeChecker.startTypeCheck() }
+        assertThrows<NoSuchFunctionException> { typeChecker.startTypeCheck() }
     }
 
     @Test
