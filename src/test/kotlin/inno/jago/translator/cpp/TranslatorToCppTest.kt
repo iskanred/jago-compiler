@@ -1,5 +1,23 @@
 package inno.jago.translator.cpp
 
-class TranslatorToCppTest {
+import org.junit.jupiter.api.Test
+import java.nio.file.Files
+import java.nio.file.Path
+import java.nio.file.Paths
+import java.util.stream.Stream
 
+class TranslatorToCppTest {
+    @Test
+    fun `hello world`() {
+
+    }
+
+    companion object {
+        private const val BASE_DIR = "src/test/resources/translator/input"
+
+        @JvmStatic
+        fun pathStream(): Stream<Path> = getFilesStream(BASE_DIR)
+
+        private fun getFilesStream(path: String) = Files.list(Paths.get(path))
+    }
 }

@@ -1,6 +1,5 @@
 package inno.jago.ast.typechecker
 
-import inno.jago.common.WrongNumberOfExpressionsException
 import inno.jago.createAST
 import inno.jago.semantic.SemanticException
 import inno.jago.semantic.TypeChecker
