@@ -1,5 +1,6 @@
 package inno.jago.ast.typechecker
 
+import inno.jago.common.WrongNumberOfExpressionsException
 import inno.jago.createAST
 import inno.jago.semantic.NoSuchFunctionException
 import inno.jago.semantic.NonCastableTypeException
@@ -150,7 +151,7 @@ class TypeCheckerTest {
         val typeChecker = TypeChecker(
             createAST("src/test/resources/tests/type_checker/variable/invalid_var_declaration_3.go")
         )
-        assertThrows<WrongTypeException> { typeChecker.startTypeCheck() }
+        assertThrows<WrongNumberOfExpressionsException> { typeChecker.startTypeCheck() }
     }
 
     // test for pointer

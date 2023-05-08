@@ -63,7 +63,8 @@ fun GoParser.VarSpecContext.toVarDeclarationNodes(): List<VarDeclarationNode> {
                 identifier = identifier,
                 type = type()?.toTypeNode(),
                 expression = expressions?.first(),
-                positionInRow = index
+                positionInRow = index,
+                numberOfDeclarationsInRow = identifiers.size
             )
         }
     } else if (identifiers.size == expressions.size) { // var a, b = 1, true
@@ -73,7 +74,8 @@ fun GoParser.VarSpecContext.toVarDeclarationNodes(): List<VarDeclarationNode> {
                 identifier = identifier,
                 type = type()?.toTypeNode(),
                 expression = expressions[index],
-                positionInRow = -1
+                positionInRow = -1,
+                numberOfDeclarationsInRow = identifiers.size
             )
         }
     } else {
