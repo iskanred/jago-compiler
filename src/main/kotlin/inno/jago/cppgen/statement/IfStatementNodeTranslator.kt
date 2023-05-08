@@ -62,6 +62,11 @@ fun smartReplace(source: String, oldValue: String, newValue: String): String{
     newCode = newCode.replace("$oldValue)", "$newValue)")
     // oldVar,
     newCode = newCode.replace("$oldValue,", "$newValue,")
+    // oldVar++
+    newCode = newCode.replace("$oldValue++", "$newValue++")
+    // oldVar--
+    newCode = newCode.replace("$oldValue--", "$newValue--")
+
 
     return newCode
 }
