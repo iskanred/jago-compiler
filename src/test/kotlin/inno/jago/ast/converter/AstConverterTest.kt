@@ -100,7 +100,7 @@ class AstConverterTest {
     }
 
     @Test
-    fun `top level decl`() {
+    fun `top level var decl`() {
         val astRoot = createAST("src/test/resources/tests/ast/top_level_var.go")
 
         assertEquals("main", astRoot.packageName.name, "Unexpected package name")
