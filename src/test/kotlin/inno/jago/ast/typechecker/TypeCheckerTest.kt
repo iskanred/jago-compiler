@@ -204,6 +204,8 @@ class TypeCheckerTest {
         assertThrows<WrongTypeException> { typeChecker.startTypeCheck() }
     }
 
+    /* TODO: test string conversion */
+
     /* TODO: test for pointers */
 
     @Test
