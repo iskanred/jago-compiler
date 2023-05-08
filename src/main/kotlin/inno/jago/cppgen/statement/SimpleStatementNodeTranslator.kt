@@ -28,7 +28,7 @@ fun AssignmentNode.translateToCode(): String {
 
     var res = ""
     if (leftExpressions.size != rightExpressions.size) {
-        res = "tie(${leftExpressions.joinToString()}) = ${rightExpressions.first()}"
+        res = "tie(${translatedLeftExpressions.joinToString()}) = ${translatedRightExpressions.first()}"
     } else {
         translatedLeftExpressions.zip(translatedRightExpressions).forEach { (lhs, rhs) ->
             res += when (val it = assignOperator) {

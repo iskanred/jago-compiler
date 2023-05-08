@@ -2,7 +2,6 @@ package inno.jago.semantic.analyzer.statement
 
 import inno.jago.ast.model.statement.ShortVarDeclNode
 import inno.jago.common.JaGoException
-import inno.jago.common.UnreachableCodeException
 import inno.jago.common.WrongNumberOfExpressionsException
 import inno.jago.semantic.analyzer.expression.toSemanticEntity
 import inno.jago.semantic.model.ScopeNode
@@ -18,15 +17,10 @@ fun ShortVarDeclNode.toSemanticEntity(scope: ScopeNode): StatementEntity {
     // a, b := someFun(); someFun return > 1 elements
     if (semanticEntities.any { it.type is Type.TupleType } ) {
         if (semanticEntities.size != 1) {
-            throw JaGoException(msg = "Can be only one tuple in expressions")
+            throw JaGoException(msg = "Can be only one tuple in expressions at $pos")
         }
 
-        val tupleEntity = semanticEntities.first()
-        if (tupleEntity.type !is Type.TupleType) {
-            throw UnreachableCodeException()
-        }
-
-        val tupleElements = tupleEntity.type.elementTypes
+        val tupleElements = (semanticEntities.first().type as Type.TupleType).elementTypes
         if (identifierList.size != tupleElements.size) {
             throw WrongNumberOfExpressionsException(
                 expected =  identifierList.size,
@@ -35,15 +29,17 @@ fun ShortVarDeclNode.toSemanticEntity(scope: ScopeNode): StatementEntity {
             )
         }
 
-        identifierList.zip(tupleElements).forEach { (identifier, type) ->
-            scope.addUniqueEntity(
-                entity = VarEntity(
-                    type = type,
-                    identifier = identifier
-                ),
-                pos = pos
-            )
-        }
+        identifierList
+            .zip(tupleElements)
+            .forEach { (identifier, type) ->
+                scope.addUniqueEntity(
+                    entity = VarEntity(
+                        type = type,
+                        identifier = identifier
+                    ),
+                    pos = pos
+                )
+            }
     } else { // a, b := 3, true. No tuple in semanticEntities.
         if (semanticEntities.size != identifierList.size) {
             throw WrongNumberOfExpressionsException(
@@ -53,15 +49,17 @@ fun ShortVarDeclNode.toSemanticEntity(scope: ScopeNode): StatementEntity {
             )
         }
 
-        identifierList.zip(semanticEntities.map { it.type }).forEach { (identifier, type) ->
-            scope.addUniqueEntity(
-                entity = VarEntity(
-                    type = type,
-                    identifier = identifier
-                ),
-                pos = pos
-            )
-        }
+        identifierList
+            .zip(semanticEntities.map { it.type })
+            .forEach { (identifier, type) ->
+                scope.addUniqueEntity(
+                    entity = VarEntity(
+                        type = type,
+                        identifier = identifier
+                    ),
+                    pos = pos
+                )
+            }
     }
 
     return StatementEntity()
