@@ -3,6 +3,7 @@ package inno.jago.ast.converter
 import GoLexer
 import GoParser
 import inno.jago.ast.model.decl.FunctionDeclarationNode
+import inno.jago.ast.model.decl.VarDeclarationNode
 import inno.jago.ast.model.expression.unary_expression.ApplicationExpressionNode
 import inno.jago.ast.model.expression.unary_expression.primary_expression.operand.LiteralOperandNode
 import inno.jago.ast.model.expression.unary_expression.primary_expression.operand.OperandNameNode
@@ -14,6 +15,7 @@ import inno.jago.ast.model.statement.IfStatementNode
 import inno.jago.ast.model.statement.ReturnStatementNode
 import inno.jago.ast.model.statement.ShortVarDeclNode
 import inno.jago.ast.model.statement.SimpleElseStatementNode
+import inno.jago.ast.model.type.IntegerTypeNode
 import org.antlr.v4.runtime.CharStreams
 import org.antlr.v4.runtime.CommonTokenStream
 import org.junit.jupiter.api.Assertions
@@ -95,6 +97,26 @@ class AstConverterTest {
         assertEquals(OperandNameNode::class.java, applicationNode.leftExpression.javaClass, "Expected operand name node in application node")
         assertEquals(1, applicationNode.expressions.size, "Unexpected number of params in application node")
         assertEquals(LiteralOperandNode::class.java, applicationNode.expressions[0].javaClass, "Unexpected type of param in application node")
+    }
+
+    @Test
+    fun `top level var decl`() {
+        val astRoot = createAST("src/test/resources/tests/ast/top_level_var.go")
+
+        assertEquals("main", astRoot.packageName.name, "Unexpected package name")
+        assertEquals(2, astRoot.topLevelDecls.size, "Unexpected number of toplevel decls")
+        assertEquals(VarDeclarationNode::class.java, astRoot.topLevelDecls[0].javaClass, "Unexpected top level decl")
+        assertEquals(FunctionDeclarationNode::class.java, astRoot.topLevelDecls[1].javaClass, "Unexpected top level decl")
+
+        val varDecl = astRoot.topLevelDecls[0] as VarDeclarationNode
+        assertEquals("a", varDecl.identifier, "Unexpected identifier of var decl")
+        assertEquals(IntegerTypeNode::class.java, varDecl.type!!.javaClass, "Unexpected type of var decl")
+        assertEquals(LiteralOperandNode::class.java, varDecl.expression!!.javaClass, "Unexpected expression in var decl")
+
+        val mainFunDecl = astRoot.topLevelDecls[1] as FunctionDeclarationNode
+        checkMainFun(mainFunDecl)
+
+        assertEquals(1, mainFunDecl.functionBody.block.size, "Unexpected number of stmts in function block")
     }
 
     private fun checkMainFun(funDecl: FunctionDeclarationNode) {
