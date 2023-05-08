@@ -4,6 +4,7 @@ import GoLexer
 import GoParser
 import inno.jago.ast.model.decl.FunctionDeclarationNode
 import inno.jago.ast.model.decl.VarDeclarationNode
+import inno.jago.ast.model.expression.binary_expression.BinaryExpression
 import inno.jago.ast.model.expression.unary_expression.ApplicationExpressionNode
 import inno.jago.ast.model.expression.unary_expression.primary_expression.operand.LiteralOperandNode
 import inno.jago.ast.model.expression.unary_expression.primary_expression.operand.OperandNameNode
@@ -11,8 +12,11 @@ import inno.jago.ast.model.expression.unary_expression.primary_expression.operan
 import inno.jago.ast.model.global.SourceFileNode
 import inno.jago.ast.model.statement.EmptyStatementNode
 import inno.jago.ast.model.statement.ExpressionStatementNode
+import inno.jago.ast.model.statement.ForClauseStatementNode
+import inno.jago.ast.model.statement.ForStatementNode
 import inno.jago.ast.model.statement.IfStatementNode
 import inno.jago.ast.model.statement.ReturnStatementNode
+import inno.jago.ast.model.statement.IncDecStatementNode
 import inno.jago.ast.model.statement.ShortVarDeclNode
 import inno.jago.ast.model.statement.SimpleElseStatementNode
 import inno.jago.ast.model.type.IntegerTypeNode
@@ -25,6 +29,38 @@ import java.util.*
 import kotlin.test.assertNotNull
 
 class AstConverterTest {
+
+    @Test
+    fun `for with if and return`() {
+        val astRoot = createAST("src/test/resources/tests/ast/for.go")
+
+        assertEquals("main", astRoot.packageName.name, "Unexpected package name")
+        assertEquals(1, astRoot.topLevelDecls.size, "Unexpected number of toplevel decls")
+        assertEquals(FunctionDeclarationNode::class.java, astRoot.topLevelDecls[0].javaClass, "Unexpected top level decl")
+
+        val funDecl = astRoot.topLevelDecls[0] as FunctionDeclarationNode
+        checkMainFun(funDecl)
+
+        assertEquals(2, funDecl.functionBody.block.size, "Unexpected number of stmts in function block")
+        assertEquals(ForClauseStatementNode::class.java, funDecl.functionBody.block[0].javaClass, "Unexpected number of stmts in function block")
+        assertEquals(EmptyStatementNode::class.java, funDecl.functionBody.block[1].javaClass, "Unexpected number of stmts in function block")
+
+        var forClause = funDecl.functionBody.block[0] as ForClauseStatementNode
+
+//        assertEquals(2, funDecl.functionBody.block.size, "Unexpected number of stmts in function block")
+        assertEquals(ShortVarDeclNode::class.java, forClause.initStatementNode?.javaClass, "Unexpected type of for init statement")
+
+
+        var shortVarDecl = forClause.initStatementNode
+
+
+        assertEquals(BinaryExpression::class.java, forClause.condition?.javaClass, "Unexpected type of for condition")
+        assertEquals(IncDecStatementNode::class.java, forClause.postStatementNode?.javaClass, "Unexpected type of for post statement")
+
+
+//        println("" + forClause.initStatementNode + forClause.condition + forClause.postStatementNode)
+    }
+
     @Test
     fun `empty main fun must have only empty stmt`() {
         val astRoot = createAST("src/test/resources/tests/ast/empty_main.go")
