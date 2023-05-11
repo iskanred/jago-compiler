@@ -1,9 +1,10 @@
 plugins {
     kotlin("jvm") version "1.8.0"
+    id("com.github.johnrengelman.shadow") version "8.1.1"
+
     antlr
     application
     java
-//    `cpp-application`
 }
 
 group = "inno.jago"
@@ -19,7 +20,7 @@ dependencies {
     antlr("org.antlr:antlr4:4.12.0")
     testImplementation(kotlin("test"))
     testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
-    testImplementation("org.junit.jupiter:junit-jupiter-params:5.9.2")
+    testImplementation("org.junit.jupiter:junit-jupiter-params:$junitVersion")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
 }
 
@@ -44,7 +45,18 @@ tasks {
         }
     }
 
-    compileKotlin {
-        dependsOn.add(generateGrammarSource)
+    compileKotlin { dependsOn.add(generateGrammarSource) }
+    compileTestKotlin {
+        dependsOn.add(generateTestGrammarSource)
+    }
+
+    jar {
+        manifest.attributes["Main-Class"] = "inno.jago.MainKt"
+    }
+
+    shadowJar {
+        archiveBaseName.set("jago")
+        archiveClassifier.set("")
+        archiveVersion.set("")
     }
 }
