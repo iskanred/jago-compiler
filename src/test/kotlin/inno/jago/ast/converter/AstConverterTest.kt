@@ -2,6 +2,7 @@ package inno.jago.ast.converter
 
 import GoLexer
 import GoParser
+import inno.jago.ast.IncorrectNumberLiteral
 import inno.jago.ast.model.decl.FunctionDeclarationNode
 import inno.jago.ast.model.decl.VarDeclarationNode
 import inno.jago.ast.model.expression.binary_expression.BinaryExpression
@@ -23,9 +24,11 @@ import inno.jago.ast.model.statement.ShortVarDeclNode
 import inno.jago.ast.model.statement.SimpleElseStatementNode
 import inno.jago.ast.model.type.IntegerTypeNode
 import inno.jago.createAST
+import inno.jago.semantic.TypeChecker
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import java.util.*
 import kotlin.test.assertNotNull
 
@@ -186,6 +189,13 @@ class AstConverterTest {
         checkMainFun(mainFunDecl)
 
         assertEquals(1, mainFunDecl.functionBody.block.size, "Unexpected number of stmts in function block")
+    }
+
+    @Test
+    fun `int overflow`() {
+        assertThrows<IncorrectNumberLiteral> {
+            createAST("src/test/resources/tests/ast/overflow.go")
+        }
     }
 
     private fun checkMainFun(funDecl: FunctionDeclarationNode) {
