@@ -1,7 +1,13 @@
+// You can edit this code!
+// Click here and start typing.
 package main
 
+import "fmt"
+
 func main() {
-    var a int = 5
-    for a = 0; a < 10; a++ {
-    }
+    a := 5
+    pt := &a
+    ppt := &pt
+    pppt := &ppt
+    fmt.Println(***pppt)
 }

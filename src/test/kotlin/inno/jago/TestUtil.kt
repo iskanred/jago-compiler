@@ -6,7 +6,11 @@ import inno.jago.ast.converter.toSourceFileNode
 import inno.jago.ast.model.global.SourceFileNode
 import org.antlr.v4.runtime.CharStreams
 import org.antlr.v4.runtime.CommonTokenStream
+import java.nio.file.Files
+import java.nio.file.Path
+import java.nio.file.Paths
 import java.util.InputMismatchException
+import kotlin.streams.asSequence
 
 @Throws(InputMismatchException::class)
 fun createAST(inputFilePath: String): SourceFileNode {
@@ -21,4 +25,8 @@ fun createAST(inputFilePath: String): SourceFileNode {
     return sourceFile.toSourceFileNode()
 }
 
+fun getFilesSequence(path: String): Sequence<Path> =
+    Files.list(Paths.get(path))
+        .sorted()
+        .asSequence()
 
