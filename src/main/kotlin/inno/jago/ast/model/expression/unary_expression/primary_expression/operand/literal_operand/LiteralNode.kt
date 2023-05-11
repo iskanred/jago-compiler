@@ -21,7 +21,7 @@ class IntegerLiteralNode(
     pos = pos,
     value = value
 ) {
-    val intValue: Int by lazy {
+    val intValue = run {
         try {
             if (value.lowercase().startsWith("0x")) {
                 value.substring(2).toInt(radix = 16)
@@ -43,7 +43,7 @@ class DoubleLiteralNode(
     pos = pos,
     value = value
 ) {
-    val doubleValue: Double by lazy {
+    val doubleValue: Double = run {
         try {
             value.toDouble()
         } catch (e: NumberFormatException) {
@@ -67,7 +67,7 @@ class BoolLiteralNode(
     pos = pos,
     value = value
 ) {
-    val boolValue: Boolean by lazy {
+    val boolValue: Boolean = run {
         value.toBooleanStrict()
     }
 }
