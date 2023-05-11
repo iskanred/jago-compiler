@@ -10,7 +10,7 @@ import inno.jago.ast.converter.expression.toExpressionNode
 import inno.jago.ast.converter.statement.toBlockStatementNode
 import inno.jago.ast.converter.signature.toSignatureNode
 import inno.jago.ast.converter.type.toTypeNode
-import inno.jago.common.EntityNotSupportedException
+import inno.jago.ast.model.decl.StructDeclarationNode
 import inno.jago.common.WrongNumberOfExpressionsException
 
 fun GoParser.DeclarationContext.toDeclarationNodes(): List<DeclarationNode> {
@@ -24,8 +24,16 @@ fun GoParser.DeclarationContext.toDeclarationNodes(): List<DeclarationNode> {
             varSpec.toVarDeclarationNodes()
         }
     }
-    typeDecl()?.let {
-        throw EntityNotSupportedException("Types")
+    typeDecl()?.let { typeDecl ->
+        val typeDef = typeDecl.typeSpec()[0].typeDef()
+        val structName = typeDef.IDENTIFIER().text
+        val fields = typeDef.type().toTypeNode()
+
+        return listOf(StructDeclarationNode(
+            pos = toPos(),
+            identifier = structName,
+            type = fields
+        ))
     }
     throw UnreachableCodeException()
 }

@@ -10,6 +10,7 @@ import inno.jago.ast.converter.expression.toExpressionNode
 import inno.jago.ast.converter.expression.primary_expression.operand.toOperandNode
 import inno.jago.ast.converter.type.toTypeNode
 import inno.jago.ast.model.expression.unary_expression.ConversionNode
+import inno.jago.ast.model.expression.unary_expression.SelectorExpressionNode
 import inno.jago.common.EntityNotSupportedException
 import inno.jago.semantic.model.Type
 import inno.jago.semantic.model.toType
@@ -26,10 +27,6 @@ fun GoParser.PrimaryExprContext.toPrimaryExpressionNode(): PrimaryExpressionNode
 
     methodExpr()?.let {
         throw EntityNotSupportedException("Methods")
-    }
-
-    selector()?.let {
-        throw EntityNotSupportedException("Methods and Imports")
     }
 
     index()?.let {
@@ -62,6 +59,14 @@ fun GoParser.PrimaryExprContext.toPrimaryExpressionNode(): PrimaryExpressionNode
         )
     }
 
+    selector()?.let {
+        return SelectorExpressionNode(
+            pos = toPos(),
+            primaryExpression = primaryExpr().toPrimaryExpressionNode(),
+            selector = it.IDENTIFIER().text
+        )
+    }
+
     slice()?.let {
         throw EntityNotSupportedException("Slice")
     }
@@ -69,6 +74,8 @@ fun GoParser.PrimaryExprContext.toPrimaryExpressionNode(): PrimaryExpressionNode
     typeAssertion()?.let {
         throw EntityNotSupportedException("TypeAssertion")
     }
+
+
 
     throw UnreachableCodeException()
 }

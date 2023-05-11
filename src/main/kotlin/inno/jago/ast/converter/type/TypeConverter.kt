@@ -21,34 +21,44 @@ import inno.jago.ast.converter.expression.toExpressionNode
 import inno.jago.ast.converter.signature.toSignatureNode
 import inno.jago.ast.model.expression.unary_expression.primary_expression.operand.LiteralOperandNode
 import inno.jago.ast.model.expression.unary_expression.primary_expression.operand.literal_operand.IntegerLiteralNode
+import inno.jago.ast.model.type.StructTypeNode
+import inno.jago.ast.model.type.TypeNameNode
 import inno.jago.common.EntityNotSupportedException
 import inno.jago.lexer.Pos
 
-fun GoParser.TypeContext.toTypeNode(): TypeNode =
-    typeName()?.IDENTIFIER()?.text.toTypeNode(pos = toPos())
-        ?: typeLit().toTypeNode()
-        ?: throw UnknownTypeException(entityName = text, pos = toPos())
+fun GoParser.TypeContext.toTypeNode(): TypeNode {
+    if (typeName() != null) {
+        return typeName().IDENTIFIER().text.toTypeNode(pos = toPos()) ?: throw UnknownTypeException(entityName = text, pos = toPos())
+    }
+
+    if (typeLit() != null) {
+       return typeLit().toTypeNode() ?: throw UnknownTypeException(entityName = text, pos = toPos())
+    }
+
+    throw UnknownTypeException(entityName = text, pos = toPos())
+}
+
 
 fun String?.toTypeNode(pos: Pos): TypeNode? = when {
     this == INT_TYPE_NAME -> IntegerTypeNode(pos = pos)
     this == DOUBLE_TYPE_NAME -> DoubleTypeNode(pos = pos)
     this == STRING_TYPE_NAME -> StringTypeNode(pos = pos)
     this == BOOL_TYPE_NAME -> BoolTypeNode(pos = pos)
-    else -> null
+    else -> TypeNameNode(pos = pos, identifier = this!!)
 }
 
 fun GoParser.TypeLitContext?.toTypeNode(): TypeNode? = this?.let { typeLitContext ->
     typeLitContext.arrayType()?.let { arrayTypeContext ->
         return arrayTypeContext.toArrayTypeNode()
     }
-    typeLitContext.pointerType()?.let  { pointerTypeContext ->
+    typeLitContext.pointerType()?.let { pointerTypeContext ->
         return pointerTypeContext.toPointerTypeNode()
     }
     typeLitContext.functionType()?.let { functionTypeContext ->
         return functionTypeContext.toFunctionTypeNode()
     }
-    typeLitContext.structType()?.let {
-        throw EntityNotSupportedException("Structures")
+    typeLitContext.structType()?.let { structTypeContext ->
+        return structTypeContext.toStructTypeNode()
     }
     typeLitContext.interfaceType()?.let {
         throw EntityNotSupportedException("Interfaces")
@@ -83,3 +93,14 @@ fun GoParser.FunctionTypeContext.toFunctionTypeNode() = FunctionTypeNode(
     pos = toPos(),
     signature = signature().toSignatureNode()
 )
+
+fun GoParser.StructTypeContext.toStructTypeNode(): StructTypeNode {
+    val fields = mutableMapOf<String, TypeNode> ()
+    for (field in this.fieldDecl()) {
+        fields[field.identifierList().IDENTIFIER()[0].text] = field.type().toTypeNode()
+    }
+    return StructTypeNode(
+        pos = toPos(),
+        fields = fields
+    )
+}

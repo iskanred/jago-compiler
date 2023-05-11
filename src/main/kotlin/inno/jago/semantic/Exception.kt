@@ -16,6 +16,8 @@ class NamedEntityAlreadyExistsException(identifier: String, pos: Pos)
 class FuncEntityAlreadyExistsException(identifier: String, type: Type.FuncType, pos: Pos)
     : SemanticException("Function $identifier(${type.paramTypes.joinToString()}) at $pos")
 
+class StructEntityAlreadyExistsException(identifier: String, type: Type.StructType, pos: Pos)
+    : SemanticException("Struct $identifier(${type.fields}) at $pos")
 class VarDeclMustPresentTypeOrExpressionException(varIdentifier: String, pos: Pos) : SemanticException(
     "The variable declaration '$varIdentifier' must specify the type or the assigned expression at $pos"
 )

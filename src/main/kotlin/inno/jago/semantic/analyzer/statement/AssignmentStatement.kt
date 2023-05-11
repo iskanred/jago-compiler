@@ -2,6 +2,7 @@ package inno.jago.semantic.analyzer.statement
 
 import inno.jago.ast.model.expression.ExpressionNode
 import inno.jago.ast.model.expression.unary_expression.IndexExpressionNode
+import inno.jago.ast.model.expression.unary_expression.SelectorExpressionNode
 import inno.jago.ast.model.expression.unary_expression.UnaryExpressionNode
 import inno.jago.ast.model.expression.unary_expression.UnaryOperators
 import inno.jago.ast.model.expression.unary_expression.primary_expression.operand.OperandNameNode
@@ -118,6 +119,9 @@ fun canBeReassigned(expression: ExpressionNode, semanticEntity: SemanticEntity, 
         }
         is IndexExpressionNode -> {
             expression.toSemanticEntity(scope)
+            return true
+        }
+        is SelectorExpressionNode -> {
             return true
         }
         else -> return false

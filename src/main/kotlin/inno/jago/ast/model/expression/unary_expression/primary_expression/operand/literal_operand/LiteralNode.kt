@@ -3,8 +3,8 @@ package inno.jago.ast.model.expression.unary_expression.primary_expression.opera
 import inno.jago.ast.IncorrectNumberLiteral
 import inno.jago.ast.model.signature.SignatureNode
 import inno.jago.ast.model.statement.BlockStatementNode
-import inno.jago.ast.model.type.ArrayTypeNode
 import inno.jago.ast.model.expression.ExpressionNode
+import inno.jago.ast.model.type.ComplexTypeNode
 import inno.jago.lexer.Pos
 
 sealed class LiteralNode(pos: Pos) : ExpressionNode(pos = pos)
@@ -74,9 +74,10 @@ class BoolLiteralNode(
 
 class CompositeLiteralNode(
     pos: Pos,
-    val literal: ArrayTypeNode,
+    val literal: ComplexTypeNode,
     val literalValue: LiteralValueElementNode
 ) : LiteralNode(pos = pos)
+
 
 class FunctionLiteralNode(
     pos: Pos,

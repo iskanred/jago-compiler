@@ -2,6 +2,7 @@ package inno.jago.cppgen
 
 import inno.jago.ast.model.decl.ConstDeclarationNode
 import inno.jago.ast.model.decl.FunctionDeclarationNode
+import inno.jago.ast.model.decl.StructDeclarationNode
 import inno.jago.ast.model.decl.VarDeclarationNode
 import inno.jago.ast.model.global.SourceFileNode
 import inno.jago.cppgen.declaration.translateToCode
@@ -31,6 +32,10 @@ fun compile(root: SourceFileNode): String {
             }
             is VarDeclarationNode -> {
                 decl.translateToCode()
+            }
+            is StructDeclarationNode -> {
+                "STRUCT"
+                // TODO()
             }
         }
         program.addInstruction(instruction)

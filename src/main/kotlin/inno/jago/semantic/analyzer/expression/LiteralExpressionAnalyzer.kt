@@ -12,6 +12,9 @@ import inno.jago.ast.model.expression.unary_expression.primary_expression.operan
 import inno.jago.ast.model.expression.unary_expression.primary_expression.operand.literal_operand.LiteralNode
 import inno.jago.ast.model.expression.unary_expression.primary_expression.operand.literal_operand.LiteralValueElementNode
 import inno.jago.ast.model.expression.unary_expression.primary_expression.operand.literal_operand.StringLiteralNode
+import inno.jago.ast.model.type.ArrayTypeNode
+import inno.jago.ast.model.type.TypeNameNode
+import inno.jago.semantic.NoSuchEntityInCurrentScopeException
 import inno.jago.semantic.SemanticException
 import inno.jago.semantic.analyzer.signature.toSemanticEntity
 import inno.jago.semantic.analyzer.signature.toType
@@ -35,15 +38,26 @@ private fun BasicLiteralNode.toSemanticEntity(): ExpressionEntity = when(this) {
 }
 
 private fun CompositeLiteralNode.toSemanticEntity(scope: ScopeNode): ExpressionEntity {
-    val isAllElementsOfCorrectType = literalValue.elements
-        .flatMap { it.toSemanticEntities(scope) }
-        .all { it.type == literal.elementType.toType() }
+    when (this.literal) {
+        is ArrayTypeNode -> {
+            val isAllElementsOfCorrectType = literalValue.elements
+                .flatMap { it.toSemanticEntities(scope) }
+                .all { it.type == literal.elementType.toType() }
 
-    if (!isAllElementsOfCorrectType) {
-        throw SemanticException("All array elements must be of type ${literal.elementType.toType()} at $pos")
+            if (!isAllElementsOfCorrectType) {
+                throw SemanticException("All array elements must be of type ${literal.elementType.toType()} at $pos")
+            }
+
+            return ExpressionEntity(type = literal.toType())
+        }
+        is TypeNameNode -> {
+            val struct = scope.findVisibleStructEntities(identifier = this.literal.identifier)
+            return ExpressionEntity(type = struct?.type ?: throw NoSuchEntityInCurrentScopeException(this.literal.identifier, pos))
+        }
+
+        else -> throw NotImplementedError()
     }
 
-    return ExpressionEntity(type = literal.toType())
 }
 
 private fun ElementNode.toSemanticEntities(scope: ScopeNode): List<ExpressionEntity> = when(this) {

@@ -1,10 +1,11 @@
 package main
 
-func test() int {
-	return 42
-}
+type name struct{ a int }
+
+type surname struct{ a int }
 
 func main() {
-	//var a1, b1, c1 = 1, 2, 3
-	var a = 1
+	var b name
+	c := name{}
+	b = c
 }

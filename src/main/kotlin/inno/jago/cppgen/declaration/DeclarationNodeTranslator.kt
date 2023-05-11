@@ -2,6 +2,7 @@ package inno.jago.cppgen.declaration
 
 import inno.jago.ast.model.decl.ConstDeclarationNode
 import inno.jago.ast.model.decl.DeclarationNode
+import inno.jago.ast.model.decl.StructDeclarationNode
 import inno.jago.ast.model.decl.VarDeclarationNode
 
 fun DeclarationNode.translateToCode(): String = when(this) {
@@ -11,5 +12,9 @@ fun DeclarationNode.translateToCode(): String = when(this) {
 
     is ConstDeclarationNode -> {
         translateToCode()
+    }
+
+    is StructDeclarationNode -> {
+        throw NotImplementedError()
     }
 }

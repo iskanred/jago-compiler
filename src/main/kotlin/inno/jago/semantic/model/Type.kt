@@ -7,11 +7,14 @@ import inno.jago.ast.model.type.FunctionTypeNode
 import inno.jago.ast.model.type.IntegerTypeNode
 import inno.jago.ast.model.type.PointerTypeNode
 import inno.jago.ast.model.type.StringTypeNode
+import inno.jago.ast.model.type.StructTypeNode
+import inno.jago.ast.model.type.TypeNameNode
 import inno.jago.ast.model.type.TypeNode
 import inno.jago.common.BOOL_TYPE_NAME
 import inno.jago.common.DOUBLE_TYPE_NAME
 import inno.jago.common.INT_TYPE_NAME
 import inno.jago.common.STRING_TYPE_NAME
+import inno.jago.lexer.Pos
 import inno.jago.semantic.analyzer.signature.toType
 
 sealed class Type {
@@ -101,6 +104,14 @@ sealed class Type {
         val baseType: Type
     ) : Type()
 
+    data class StructType(
+        val pos: Pos,
+        val fields: Map<String, Type>
+    ) : Type()
+
+    data class NamedType(
+        val name: String
+    ) : Type()
     /**
      * Implementation specific type.
      * I
@@ -118,4 +129,6 @@ fun TypeNode.toType(): Type = when(this) {
     is FunctionTypeNode -> signature.toType()
     is PointerTypeNode -> Type.PointerType(baseType = baseType.toType())
     is ArrayTypeNode -> Type.ArrayType(length = length.intValue, elementType = elementType.toType())
+    is StructTypeNode -> Type.StructType(pos = pos, fields = fields.mapValues { it.value.toType() })
+    is TypeNameNode -> Type.NamedType(name = identifier)
 }

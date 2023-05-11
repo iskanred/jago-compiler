@@ -33,6 +33,12 @@ open class IndexExpressionNode(
     val expression: ExpressionNode,
 ) : PrimaryExpressionNode(pos)
 
+open class SelectorExpressionNode(
+    pos: Pos,
+    val primaryExpression: PrimaryExpressionNode,
+    val selector: String,
+) : PrimaryExpressionNode(pos)
+
 open class UnaryOperatorNode(
     pos: Pos,
     val operator: UnaryOperators

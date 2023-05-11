@@ -1,7 +1,9 @@
 package inno.jago.semantic.analyzer.declaration
 
+import inno.jago.ast.UnknownTypeException
 import inno.jago.ast.model.decl.ConstDeclarationNode
 import inno.jago.ast.model.decl.FunctionDeclarationNode
+import inno.jago.ast.model.decl.StructDeclarationNode
 import inno.jago.ast.model.decl.TopLevelDeclNode
 import inno.jago.ast.model.decl.VarDeclarationNode
 import inno.jago.common.WrongNumberOfExpressionsException
@@ -15,6 +17,7 @@ import inno.jago.semantic.model.ConstEntity
 import inno.jago.semantic.model.FuncEntity
 import inno.jago.semantic.model.NamedEntity
 import inno.jago.semantic.model.ScopeNode
+import inno.jago.semantic.model.StructEntity
 import inno.jago.semantic.model.Type
 import inno.jago.semantic.model.VarEntity
 import inno.jago.semantic.model.toType
@@ -23,6 +26,7 @@ fun TopLevelDeclNode.toSemanticEntity(scope: ScopeNode): NamedEntity = when(this
     is FunctionDeclarationNode -> toSemanticEntity(scope)
     is ConstDeclarationNode -> toSemanticEntity(scope)
     is VarDeclarationNode -> toSemanticEntity(scope)
+    is StructDeclarationNode -> toSemanticEntity(scope)
 }
 
 private fun ConstDeclarationNode.toSemanticEntity(scope: ScopeNode): ConstEntity {
@@ -44,11 +48,20 @@ private fun VarDeclarationNode.toSemanticEntity(scope: ScopeNode): VarEntity {
     val entityType = if (expression == null && type == null) {
         throw VarDeclMustPresentTypeOrExpressionException(varIdentifier = identifier, pos = pos)
     } else if (expression == null && type != null) {
-        type.toType()
+        val type = type.toType()
+        if (type is Type.NamedType) {
+            val structEntity = scope.findVisibleStructEntities(type.name)
+            structEntity?.type ?: throw UnknownTypeException(pos = pos, entityName = type.name)
+        } else {
+            type
+        }
     } else { // expression != null
         val expressionEntity = expression!!.toSemanticEntity(scope)
         val expressionType = if (expressionEntity.type is Type.TupleType) {
             /* == Проверка кол-ва переменных слева и выражений для присвоения справа == */
+            if (expressionEntity.type is Type.NamedType && scope.findVisibleStructEntities(expressionEntity.type.name) == null) {
+                throw UnknownTypeException(pos = pos, entityName = expressionEntity.type.name)
+            }
             if (numberOfDeclarationsInRow != expressionEntity.type.elementTypes.size) {
                 throw WrongNumberOfExpressionsException(
                     expected = numberOfDeclarationsInRow,
@@ -103,5 +116,12 @@ fun FunctionDeclarationNode.toSemanticEntity(scope: ScopeNode) = FuncEntity(
     functionBody.block.forEach { statementNode ->
         statementNode.toSemanticEntity(functionScope)
     }
+}
+
+fun StructDeclarationNode.toSemanticEntity(scope: ScopeNode) = StructEntity(
+    identifier = identifier,
+    type = type!!.toType() as Type.StructType
+).also { entity ->
+    scope.addUniqueEntity(entity = entity, pos = pos)
 }
 

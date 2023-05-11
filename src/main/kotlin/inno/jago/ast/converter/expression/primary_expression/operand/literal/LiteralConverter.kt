@@ -19,6 +19,8 @@ import inno.jago.ast.converter.statement.toBlockStatementNode
 import inno.jago.ast.converter.signature.toSignatureNode
 import inno.jago.ast.converter.type.toTypeNode
 import inno.jago.ast.model.expression.unary_expression.primary_expression.operand.LiteralOperandNode
+import inno.jago.ast.model.type.ComplexTypeNode
+import inno.jago.ast.model.type.TypeNameNode
 import inno.jago.common.EntityNotSupportedException
 
 @Suppress("ReturnCount")
@@ -63,12 +65,12 @@ fun GoParser.FunctionLitContext.toFunctionLiteralNode(): FunctionLiteralNode {
 
 fun GoParser.CompositeLitContext.toCompositeLiteralNode() = CompositeLiteralNode(
     pos = toPos(),
-    literal = literalType().toArrayTypeNode(),
+    literal = literalType().toComplexTypeNode(),
     literalValue = literalValue().toLiteralValueElementNode()
 )
 
 @Suppress("ThrowsCount")
-fun GoParser.LiteralTypeContext.toArrayTypeNode(): ArrayTypeNode {
+fun GoParser.LiteralTypeContext.toComplexTypeNode(): ComplexTypeNode {
     arrayType()?.let {
         return ArrayTypeNode(
             pos = toPos(),
@@ -79,8 +81,11 @@ fun GoParser.LiteralTypeContext.toArrayTypeNode(): ArrayTypeNode {
             elementType = it.elementType().type().toTypeNode()
         )
     }
-    structType()?.let {
-        throw EntityNotSupportedException("Structures")
+    typeName()?.let {
+        return TypeNameNode(
+            pos = toPos(),
+            identifier = it.IDENTIFIER().text
+        )
     }
 
     throw UnreachableCodeException()
@@ -88,7 +93,7 @@ fun GoParser.LiteralTypeContext.toArrayTypeNode(): ArrayTypeNode {
 
 fun GoParser.LiteralValueContext.toLiteralValueElementNode() = LiteralValueElementNode(
     pos = toPos(),
-    elements = elementList().keyedElement().map { it.element().toElementNode() }
+    elements = elementList()?.keyedElement()?.map { it.element().toElementNode() } ?: emptyList()
 )
 
 fun GoParser.ElementContext.toElementNode(): ElementNode {

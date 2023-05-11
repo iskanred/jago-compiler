@@ -8,6 +8,9 @@ import inno.jago.ast.model.expression.unary_expression.primary_expression.operan
 import inno.jago.ast.model.expression.unary_expression.primary_expression.operand.literal_operand.IntegerLiteralNode
 import inno.jago.ast.model.expression.unary_expression.primary_expression.operand.literal_operand.LiteralNode
 import inno.jago.ast.model.expression.unary_expression.primary_expression.operand.literal_operand.StringLiteralNode
+import inno.jago.ast.model.type.ArrayTypeNode
+import inno.jago.ast.model.type.StructTypeNode
+import inno.jago.common.EntityNotSupportedException
 import inno.jago.cppgen.declaration.translateToCode
 import inno.jago.cppgen.expression.translateToCode
 import inno.jago.cppgen.statement.translateToCode
@@ -29,20 +32,27 @@ fun LiteralNode.translateToCode(): String = when (this) {
     }
 
     is StringLiteralNode -> {
-         this.value
+        this.value
     }
 
     is CompositeLiteralNode -> {
-        "vector <" + this.literal.elementType.translateToCode() + ">{" +
-                this.literalValue.elements.map { elem -> elem.translateToCode() }.joinToString{ it } +
-        "}"
+        when (this.literal) {
+            is ArrayTypeNode -> "vector <" + this.literal.elementType.translateToCode() +
+                    ">{" +
+                    this.literalValue.elements.map { elem -> elem.translateToCode() }.joinToString { it } +
+                    "}"
+            is StructTypeNode -> {
+                this.literal.toString()// TODO
+            }
+            else -> throw EntityNotSupportedException("Composite literal node childs")
+        }
     }
 
     is FunctionLiteralNode -> {
         "[=](" +
-            this.signature.parameterNodes.joinToString { param -> param.translateToCode() } +
-        ")" +
-        this.functionBody.translateToCode()
+                this.signature.parameterNodes.joinToString { param -> param.translateToCode() } +
+                ")" +
+                this.functionBody.translateToCode()
     }
 }
 

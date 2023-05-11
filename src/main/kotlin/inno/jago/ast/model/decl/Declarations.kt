@@ -50,3 +50,14 @@ class VarDeclarationNode(
     type = type,
     expression = expression
 )
+
+class StructDeclarationNode(
+    pos: Pos,
+    identifier: String,
+    type: TypeNode
+) : DeclarationNode(
+    pos = pos,
+    identifier = identifier,
+    type = type,
+    expression = null
+)

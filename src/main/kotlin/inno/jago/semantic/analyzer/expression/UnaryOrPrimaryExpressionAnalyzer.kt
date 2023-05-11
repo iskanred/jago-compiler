@@ -5,6 +5,7 @@ import inno.jago.ast.model.expression.unary_expression.ApplicationExpressionNode
 import inno.jago.ast.model.expression.unary_expression.ConversionNode
 import inno.jago.ast.model.expression.unary_expression.IndexExpressionNode
 import inno.jago.ast.model.expression.unary_expression.PrimaryExpressionNode
+import inno.jago.ast.model.expression.unary_expression.SelectorExpressionNode
 import inno.jago.ast.model.expression.unary_expression.UnaryExpressionNode
 import inno.jago.ast.model.expression.unary_expression.UnaryOperators
 import inno.jago.ast.model.expression.unary_expression.UnaryOrPrimaryExpressionNode
@@ -78,6 +79,7 @@ fun UnaryExpressionNode.toSemanticEntity(scope: ScopeNode): ExpressionEntity {
 fun PrimaryExpressionNode.toSemanticEntity(scope: ScopeNode): ExpressionEntity = when (this) {
     is ConversionNode -> toSemanticEntity(scope)
     is IndexExpressionNode -> toSemanticEntity(scope)
+    is SelectorExpressionNode -> toSemanticEntity(scope)
     is ApplicationExpressionNode -> toSemanticEntity(scope)
     is OperandNode -> toSemanticEntity(scope)
     else -> throw UnreachableCodeException()
@@ -113,6 +115,20 @@ fun IndexExpressionNode.toSemanticEntity(scope: ScopeNode): ExpressionEntity {
     }
 
     return ExpressionEntity(type = exprEntity.type.elementType)
+}
+
+fun SelectorExpressionNode.toSemanticEntity(scope: ScopeNode): ExpressionEntity {
+    val exprEntity = primaryExpression.toSemanticEntity(scope)
+
+    if (exprEntity.type !is Type.StructType) {
+        throw WrongTypeException(Type.StructType(pos = pos, fields = emptyMap()), actualType = exprEntity.type, pos = pos)
+    }
+
+    if (!exprEntity.type.fields.containsKey(selector)) {
+        throw SemanticException("Struct(${exprEntity.type}) does not contain such field: $selector")
+    }
+
+    return ExpressionEntity(type = exprEntity.type.fields[selector]!!)
 }
 
 fun ApplicationExpressionNode.toSemanticEntity(scope: ScopeNode): ExpressionEntity {

@@ -36,3 +36,19 @@ class FunctionTypeNode(
     pos = pos,
     name = "function type"
 )
+
+class TypeNameNode(
+    pos: Pos,
+    val identifier: String
+) : ComplexTypeNode(
+    pos = pos,
+    name = "custom type"
+)
+
+class StructTypeNode(
+    pos: Pos,
+    val fields: Map<String, TypeNode>
+) : ComplexTypeNode(
+    pos = pos,
+    name = "struct type"
+)

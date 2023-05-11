@@ -3,6 +3,7 @@ package inno.jago.semantic.model
 import inno.jago.lexer.Pos
 import inno.jago.semantic.FuncEntityAlreadyExistsException
 import inno.jago.semantic.NamedEntityAlreadyExistsException
+import inno.jago.semantic.StructEntityAlreadyExistsException
 
 @Suppress("TooManyFunctions")
 sealed class ScopeNode(
@@ -11,7 +12,7 @@ sealed class ScopeNode(
 ) {
     private val objectEntities = mutableMapOf<String, ObjectEntity>()
     private val funcEntities = mutableSetOf<FuncEntity>()
-
+    private val structEntities = mutableSetOf<StructEntity>()
     fun createNewFuncScope(functionName: String, expectedReturnType: Type? = null) = FuncScopeNode(
         name = "Function '$functionName' scope inside scope [$name]",
         parent = this,
@@ -38,9 +39,10 @@ sealed class ScopeNode(
         if (entity.identifier == "_") {
             return entity
         }
-        return when(entity) {
+        return when (entity) {
             is ObjectEntity -> addUniqueObjectEntity(objectEntity = entity, pos = pos)
             is FuncEntity -> addUniqueFuncEntity(funcEntity = entity, pos = pos)
+            is StructEntity -> addUniqueStructEntity(structEntity = entity, pos = pos)
         }
     }
 
@@ -69,6 +71,19 @@ sealed class ScopeNode(
             }
         }
 
+    private fun addUniqueStructEntity(structEntity: StructEntity, pos: Pos): StructEntity =
+        if (structEntity in structEntities) {
+            throw StructEntityAlreadyExistsException(
+                structEntity.identifier,
+                structEntity.type as Type.StructType,
+                pos = pos
+            )
+        } else {
+            structEntity.apply {
+                structEntities.add(this)
+            }
+        }
+
     /**
      * Searches for visible entities by identifier
      * 'Visible' means in one of ancestor's scope
@@ -92,6 +107,17 @@ sealed class ScopeNode(
             currentScopeNode = currentScopeNode.parent
         }
         return funcEntities
+    }
+
+    fun findVisibleStructEntities(identifier: String): StructEntity? {
+        var currentScopeNode: ScopeNode? = this
+        while (currentScopeNode != null) {
+            if (identifier in currentScopeNode.structEntities.map { it.identifier }) {
+                return currentScopeNode.structEntities.find { it.identifier == identifier }!!
+            }
+            currentScopeNode = currentScopeNode.parent
+        }
+        return null
     }
 
     fun findExpectedReturnType(): Type? {
