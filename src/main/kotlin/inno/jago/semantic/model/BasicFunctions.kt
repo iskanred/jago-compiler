@@ -30,7 +30,7 @@ val toStringFunctionEntities = (baseTypes).map {
             paramTypes = listOf(it),
             returnType = Type.StringType
         ),
-        identifier = "to_string"
+        identifier = "toString"
     )
 }
 

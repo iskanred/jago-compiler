@@ -18,7 +18,7 @@ fun ApplicationExpressionNode.translateToCode(): String {
         "print" -> expressions.joinToString(prefix = "cout << ", separator = " << ", postfix = " << endl") {
             it.translateToCode()
         }
-        "to_string" -> "std::to_string(${expressions.first().translateToCode()})"
+        "toString" -> "std::to_string(${expressions.first().translateToCode()})"
         else -> "${leftExpression.translateToCode()}($args)"
     }
 }
