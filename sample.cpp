@@ -5,8 +5,11 @@
 #include <tuple>
 using namespace std;
 
+int test(){
+return 42;
+;
+}
 int main(){
-auto a = 5;
-for (a = 0;(a) < (10); a++) { ; }
+auto a = 1;
 ;
 }

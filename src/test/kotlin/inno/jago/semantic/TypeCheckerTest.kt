@@ -239,4 +239,36 @@ class TypeCheckerTest {
         assertDoesNotThrow { typeChecker.startTypeCheck() }
     }
 
+    @Test
+    fun `invalid tuples 1`(){
+        val typeChecker = TypeChecker(
+            createAST("src/test/resources/tests/semantic/tuples/invalid_tuples_1.go")
+        )
+        assertThrows<WrongNumberOfExpressionsException> { typeChecker.startTypeCheck() }
+    }
+
+    @Test
+    fun `invalid tuples 2`(){
+        val typeChecker = TypeChecker(
+            createAST("src/test/resources/tests/semantic/tuples/invalid_tuples_2.go")
+        )
+        assertThrows<WrongNumberOfExpressionsException> { typeChecker.startTypeCheck() }
+    }
+
+    @Test
+    fun `invalid tuples 3`(){
+        val typeChecker = TypeChecker(
+            createAST("src/test/resources/tests/semantic/tuples/invalid_tuples_3.go")
+        )
+        assertThrows<WrongNumberOfExpressionsException> { typeChecker.startTypeCheck() }
+    }
+
+    @Test
+    fun `valid tuples 1`(){
+        val typeChecker = TypeChecker(
+            createAST("src/test/resources/tests/semantic/tuples/valid_tuples_1.go")
+        )
+        assertDoesNotThrow { typeChecker.startTypeCheck() }
+    }
+
 }

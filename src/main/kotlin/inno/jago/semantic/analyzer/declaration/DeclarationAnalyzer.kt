@@ -58,12 +58,12 @@ private fun VarDeclarationNode.toSemanticEntity(scope: ScopeNode): VarEntity {
             }
             /* ======================================================================== */
             expressionEntity.type.elementTypes[positionInRow]
-        } else if (numberOfDeclarationsInRow == 1) {
+        } else if (positionInRow == -1) {
             expressionEntity.type
         } else {
             throw WrongNumberOfExpressionsException(
-                expected = 1,
-                actual = numberOfDeclarationsInRow,
+                expected = numberOfDeclarationsInRow,
+                actual = 1,
                 pos = pos
             )
         }
