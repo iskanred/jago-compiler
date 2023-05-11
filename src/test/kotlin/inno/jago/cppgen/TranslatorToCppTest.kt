@@ -1,10 +1,8 @@
-package inno.jago.translator.cpp
+package inno.jago.cppgen
 
 import GoLexer
 import GoParser
 import inno.jago.ast.converter.toSourceFileNode
-import inno.jago.cppgen.Translator
-import inno.jago.cppgen.compile
 import inno.jago.semantic.TypeChecker
 import org.antlr.v4.runtime.CharStreams
 import org.antlr.v4.runtime.CommonTokenStream
@@ -16,12 +14,14 @@ import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
 import java.util.stream.Stream
+import kotlin.streams.asSequence
+import kotlin.streams.asStream
 import kotlin.test.assertEquals
 
 class TranslatorToCppTest {
 
     @ParameterizedTest
-    @MethodSource("inno.jago.translator.cpp.TranslatorToCppTest#getZippedInputAndOutput")
+    @MethodSource("inno.jago.cppgen.TranslatorToCppTest#getZippedInputAndOutput")
     fun `hello world`(input: String, output: String) {
         val expected = readFileDirectlyAsText(output)
 
@@ -38,7 +38,8 @@ class TranslatorToCppTest {
         assertEquals(expected, got)
     }
 
-    private fun readFileDirectlyAsText(fileName: String): String = File(fileName).readText(Charsets.UTF_8)
+    private fun readFileDirectlyAsText(fileName: String): String =
+        File(fileName).readText(Charsets.UTF_8)
 
 
     companion object {
@@ -46,19 +47,26 @@ class TranslatorToCppTest {
         private const val BASE_OUTPUT_DIR = "src/test/resources/tests/translator/output/for"
 
         @JvmStatic
-        fun pathInputStream(): Stream<Path> = getFilesStream(BASE_INPUT_DIR)
+        fun pathInputSequence(): Sequence<Path> = getFilesSequence(BASE_INPUT_DIR)
 
         @JvmStatic
-        fun pathOutputStream(): Stream<Path> = getFilesStream(BASE_OUTPUT_DIR)
+        fun pathOutputSequence(): Sequence<Path> = getFilesSequence(BASE_OUTPUT_DIR)
 
-        private fun getFilesStream(path: String) = Files.list(Paths.get(path)).sorted()
+        private fun getFilesSequence(path: String): Sequence<Path> =
+            Files.list(Paths.get(path))
+                .sorted()
+                .asSequence()
 
         @JvmStatic
-        private fun getZippedInputAndOutput(): Stream<Arguments> {
-            return Stream.of(
-                *(pathInputStream().toArray().zip(pathOutputStream().toArray())
-                    .map { Arguments.of(it.first.toString(), it.second.toString()) }.toTypedArray())
-            )
-        }
+        fun getZippedInputAndOutput(): Stream<Arguments> =
+            pathInputSequence()
+                .zip(pathOutputSequence())
+                .map {  (input, output) ->
+                    Arguments.of(
+                        input.toString(),
+                        output.toString()
+                    )
+                }
+                .asStream()
     }
 }

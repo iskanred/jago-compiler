@@ -1,12 +1,7 @@
-package inno.jago.ast.typechecker
+package inno.jago.semantic
 
 import inno.jago.common.WrongNumberOfExpressionsException
 import inno.jago.createAST
-import inno.jago.semantic.NoSuchFunctionException
-import inno.jago.semantic.NonCastableTypeException
-import inno.jago.semantic.SemanticException
-import inno.jago.semantic.TypeChecker
-import inno.jago.semantic.WrongTypeException
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
