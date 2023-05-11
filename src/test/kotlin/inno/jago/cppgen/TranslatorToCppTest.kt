@@ -22,7 +22,7 @@ class TranslatorToCppTest {
 
     @ParameterizedTest
     @MethodSource("inno.jago.cppgen.TranslatorToCppTest#getZippedInputAndOutput")
-    fun `hello world`(input: String, output: String) {
+    fun test(input: String, output: String) {
         val expected = readFileDirectlyAsText(output)
 
         val cs = CharStreams.fromFileName(input)
