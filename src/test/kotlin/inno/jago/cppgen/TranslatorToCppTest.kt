@@ -40,8 +40,8 @@ class TranslatorToCppTest {
 
 
     companion object {
-        private const val BASE_INPUT_DIR_PATH = "src/test/resources/tests/cppgen/input/for"
-        private const val BASE_OUTPUT_DIR_PATH = "src/test/resources/tests/cppgen/output/for"
+        private const val BASE_INPUT_DIR_PATH = "src/test/resources/tests/cppgen/input"
+        private const val BASE_OUTPUT_DIR_PATH = "src/test/resources/tests/cppgen/output"
 
         @JvmStatic
         fun getZippedInputAndOutput(): Stream<Arguments> =
