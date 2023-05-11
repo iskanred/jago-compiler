@@ -10,7 +10,6 @@ import inno.jago.ast.model.statement.IfStatementNode
 import inno.jago.ast.model.statement.ReturnStatementNode
 import inno.jago.ast.model.statement.SimpleStatementNode
 import inno.jago.ast.model.statement.StatementNode
-import inno.jago.common.UnreachableCodeException
 import inno.jago.cppgen.declaration.translateToCode
 
 fun StatementNode.translateToCode(): String = when (this) {

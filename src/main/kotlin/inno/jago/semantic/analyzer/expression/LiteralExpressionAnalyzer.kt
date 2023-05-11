@@ -28,19 +28,11 @@ fun LiteralNode.toSemanticEntity(scope: ScopeNode): ExpressionEntity = when(this
 }
 
 private fun BasicLiteralNode.toSemanticEntity(): ExpressionEntity = when(this) {
-    is IntegerLiteralNode -> toSemanticEntity()
-    is DoubleLiteralNode -> toSemanticEntity()
-    is StringLiteralNode -> toSemanticEntity()
-    is BoolLiteralNode -> toSemanticEntity()
+    is IntegerLiteralNode -> ExpressionEntity(type = Type.IntegerType)
+    is DoubleLiteralNode -> ExpressionEntity(type = Type.DoubleType)
+    is StringLiteralNode -> ExpressionEntity(type = Type.StringType)
+    is BoolLiteralNode -> ExpressionEntity(type = Type.BoolType)
 }
-
-private fun IntegerLiteralNode.toSemanticEntity() = ExpressionEntity(type = Type.IntegerType)
-
-private fun DoubleLiteralNode.toSemanticEntity() = ExpressionEntity(type = Type.DoubleType)
-
-private fun StringLiteralNode.toSemanticEntity() = ExpressionEntity(type = Type.StringType)
-
-private fun BoolLiteralNode.toSemanticEntity() = ExpressionEntity(type = Type.BoolType)
 
 private fun CompositeLiteralNode.toSemanticEntity(scope: ScopeNode): ExpressionEntity {
     val isAllElementsOfCorrectType = literalValue.elements

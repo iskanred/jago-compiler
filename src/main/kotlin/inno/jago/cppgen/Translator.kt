@@ -7,10 +7,9 @@ import inno.jago.ast.model.global.SourceFileNode
 import inno.jago.cppgen.declaration.translateToCode
 import java.io.File
 
-/*
+/**
 * Convert AST of Go code to C++ code
 */
-
 class Translator(
     var text: String
 ) {

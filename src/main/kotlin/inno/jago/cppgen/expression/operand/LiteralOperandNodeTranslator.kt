@@ -33,11 +33,16 @@ fun LiteralNode.translateToCode(): String = when (this) {
     }
 
     is CompositeLiteralNode -> {
-        "vector <" + this.literal.elementType.translateToCode() + ">{" + this.literalValue.elements.map { elem -> elem.translateToCode() }.joinToString{ it } + "}";
+        "vector <" + this.literal.elementType.translateToCode() + ">{" +
+                this.literalValue.elements.map { elem -> elem.translateToCode() }.joinToString{ it } +
+        "}"
     }
 
     is FunctionLiteralNode -> {
-        "[=](" + this.signature.parameterNodes.map { param -> param.translateToCode() }.joinToString() + ")" + this.functionBody.translateToCode();
+        "[=](" +
+            this.signature.parameterNodes.joinToString { param -> param.translateToCode() } +
+        ")" +
+        this.functionBody.translateToCode()
     }
 }
 

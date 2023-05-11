@@ -11,7 +11,6 @@ import inno.jago.ast.model.statement.SimpleAssignOperatorNode
 import inno.jago.ast.model.statement.SimpleStatementNode
 import inno.jago.cppgen.expression.binary_expression.translateToCode
 import inno.jago.cppgen.expression.translateToCode
-import inno.jago.cppgen.type.translateToCode
 import java.util.UUID
 
 fun SimpleStatementNode.translateToCode(): String = when (this) {
@@ -37,7 +36,7 @@ fun AssignmentNode.translateToCode(): String {
                 is MulOpSimpleAssignOperatorNode -> "$lhs ${it.mulOperator.translateToCode()}= $rhs"
             }
         }
-        res = res.dropLast(0);
+        res = res.dropLast(0)
     }
 
     return res
@@ -51,7 +50,7 @@ fun IncDecStatementNode.translateToCode(): String = when (type) {
 fun ShortVarDeclNode.translateToCode(): String {
     var res = ""
     if (identifierList.size != expression.size) {
-        val uniqueName = "tuple_" + UUID.randomUUID().toString().replace("-", "");
+        val uniqueName = "tuple_" + UUID.randomUUID().toString().replace("-", "")
         res = "auto $uniqueName = ${expression.first().translateToCode()};\n"
         for (i in 0 until this.identifierList.size) {
             if (identifierList[i] == "_") {

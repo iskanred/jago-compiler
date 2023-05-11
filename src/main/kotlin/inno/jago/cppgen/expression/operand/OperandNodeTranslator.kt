@@ -21,17 +21,13 @@ fun OperandNode.translateToCode(): String = when (this) {
 fun OperandNameNode.translateToCode(): String {
     return when(this.name) {
         is SimpleIdentifierOperandNode -> this.name.translateToCode()
-        is QualifiedIdentifierOperandNode -> this.name.translateToCode()
+        is QualifiedIdentifierOperandNode -> throw EntityNotSupportedException("packages and structs")
     }
 }
 fun SimpleIdentifierOperandNode.translateToCode(): String {
     return this.identifier
 }
 
-// по идее тут надо кидать ошибку, но пока что так
-fun QualifiedIdentifierOperandNode.translateToCode(): String {
-    throw EntityNotSupportedException("QualifiedIdentifierOperandNode")
-}
 fun ExpressionOperandNode.translateToCode(): String {
     return expression.translateToCode()
 }

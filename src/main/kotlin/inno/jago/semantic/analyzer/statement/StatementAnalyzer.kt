@@ -34,7 +34,7 @@ fun StatementNode.toSemanticEntity(scope: ScopeNode): SemanticEntity = when (thi
     is ContinueStatementNode -> toSemanticNode(scope)
     is DeclarationStatementNode -> toSemanticNode(scope)
     is ReturnStatementNode -> toSemanticEntity(scope)
-    is EmptyStatementNode -> toSemanticEntity()
+    is EmptyStatementNode -> StatementEntity()
     is ForStatementNode -> toSemanticEntity(scope)
     is ShortVarDeclNode -> toSemanticEntity(scope)
     is ElseStatementNode -> throw UnreachableCodeException() // NOT NEEDED
@@ -57,5 +57,3 @@ private fun ReturnStatementNode.toSemanticEntity(scope: ScopeNode) = StatementEn
         throw WrongTypeException(expectedReturnType, actualType = type, pos = pos)
     }
 }
-
-private fun EmptyStatementNode.toSemanticEntity() = StatementEntity()
