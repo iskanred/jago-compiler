@@ -1,6 +1,5 @@
 package inno.jago.semantic
 
-import inno.jago.ast.IncorrectNumberLiteral
 import inno.jago.common.WrongNumberOfExpressionsException
 import inno.jago.createAST
 import org.junit.jupiter.api.Test
@@ -203,7 +202,7 @@ class TypeCheckerTest {
     @Test
     fun `valid string cast`() {
         val typeChecker = TypeChecker(
-            createAST("src/test/resources/tests/type_checker/conversion/string_cast.go")
+            createAST("src/test/resources/tests/semantic/conversion/string_cast.go")
         )
         assertDoesNotThrow { typeChecker.startTypeCheck() }
     }
