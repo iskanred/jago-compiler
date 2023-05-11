@@ -5,7 +5,7 @@ import GoParser
 import com.andreapivetta.kolor.red
 import inno.jago.ast.converter.toSourceFileNode
 import inno.jago.common.InputArgumentsException
-import inno.jago.cppgen.compile
+import inno.jago.cppgen.Translator
 import inno.jago.semantic.TypeChecker
 import org.antlr.v4.runtime.CharStreams
 import org.antlr.v4.runtime.CommonTokenStream
@@ -61,7 +61,7 @@ fun main(args: Array<String>) {
         val sourceFileNode = parser.sourceFile().toSourceFileNode()
         TypeChecker(sourceFileNode = sourceFileNode).startTypeCheck()
 
-        val outputCppCode = compile(root = sourceFileNode)
+        val outputCppCode = Translator(root = sourceFileNode).translate()
         createCppFile(outputFilename, outputCppCode)
     }.onFailure {
         println(it.message!!.red())

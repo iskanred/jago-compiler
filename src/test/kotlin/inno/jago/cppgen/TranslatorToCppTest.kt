@@ -30,9 +30,8 @@ class TranslatorToCppTest {
         @Suppress("UNUSED_VARIABLE") val sourceFileNode = parser.sourceFile().toSourceFileNode()
         TypeChecker(sourceFileNode = sourceFileNode).startTypeCheck()
 
-        val got = compile(root = sourceFileNode)
-
-        assertEquals(expected, got)
+        val actual = Translator(root = sourceFileNode).translate()
+        assertEquals(expected, actual)
     }
 
     private fun readFileDirectlyAsText(fileName: String): String =
