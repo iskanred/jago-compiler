@@ -26,7 +26,8 @@ fun createAST(inputFilePath: String): SourceFileNode {
 }
 
 fun getFilesSequence(path: String): Sequence<Path> =
-    Files.list(Paths.get(path))
+    Files.walk(Paths.get(path))
+        .filter { Files.isRegularFile(it) }
         .sorted()
         .asSequence()
 
