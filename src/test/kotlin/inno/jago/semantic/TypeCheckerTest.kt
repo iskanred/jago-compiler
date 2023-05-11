@@ -208,6 +208,14 @@ class TypeCheckerTest {
     }
 
     @Test
+    fun `overflow`() {
+        val typeChecker = TypeChecker(
+            createAST("src/test/resources/tests/type_checker/variable/overflow.go")
+        )
+        assertDoesNotThrow { typeChecker.startTypeCheck() }
+    }
+
+    @Test
     fun `invalid pointer chain dereference`(){
         val typeChecker = TypeChecker(
             createAST("src/test/resources/tests/type_checker/pointer/invalid_pointer_chain_1.go")
