@@ -11,7 +11,7 @@ import inno.jago.ast.model.statement.SimpleAssignOperatorNode
 import inno.jago.ast.model.statement.SimpleStatementNode
 import inno.jago.cppgen.expression.binary_expression.translateToCode
 import inno.jago.cppgen.expression.translateToCode
-import java.util.UUID
+import java.security.MessageDigest
 
 fun SimpleStatementNode.translateToCode(): String = when (this) {
     is AssignmentNode -> translateToCode() + ";"
@@ -50,8 +50,9 @@ fun IncDecStatementNode.translateToCode(): String = when (type) {
 fun ShortVarDeclNode.translateToCode(): String {
     var res = ""
     if (identifierList.size != expression.size) {
-        val uniqueName = "tuple_" + UUID.randomUUID().toString().replace("-", "")
+        val uniqueName = generateUniqueTupleName(identifierList.joinToString(""))
         res = "auto $uniqueName = ${expression.first().translateToCode()};\n"
+
         for (i in 0 until this.identifierList.size) {
             if (identifierList[i] == "_") {
                 continue
@@ -68,5 +69,11 @@ fun ShortVarDeclNode.translateToCode(): String {
     }
 
     return res.dropLast(1)
+}
+
+private fun generateUniqueTupleName(base: String): String {
+    val bytes = base.toByteArray(Charsets.UTF_8)
+    val digest = MessageDigest.getInstance("SHA-256").digest(bytes)
+    return "tuple_" + digest.fold("") { str, it -> str + "%02x".format(it) }
 }
 
