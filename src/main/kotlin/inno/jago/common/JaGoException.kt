@@ -9,6 +9,8 @@ class UnreachableCodeException : OperationNotSupportedException("Unreachable cod
 
 
 class WrongNumberOfExpressionsException(expected: Int, actual: Int, pos: Pos)
-    : JaGoException("Expected $expected or func (with tuple return type) expressions, got $actual expression at $pos")
+    : JaGoException("$pos> Expected $expected or func (with tuple return type) expressions, got $actual expression")
 
 class EntityNotSupportedException(entityName: String) : JaGoException("$entityName are not supported")
+
+class InputArgumentsException(msg: String) : JaGoException(msg)

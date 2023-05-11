@@ -8,37 +8,37 @@ import inno.jago.semantic.model.Type
 open class SemanticException(msg: String) : JaGoException(msg)
 
 class WrongTypeException(vararg expectedType: Type, actualType: Type, pos: Pos)
-    : SemanticException("Expected [${expectedType.joinToString()}] type but got [$actualType] at $pos")
+    : SemanticException("$pos> Expected [${expectedType.joinToString()}] type but got [$actualType]")
 
 class NamedEntityAlreadyExistsException(identifier: String, pos: Pos)
-    : SemanticException("Entity '$identifier' already exists at $pos")
+    : SemanticException("$pos> Entity '$identifier' already exists")
 
 class FuncEntityAlreadyExistsException(identifier: String, type: Type.FuncType, pos: Pos)
-    : SemanticException("Function $identifier(${type.paramTypes.joinToString()}) at $pos")
+    : SemanticException("$pos> Function $identifier(${type.paramTypes.joinToString()})")
 
 class StructEntityAlreadyExistsException(identifier: String, type: Type.StructType, pos: Pos)
     : SemanticException("Struct $identifier(${type.fields}) at $pos")
 class VarDeclMustPresentTypeOrExpressionException(varIdentifier: String, pos: Pos) : SemanticException(
-    "The variable declaration '$varIdentifier' must specify the type or the assigned expression at $pos"
+    "$pos> The variable declaration '$varIdentifier' must specify the type or the assigned expression"
 )
 
 class ReturnInWrongScopeException(pos : Pos)
-    : SemanticException("Return statement at $pos must be inside function scope")
+    : SemanticException("$pos> Return statement at must be inside function scope")
 
 class NoSuchEntityInCurrentScopeException(identifier: String, pos : Pos)
-    : SemanticException("No such entity '$identifier' at $pos")
+    : SemanticException("$pos> No such entity '$identifier'")
 
 class NoSuchFunctionException(argTypes: List<Type>, pos : Pos)
-    : SemanticException("No such function with argument types (${argTypes.joinToString()}) at $pos")
+    : SemanticException("$pos> No such function with argument types (${argTypes.joinToString()})")
 
 class NonCastableTypeException(from: Type, to: Type, pos: Pos)
-    : SemanticException("Cannot cast from $from to $to at $pos")
+    : SemanticException("$pos> Cannot cast from $from to $to")
 
 class BreakIsNotInLoopException(pos: Pos)
-    : SemanticException("break is not in a loop at $pos")
+    : SemanticException("$pos> 'break' is not in a loop")
 
 class ContinueIsNotInLoopException(pos: Pos)
-    : SemanticException("continue is not in a loop at $pos")
+    : SemanticException("$pos> continue is not in a loop")
 
 class IsNotAssignableExpression(expression: ExpressionNode)
-    : SemanticException("${expression.javaClass.simpleName} is not assignable at ${expression.pos}")
+    : SemanticException("${expression.pos}> ${expression.javaClass.simpleName} is not assignable")

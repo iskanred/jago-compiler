@@ -6,7 +6,6 @@ import inno.jago.ast.model.decl.StructDeclarationNode
 import inno.jago.ast.model.decl.VarDeclarationNode
 import inno.jago.ast.model.global.SourceFileNode
 import inno.jago.cppgen.declaration.translateToCode
-import java.io.File
 
 /**
 * Convert AST of Go code to C++ code
@@ -41,14 +40,6 @@ fun compile(root: SourceFileNode): String {
         program.addInstruction(instruction)
     }
     return program.text
-}
-
-fun createCppFile(fileName: String, text: String) = File(fileName).apply {
-    if (exists()) {
-        delete()
-    }
-    createNewFile()
-    writeText(text)
 }
 
 fun getIncludes(): String = """

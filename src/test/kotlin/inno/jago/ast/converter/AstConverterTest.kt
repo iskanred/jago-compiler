@@ -1,6 +1,6 @@
 package inno.jago.ast.converter
 
-import inno.jago.ast.IncorrectNumberLiteral
+import inno.jago.ast.IncorrectNumberLiteralException
 import inno.jago.ast.model.decl.FunctionDeclarationNode
 import inno.jago.ast.model.decl.VarDeclarationNode
 import inno.jago.ast.model.expression.binary_expression.BinaryExpression
@@ -239,7 +239,7 @@ class AstConverterTest {
 
     @Test
     fun `int overflow`() {
-        assertThrows<IncorrectNumberLiteral> {
+        assertThrows<IncorrectNumberLiteralException> {
             createAST("src/test/resources/tests/ast/overflow.go")
         }
     }

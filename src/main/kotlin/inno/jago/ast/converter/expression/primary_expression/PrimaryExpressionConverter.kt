@@ -75,8 +75,6 @@ fun GoParser.PrimaryExprContext.toPrimaryExpressionNode(): PrimaryExpressionNode
         throw EntityNotSupportedException("TypeAssertion")
     }
 
-
-
     throw UnreachableCodeException()
 }
 

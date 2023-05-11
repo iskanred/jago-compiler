@@ -63,7 +63,9 @@ sealed class Type {
      * }
      * Here function return type is UnitType
      */
-    object UnitType : Type()
+    object UnitType : Type() {
+        override fun toString(): String = "unit"
+    }
 
     /**
      * Implementation specific type that is not presented in language syntax
@@ -73,7 +75,7 @@ sealed class Type {
      * Example: func(any) any
      */
     object AnyType : Type() {
-        override fun toString(): String = "Any"
+        override fun toString(): String = "any"
     }
 
     /**
@@ -86,23 +88,29 @@ sealed class Type {
      */
     data class TupleType(
         val elementTypes: List<Type>
-    ) : Type()
+    ) : Type() {
+        override fun toString(): String = elementTypes.joinToString(prefix = "(", postfix = ")")
+    }
 
     data class FuncType(
         val paramTypes: List<Type>,
         val returnType: Type
     ) : Type() {
-        override fun toString(): String = super.toString()
+        override fun toString(): String = "func(${paramTypes.joinToString()}) $returnType"
     }
 
     data class ArrayType(
         val length: Int,
         val elementType: Type
-    ) : Type()
+    ) : Type() {
+        override fun toString(): String = "[$length]$elementType"
+    }
 
     data class PointerType(
         val baseType: Type
-    ) : Type()
+    ) : Type() {
+        override fun toString(): String = "*$baseType"
+    }
 
     data class StructType(
         val pos: Pos,
@@ -114,7 +122,7 @@ sealed class Type {
     ) : Type()
     /**
      * Implementation specific type.
-     * I
+     * Is necessary for function overloading
      */
     data class FuncTypesSumType(
         val funcTypes: List<FuncType>

@@ -1,6 +1,6 @@
 package inno.jago.ast.model.expression.unary_expression.primary_expression.operand.literal_operand
 
-import inno.jago.ast.IncorrectNumberLiteral
+import inno.jago.ast.IncorrectNumberLiteralException
 import inno.jago.ast.model.signature.SignatureNode
 import inno.jago.ast.model.statement.BlockStatementNode
 import inno.jago.ast.model.expression.ExpressionNode
@@ -31,7 +31,7 @@ class IntegerLiteralNode(
                 value.toInt()
             }
         } catch(e: NumberFormatException) {
-            throw IncorrectNumberLiteral(literal = value, pos = pos)
+            throw IncorrectNumberLiteralException(literal = value, pos = pos)
         }
     }
 }
@@ -47,7 +47,7 @@ class DoubleLiteralNode(
         try {
             value.toDouble()
         } catch (e: NumberFormatException) {
-            throw IncorrectNumberLiteral(literal = value, pos = pos)
+            throw IncorrectNumberLiteralException(literal = value, pos = pos)
         }
     }
 }

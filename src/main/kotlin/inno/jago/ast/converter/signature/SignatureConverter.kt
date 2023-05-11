@@ -20,7 +20,7 @@ fun GoParser.ParametersContext.toParameterNodes(): List<ParameterNode> {
         // func (int, int, bool)
         if (paramDecl.identifierList() == null || paramDecl.identifierList().isEmpty) {
             if (haveIdentifiers == HaveIdentifiersState.HAVE_IDENTIFIERS) {
-                throw FunctionIdentifiersException()
+                throw FunctionIdentifiersException(pos = toPos())
             }
 
             haveIdentifiers = HaveIdentifiersState.NOT_HAVE_IDENTIFIERS
@@ -35,7 +35,7 @@ fun GoParser.ParametersContext.toParameterNodes(): List<ParameterNode> {
 
         // func (a, b int, c bool)
         if (haveIdentifiers == HaveIdentifiersState.NOT_HAVE_IDENTIFIERS) {
-            throw FunctionIdentifiersException()
+            throw FunctionIdentifiersException(pos = toPos())
         }
 
         haveIdentifiers = HaveIdentifiersState.HAVE_IDENTIFIERS

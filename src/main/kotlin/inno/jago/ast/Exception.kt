@@ -6,20 +6,21 @@ import inno.jago.lexer.Pos
 
 open class ASTBuildException(msg: String) : JaGoException(msg)
 
-class WrongBinaryExpressionNumberException : ASTBuildException("Expected two expressions around binary operator")
+class WrongBinaryExpressionNumberException(pos: Pos) :
+    ASTBuildException("$pos> Expected two expressions around binary operator")
 
 
-class FunctionIdentifiersException
-    : ASTBuildException("Function can only have parameters with identifiers or do not have at all")
+class FunctionIdentifiersException(pos: Pos)
+    : ASTBuildException("$pos> Function can only have parameters with identifiers or do not have at all")
 
 class UnknownTypeException(
     pos: Pos,
     entityName: String,
-) : ASTBuildException("Unknown type '$entityName' at $pos")
+) : ASTBuildException("$pos> Unknown type '$entityName'")
 
-class IncorrectNumberLiteral(literal: String, pos: Pos)
-    : ASTBuildException("Incorrect number literal '$literal' at $pos")
+class IncorrectNumberLiteralException(literal: String, pos: Pos)
+    : ASTBuildException("$pos> Incorrect number literal '$literal'")
 
 class ArrayLengthNotIntegerLiteralException(expressionNode: ExpressionNode) : ASTBuildException(
-    "Length of array must be integer literal constant, but got something else at ${expressionNode.pos}"
+    "${expressionNode.pos}> Length of array must be integer literal constant, but got something else"
 )

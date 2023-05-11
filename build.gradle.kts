@@ -1,10 +1,10 @@
 plugins {
-    kotlin("jvm") version "1.8.0"
-    id("com.github.johnrengelman.shadow") version "8.1.1"
-
     antlr
     application
     java
+
+    kotlin("jvm") version "1.8.0"
+    id("com.github.johnrengelman.shadow") version "8.1.1"
 }
 
 group = "inno.jago"
@@ -12,12 +12,17 @@ version = "1.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
+    @Suppress("DEPRECATION")
+    jcenter()
 }
 
 val junitVersion = "5.9.2"
 dependencies {
-    implementation("org.ow2.asm:asm-all:5.2")
     antlr("org.antlr:antlr4:4.12.0")
+
+    implementation("org.ow2.asm:asm-all:5.2")
+    implementation("com.andreapivetta.kolor:kolor:1.0.0")
+
     testImplementation(kotlin("test"))
     testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
     testImplementation("org.junit.jupiter:junit-jupiter-params:$junitVersion")
@@ -25,7 +30,7 @@ dependencies {
 }
 
 application {
-    mainClass.set("MainKt")
+    mainClass.set("inno.jago.MainKt")
 }
 
 tasks {
@@ -51,7 +56,7 @@ tasks {
     }
 
     jar {
-        manifest.attributes["Main-Class"] = "inno.jago.MainKt"
+        manifest.attributes["Main-Class"] = application.mainClass
     }
 
     shadowJar {

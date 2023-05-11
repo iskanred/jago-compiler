@@ -13,7 +13,7 @@ fun GoParser.ExpressionContext.toExpressionNode(): ExpressionNode {
 
     binary_op()?.let {
         if (expression().size != 2) {
-            throw WrongBinaryExpressionNumberException()
+            throw WrongBinaryExpressionNumberException(pos = toPos())
         }
 
         val left = expression()[0]
