@@ -201,7 +201,21 @@ class TypeCheckerTest {
 
     /* TODO: test string conversion */
 
-    /* TODO: test for pointers */
+    @Test
+    fun `invalid pointer chain dereference`(){
+        val typeChecker = TypeChecker(
+            createAST("src/test/resources/tests/type_checker/pointer/invalid_pointer_chain_1.go")
+        )
+        assertThrows<WrongTypeException> { typeChecker.startTypeCheck() }
+    }
+
+    @Test
+    fun `valid pointer chain dereference`(){
+        val typeChecker = TypeChecker(
+            createAST("src/test/resources/tests/type_checker/pointer/valid_pointer_chain_1.go")
+        )
+        assertDoesNotThrow { typeChecker.startTypeCheck() }
+    }
 
     @Test
     fun `invalid type in assignment with pointer dereference`(){
@@ -218,4 +232,5 @@ class TypeCheckerTest {
         )
         assertDoesNotThrow { typeChecker.startTypeCheck() }
     }
+
 }
