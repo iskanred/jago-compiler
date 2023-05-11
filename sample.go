@@ -1,9 +1,7 @@
-package name
-
-func good1() (string, int) {
-    return "123", 23
-}
+package main
 
 func main() {
-    var a, b = good1()
+    var a int = 5
+    for a = 0; a < 10; a++ {
+    }
 }
