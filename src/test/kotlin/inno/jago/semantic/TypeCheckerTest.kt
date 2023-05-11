@@ -199,7 +199,13 @@ class TypeCheckerTest {
         assertThrows<WrongTypeException> { typeChecker.startTypeCheck() }
     }
 
-    /* TODO: test string conversion */
+    @Test
+    fun `valid string cast`() {
+        val typeChecker = TypeChecker(
+            createAST("src/test/resources/tests/type_checker/conversion/string_cast.go")
+        )
+        assertDoesNotThrow { typeChecker.startTypeCheck() }
+    }
 
     @Test
     fun `invalid pointer chain dereference`(){
