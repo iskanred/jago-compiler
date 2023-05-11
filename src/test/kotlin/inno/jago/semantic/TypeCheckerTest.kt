@@ -80,6 +80,14 @@ class TypeCheckerTest {
     }
 
     @Test
+    fun `valid structs are used in many situations`() {
+        val typeChecker = TypeChecker(
+            createAST("src/test/resources/tests/semantic/structs/valid_struct.go")
+        )
+        assertDoesNotThrow { typeChecker.startTypeCheck() }
+    }
+
+    @Test
     fun `implicit cast`() {
         val typeChecker = TypeChecker(
             createAST("src/test/resources/tests/semantic/conversion/implicit_cast.go")
