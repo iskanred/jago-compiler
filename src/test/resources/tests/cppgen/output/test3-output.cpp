@@ -5,7 +5,7 @@
 #include <tuple>
 using namespace std;
 
-vector<int> a(){
+vector <int> a(){
 return vector <int>{1, 2, 3, 4};
 ;
 }
