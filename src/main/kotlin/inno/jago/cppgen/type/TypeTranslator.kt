@@ -12,7 +12,7 @@ fun Type.translateToCode(): String = when (this) {
     is Type.DoubleType -> "double"
     is Type.StringType -> "string"
     is Type.BoolType -> "bool"
-    is Type.ArrayType -> "vector<${this.elementType.translateToCode()}>"
+    is Type.ArrayType -> "vector <${this.elementType.translateToCode()}>"
     is Type.PointerType -> "*${this.baseType.translateToCode()}"
     is Type.TupleType -> {
         val types = StringBuilder()
