@@ -67,6 +67,14 @@ sealed class ScopeNode(
                 pos = pos
             )
         } else {
+            (funcEntity.type as Type.FuncType).paramTypes.forEach {
+                if (it is Type.NamedType && !hasSuchType(it)) {
+                    throw UnknownTypeException(pos = pos, entityName = it.name)
+                }
+            }
+            if (funcEntity.type.returnType is Type.NamedType && !hasSuchType(funcEntity.type.returnType)) {
+                throw UnknownTypeException(pos = pos, entityName = funcEntity.type.returnType.name)
+            }
             funcEntity.apply {
                 funcEntities.add(this)
             }
