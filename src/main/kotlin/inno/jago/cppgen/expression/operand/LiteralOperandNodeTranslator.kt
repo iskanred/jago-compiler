@@ -10,6 +10,7 @@ import inno.jago.ast.model.expression.unary_expression.primary_expression.operan
 import inno.jago.ast.model.expression.unary_expression.primary_expression.operand.literal_operand.StringLiteralNode
 import inno.jago.ast.model.type.ArrayTypeNode
 import inno.jago.ast.model.type.StructTypeNode
+import inno.jago.ast.model.type.TypeNameNode
 import inno.jago.common.EntityNotSupportedException
 import inno.jago.cppgen.declaration.translateToCode
 import inno.jago.cppgen.expression.translateToCode
@@ -29,8 +30,13 @@ fun LiteralNode.translateToCode(): String = when (this) {
                     "{" +
                         this.literalValue.elements.joinToString { it.translateToCode() } +
                     "}"
-            is StructTypeNode -> {
-                this.literal.toString()// TODO
+
+            is TypeNameNode -> {
+                if (this.literalValue.elements.isEmpty()) {
+                    this.literal.translateToCode() + "()"
+                } else {
+                    throw EntityNotSupportedException("Composite literal node childs")
+                }
             }
             else -> throw EntityNotSupportedException("Composite literal node childred")
         }

@@ -25,5 +25,7 @@ fun Type.translateToCode(): String = when (this) {
         "tuple<${types}>"
     }
     is Type.FuncType -> "auto"
+    is Type.StructType -> "struct"
+    is Type.NamedType -> name
     else -> "void"
 }

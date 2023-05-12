@@ -6,7 +6,15 @@ import inno.jago.ast.model.decl.StructDeclarationNode
 import inno.jago.ast.model.decl.VarDeclarationNode
 
 fun DeclarationNode.translateToCode(): String = when(this) {
-    is VarDeclarationNode -> translateToCode()
-    is ConstDeclarationNode -> translateToCode()
-    is StructDeclarationNode -> TODO()
+    is VarDeclarationNode -> {
+        translateToCode()
+    }
+
+    is ConstDeclarationNode -> {
+        translateToCode()
+    }
+
+    is StructDeclarationNode -> {
+        translateToCode()
+    }
 }

@@ -16,24 +16,28 @@ class Translator(val root: SourceFileNode) {
         val resultText = StringBuilder()
         resultText.appendInstruction(instructionText = getIncludes())
 
-        for (decl in root.topLevelDecls) {
-            val instruction= when (decl) {
-                is FunctionDeclarationNode -> {
-                    decl.translateToCode()
-                }
-                is ConstDeclarationNode -> {
-                    decl.translateToCode()
-                }
-                is VarDeclarationNode -> {
-                    decl.translateToCode()
-                }
-                is StructDeclarationNode -> {
-                    "STRUCT"
-                    // TODO()
-                }
+fun compile(root: SourceFileNode): String {
+    val program = Translator("")
+    program.addInstruction(getIncludes())
+    for (decl in root.topLevelDecls) {
+        val instruction= when (decl) {
+            is FunctionDeclarationNode -> {
+                decl.translateToCode()
             }
-            resultText.appendInstruction(instructionText = instruction)
+            is ConstDeclarationNode -> {
+                decl.translateToCode()
+            }
+            is VarDeclarationNode -> {
+                decl.translateToCode()
+            }
+            is StructDeclarationNode -> {
+                decl.translateToCode()
+            }
         }
+        program.addInstruction(instruction)
+    }
+    return program.text
+}
 
         return resultText.toString()
     }
