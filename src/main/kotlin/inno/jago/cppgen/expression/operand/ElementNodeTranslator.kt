@@ -15,7 +15,5 @@ fun ElementNode.translateToCode(): String = when (this) {
         }
         output.toString().dropLast(1)
     }
-    is ExpressionElementNode -> {
-        expression.translateToCode()
-    }
+    is ExpressionElementNode -> expression.translateToCode()
 }

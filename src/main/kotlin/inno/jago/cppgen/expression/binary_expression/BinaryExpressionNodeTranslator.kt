@@ -12,53 +12,43 @@ import inno.jago.ast.model.expression.binary_expression.RelationOperator
 import inno.jago.ast.model.expression.binary_expression.RelationOperators
 import inno.jago.cppgen.expression.translateToCode
 
-fun BinaryExpression.translateToCode(): String {
-    return "(${leftExpression.translateToCode()}) ${binaryOperator.translateToCode()} (${rightExpression.translateToCode()})"
-}
-fun BinaryOperator.translateToCode(): String {
-    return when (this){
-        is RelationOperator -> operator.translateToCode()
-        is AddOperator -> operator.translateToCode()
-        is MulOperator -> operator.translateToCode()
-        is LogicOperator -> operator.translateToCode()
-    }
+fun BinaryExpression.translateToCode(): String =
+    "(${leftExpression.translateToCode()}) ${binaryOperator.translateToCode()} (${rightExpression.translateToCode()})"
+
+fun BinaryOperator.translateToCode(): String = when (this){
+    is RelationOperator -> operator.translateToCode()
+    is AddOperator -> operator.translateToCode()
+    is MulOperator -> operator.translateToCode()
+    is LogicOperator -> operator.translateToCode()
 }
 
-fun LogicOperators.translateToCode(): String {
-    return when (this) {
-        LogicOperators.LOGIC_OR -> "||"
-        LogicOperators.LOGIC_AND -> "&&"
-    }
+fun LogicOperators.translateToCode(): String = when (this) {
+    LogicOperators.LOGIC_OR -> "||"
+    LogicOperators.LOGIC_AND -> "&&"
 }
 
-fun MulOperators.translateToCode(): String {
-    return when (this) {
-        MulOperators.ASTERISK -> "*"
-        MulOperators.DIV -> "/"
-        MulOperators.MOD -> "%"
-        MulOperators.LSHIFT -> "<<"
-        MulOperators.RSHIFT -> ">>"
-        MulOperators.AMPERSAND -> "&"
-        MulOperators.BIT_CLEAR -> "&~"
-    }
+fun MulOperators.translateToCode(): String = when (this) {
+    MulOperators.ASTERISK -> "*"
+    MulOperators.DIV -> "/"
+    MulOperators.MOD -> "%"
+    MulOperators.LSHIFT -> "<<"
+    MulOperators.RSHIFT -> ">>"
+    MulOperators.AMPERSAND -> "&"
+    MulOperators.BIT_CLEAR -> "&~"
 }
 
-fun AddOperators.translateToCode(): String {
-    return when (this) {
-        AddOperators.PLUS -> "+"
-        AddOperators.MINUS -> "-"
-        AddOperators.OR -> "|"
-        AddOperators.CARET -> "^"
-    }
+fun AddOperators.translateToCode(): String = when (this) {
+    AddOperators.PLUS -> "+"
+    AddOperators.MINUS -> "-"
+    AddOperators.OR -> "|"
+    AddOperators.CARET -> "^"
 }
 
-fun RelationOperators.translateToCode(): String{
-    return when (this) {
-        RelationOperators.EQUALS -> "=="
-        RelationOperators.NOT_EQUALS -> "!="
-        RelationOperators.LESS -> "<"
-        RelationOperators.LESS_OR_EQUALS -> "<="
-        RelationOperators.GREATER -> ">"
-        RelationOperators.GREATER_OR_EQUALS -> ">="
-    }
+fun RelationOperators.translateToCode(): String = when (this) {
+    RelationOperators.EQUALS -> "=="
+    RelationOperators.NOT_EQUALS -> "!="
+    RelationOperators.LESS -> "<"
+    RelationOperators.LESS_OR_EQUALS -> "<="
+    RelationOperators.GREATER -> ">"
+    RelationOperators.GREATER_OR_EQUALS -> ">="
 }

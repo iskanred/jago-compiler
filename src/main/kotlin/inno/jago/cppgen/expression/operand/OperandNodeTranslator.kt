@@ -18,16 +18,11 @@ fun OperandNode.translateToCode(): String = when (this) {
     is ExpressionOperandNode -> translateToCode()
 }
 
-fun OperandNameNode.translateToCode(): String {
-    return when(this.name) {
-        is SimpleIdentifierOperandNode -> this.name.translateToCode()
-        is QualifiedIdentifierOperandNode -> throw EntityNotSupportedException("packages and structs")
-    }
-}
-fun SimpleIdentifierOperandNode.translateToCode(): String {
-    return this.identifier
+fun OperandNameNode.translateToCode(): String = when(this.name) {
+    is SimpleIdentifierOperandNode -> this.name.translateToCode()
+    is QualifiedIdentifierOperandNode -> throw EntityNotSupportedException("packages and structs")
 }
 
-fun ExpressionOperandNode.translateToCode(): String {
-    return expression.translateToCode()
-}
+fun SimpleIdentifierOperandNode.translateToCode(): String = this.identifier
+
+fun ExpressionOperandNode.translateToCode(): String = expression.translateToCode()

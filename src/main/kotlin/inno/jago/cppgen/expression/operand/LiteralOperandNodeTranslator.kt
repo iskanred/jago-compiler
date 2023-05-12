@@ -19,27 +19,15 @@ import inno.jago.cppgen.type.translateToCode
 fun LiteralOperandNode.translateToCode(): String = this.literalNode.translateToCode()
 
 fun LiteralNode.translateToCode(): String = when (this) {
-    is IntegerLiteralNode -> {
-        this.intValue.toString()
-    }
-
-    is BoolLiteralNode -> {
-        this.boolValue.toString()
-    }
-
-    is DoubleLiteralNode -> {
-        this.doubleValue.toString()
-    }
-
-    is StringLiteralNode -> {
-        this.value
-    }
-
+    is IntegerLiteralNode -> this.intValue.toString()
+    is BoolLiteralNode -> this.boolValue.toString()
+    is DoubleLiteralNode -> this.doubleValue.toString()
+    is StringLiteralNode -> this.value
     is CompositeLiteralNode -> {
         when (this.literal) {
-            is ArrayTypeNode -> "vector <" + this.literal.elementType.translateToCode() +
-                    ">{" +
-                    this.literalValue.elements.map { elem -> elem.translateToCode() }.joinToString { it } +
+            is ArrayTypeNode -> "vector <${this.literal.elementType.translateToCode()}>" +
+                    "{" +
+                        this.literalValue.elements.joinToString { it.translateToCode() } +
                     "}"
             is StructTypeNode -> {
                 this.literal.toString()// TODO
@@ -51,8 +39,8 @@ fun LiteralNode.translateToCode(): String = when (this) {
     is FunctionLiteralNode -> {
         "[=](" +
                 this.signature.parameterNodes.joinToString { param -> param.translateToCode() } +
-                ")" +
-                this.functionBody.translateToCode()
+        ")" +
+        this.functionBody.translateToCode()
     }
 }
 

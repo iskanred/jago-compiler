@@ -7,20 +7,17 @@ import inno.jago.cppgen.type.translateToCode
 import inno.jago.semantic.SemanticException
 
 // var a, b, c = someFunc()
-fun VarDeclarationNode.translateToCode(): String {
-    if (this.identifier == "_") {
-        return ""
+@Suppress("ReturnCount")
+fun VarDeclarationNode.translateToCode(): String = if (this.identifier == "_") {
+    ""
+} else if (expression != null) {
+    if (expression is ApplicationExpressionNode && this.positionInRow >= 0) {
+        "auto ${this.identifier} = get<${this.positionInRow}>(${this.expression.translateToCode()})"
+    } else {
+        "auto ${this.identifier} = ${this.expression.translateToCode()}"
     }
-
-    if (expression != null) {
-        if (expression is ApplicationExpressionNode && this.positionInRow >= 0) {
-            return "auto ${this.identifier} = get<${this.positionInRow}>(${this.expression.translateToCode()})"
-        }
-
-        return "auto ${this.identifier} = ${this.expression.translateToCode()}"
-    }
-    if (type != null) {
-        return "${this.type.translateToCode()} ${this.identifier}"
-    }
-    throw SemanticException("Var decl must contain either type either expression")
+} else if (type != null) {
+    "${this.type.translateToCode()} ${this.identifier}"
+} else {
+    throw SemanticException("Var decl must contain either type or expression")
 }

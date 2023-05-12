@@ -10,9 +10,8 @@ fun ForStatementNode.translateToCode(): String = when (this) {
     is ForClauseStatementNode -> translateToCode()
 }
 
-fun ConditionalForStatementNode.translateToCode(): String {
-    return "while (${condition.translateToCode()}) ${block.translateToCode()}"
-}
+fun ConditionalForStatementNode.translateToCode(): String =
+    "while (${condition.translateToCode()}) ${block.translateToCode()}"
 
 fun ForClauseStatementNode.translateToCode(): String =
     if (initStatementNode == null && condition == null && postStatementNode == null) {

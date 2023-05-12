@@ -11,6 +11,7 @@ import inno.jago.ast.model.statement.SimpleAssignOperatorNode
 import inno.jago.ast.model.statement.SimpleStatementNode
 import inno.jago.cppgen.expression.binary_expression.translateToCode
 import inno.jago.cppgen.expression.translateToCode
+import java.lang.StringBuilder
 import java.security.MessageDigest
 
 fun SimpleStatementNode.translateToCode(): String = when (this) {
@@ -48,32 +49,35 @@ fun IncDecStatementNode.translateToCode(): String = when (type) {
 }
 
 fun ShortVarDeclNode.translateToCode(): String {
-    var res = ""
+    val res = StringBuilder()
+
     if (identifierList.size != expression.size) {
         val uniqueName = generateUniqueTupleName(identifierList.joinToString(""))
-        res = "auto $uniqueName = ${expression.first().translateToCode()};\n"
+        res.append("auto $uniqueName = ${expression.first().translateToCode()};\n")
 
         for (i in 0 until this.identifierList.size) {
             if (identifierList[i] == "_") {
                 continue
             }
 
-            res += "auto ${identifierList[i]} = get<$i>($uniqueName);"
+            res.append("auto ${identifierList[i]} = get<$i>($uniqueName);")
         }
     } else {
         identifierList.zip(expression.map { it.translateToCode() }).forEach { (identifier, expressionCode) ->
             if (identifier != "_") {
-                res += "auto $identifier = $expressionCode;"
+                res.append("auto $identifier = $expressionCode;")
             }
         }
     }
 
-    return res.dropLast(1)
+    return res.toString().dropLast(1)
 }
 
 private fun generateUniqueTupleName(base: String): String {
     val bytes = base.toByteArray(Charsets.UTF_8)
     val digest = MessageDigest.getInstance("SHA-256").digest(bytes)
-    return "tuple_" + digest.fold("") { str, it -> str + "%02x".format(it) }
+    return "tuple_" + digest.fold("") {
+        str, byte -> str + "%02x".format(byte)
+    }
 }
 

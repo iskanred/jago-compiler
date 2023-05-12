@@ -2,24 +2,24 @@ package inno.jago.cppgen.statement
 
 import inno.jago.ast.model.statement.ReturnStatementNode
 import inno.jago.cppgen.expression.translateToCode
+import java.lang.StringBuilder
 
-fun ReturnStatementNode.translateToCode(): String {
+fun ReturnStatementNode.translateToCode(): String =
     if (expressions.isEmpty()) {
-        return "return"
-    }
-
-    var returnInstruction = "return "
-    if (expressions.size == 1) {
-        returnInstruction += expressions[0].translateToCode()
+        "return"
     } else {
-        returnInstruction += "make_tuple("
-        for (i in expressions.indices) {
-            returnInstruction += expressions[i].translateToCode()
-            if (i != expressions.size - 1) {
-                returnInstruction += ", "
+        val returnInstruction = StringBuilder("return ")
+        if (expressions.size == 1) {
+            returnInstruction.append(expressions[0].translateToCode())
+        } else {
+            returnInstruction.append("make_tuple(")
+            for (i in expressions.indices) {
+                returnInstruction.append(expressions[i].translateToCode())
+                if (i != expressions.size - 1) {
+                    returnInstruction.append(", ")
+                }
             }
+            returnInstruction.append(")")
         }
-        returnInstruction += ")"
+        returnInstruction.toString()
     }
-    return returnInstruction
-}

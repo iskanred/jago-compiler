@@ -9,32 +9,34 @@ import inno.jago.semantic.model.toType
 import kotlin.random.Random
 
 fun FunctionDeclarationNode.translateToCode(): String {
-    var functionInstruction = ""
+    val functionInstruction = StringBuilder()
 
     // return type
     val instructionOfReturnType = translateResultNodeToCode(this.signature.resultNode)
-    functionInstruction += if (this.functionName == "main") {
-        "int"
-    } else {
-        instructionOfReturnType
-    }
+    functionInstruction.append(
+        if (this.functionName == "main") {
+            "int"
+        } else {
+            instructionOfReturnType
+        }
+    )
 
     // function name
-    functionInstruction += " " + this.functionName
+    functionInstruction.append(" ${this.functionName}")
 
     // arguments
-    val argumentsInstruction = "(" + translateParameterNodesToCode(this.signature.parameterNodes) + ")"
-    functionInstruction += argumentsInstruction
+    val argumentsInstruction = "(${translateParameterNodesToCode(this.signature.parameterNodes)})"
+    functionInstruction.append(argumentsInstruction)
 
     // function body
     val functionBody = this.functionBody.block
-    functionInstruction += "{"
+    functionInstruction.append("{")
     for (statement in functionBody) {
-        functionInstruction += "\n"+ statement.translateToCode()
+        functionInstruction.append("\n${statement.translateToCode()}")
     }
-    functionInstruction += "\n}"
+    functionInstruction.append("\n}")
 
-    return functionInstruction
+    return functionInstruction.toString()
 }
 
 fun ParameterNode.translateToCode(): String {
@@ -42,36 +44,30 @@ fun ParameterNode.translateToCode(): String {
     if (this.identifier == null) {
         return instructionOfType + "nullArg_N" + "${Random.nextInt(1000000)}"
     }
-    return  instructionOfType + " " + this.identifier
+    return instructionOfType + " " + this.identifier
 }
 
 fun translateResultNodeToCode(typeNodes: List<TypeNode>): String {
-    var instructionOfReturnType: String
+    val instructionOfReturnType = StringBuilder()
     if (typeNodes.isEmpty()) { // no return type
-        instructionOfReturnType = "void"
+        instructionOfReturnType.append("void")
     } else if (typeNodes.size == 1) { // one return type
-        instructionOfReturnType = typeNodes[0].translateToCode()
+        instructionOfReturnType.append(typeNodes[0].translateToCode())
     } else { // more than one return type
-        instructionOfReturnType = "tuple<"
-        instructionOfReturnType += typeNodes.joinToString { it.translateToCode() }
-//        for (i in typeNodes.indices) {
-//            instructionOfReturnType += typeNodes[i].translateToCode()
-//            if (i != typeNodes.size - 1) {
-//                instructionOfReturnType = "$instructionOfReturnType, "
-//            }
-//        }
-        instructionOfReturnType += ">"
+        instructionOfReturnType.append("tuple<")
+        instructionOfReturnType.append(typeNodes.joinToString { it.translateToCode() })
+        instructionOfReturnType.append(">")
     }
-    return instructionOfReturnType
+    return instructionOfReturnType.toString()
 }
 
 fun translateParameterNodesToCode(parameterNodes: List<ParameterNode>): String {
-    var instructionOfParameters = ""
+    val instructionOfParameters = StringBuilder()
     for (i in parameterNodes.indices) {
-        instructionOfParameters += parameterNodes[i].translateToCode()
+        instructionOfParameters.append(parameterNodes[i].translateToCode())
         if (i != parameterNodes.size - 1) {
-            instructionOfParameters = "$instructionOfParameters, "
+            instructionOfParameters.append(", ")
         }
     }
-    return instructionOfParameters
+    return instructionOfParameters.toString()
 }

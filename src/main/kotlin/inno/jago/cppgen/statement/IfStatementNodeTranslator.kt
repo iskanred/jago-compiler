@@ -4,17 +4,16 @@ import inno.jago.ast.model.statement.IfStatementNode
 import inno.jago.cppgen.expression.translateToCode
 
 fun IfStatementNode.translateToCode(): String {
-    var simpleStatementCode = ""
-    if(this.simpleStatement!=null) {
-        simpleStatementCode = "{\n"
-    }
-    if (simpleStatement != null) {
-        simpleStatementCode += simpleStatement!!.translateToCode() + ";\n"
-    }
-    simpleStatementCode += "if (${expression.translateToCode()}) ${block.translateToCode()} ${elseBranch?.translateToCode() ?: ""}"
+    val simpleStatementCode = StringBuilder("{\n")
 
-    if(this.simpleStatement!=null) {
-        simpleStatementCode += "}\n"
+    if (simpleStatement != null) {
+        simpleStatementCode.append(simpleStatement!!.translateToCode())
+        simpleStatementCode.append(";\n")
     }
-    return simpleStatementCode
+
+    simpleStatementCode.append(
+        "if (${expression.translateToCode()}) ${block.translateToCode()} ${elseBranch?.translateToCode() ?: ""} }\n"
+    )
+
+    return simpleStatementCode.toString()
 }

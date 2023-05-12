@@ -5,9 +5,7 @@ import inno.jago.semantic.model.Type
 import inno.jago.semantic.model.toType
 import java.lang.StringBuilder
 
-fun TypeNode.translateToCode(): String {
-    return this.toType().translateToCode()
-}
+fun TypeNode.translateToCode(): String = this.toType().translateToCode()
 
 fun Type.translateToCode(): String = when (this) {
     is Type.IntegerType -> "int"

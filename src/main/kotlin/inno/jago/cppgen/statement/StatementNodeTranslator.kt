@@ -13,22 +13,16 @@ import inno.jago.ast.model.statement.StatementNode
 import inno.jago.cppgen.declaration.translateToCode
 
 fun StatementNode.translateToCode(): String = when (this) {
-    is BlockStatementNode -> "{ ${block.map { it.translateToCode() }.joinToString(separator = "") { it }} }"
-
-    is DeclarationStatementNode -> declaration.translateToCode() + ";"
-
-    is ReturnStatementNode -> translateToCode() + ";"
-
-    is BreakStatementNode -> "break" + ";"
-
-    is ContinueStatementNode -> "continue" + ";"
-
+    is BlockStatementNode -> "{ ${
+        block.joinToString(separator = "") { it.translateToCode() }
+    } }"
+    is DeclarationStatementNode -> "${declaration.translateToCode()};"
+    is ReturnStatementNode -> "${translateToCode()};"
+    is BreakStatementNode -> "break;"
+    is ContinueStatementNode -> "continue;"
     is IfStatementNode -> translateToCode()
-
     is ElseStatementNode -> translateToCode()
-
     is ForStatementNode -> translateToCode()
-
     is SimpleStatementNode -> translateToCode()
 }
 
