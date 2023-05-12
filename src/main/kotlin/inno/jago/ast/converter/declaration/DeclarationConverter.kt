@@ -65,7 +65,7 @@ fun GoParser.VarSpecContext.toVarDeclarationNodes(): List<VarDeclarationNode> {
     val expressions = expressionList()?.expression()?.map { it.toExpressionNode() }
 
     return if (identifiers.size == 1 && (expressions == null || expressions.size == 1)) { // var a = func()
-        identifiers.mapIndexed { index, identifier ->
+        identifiers.mapIndexed { _, identifier ->
             VarDeclarationNode(
                 pos = toPos(),
                 identifier = identifier,

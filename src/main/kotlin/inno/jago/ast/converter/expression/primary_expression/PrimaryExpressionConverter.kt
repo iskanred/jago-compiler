@@ -43,7 +43,7 @@ fun GoParser.PrimaryExprContext.toPrimaryExpressionNode(): PrimaryExpressionNode
         val rightExpressions = it.toExpressionNodes()
 
         primaryExpr.text.toTypeNode(primaryExpr.toPos()).also { typeNode ->
-            if (rightExpressions.size == 1 && typeNode != null && typeNode.toType() is Type.NumberType) {
+            if (rightExpressions.size == 1 && typeNode.toType() is Type.NumberType) {
                 return ConversionNode(
                     pos = toPos(),
                     type = typeNode,
