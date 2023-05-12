@@ -9,35 +9,30 @@ import inno.jago.cppgen.declaration.translateToCode
 import kotlin.text.StringBuilder
 
 /**
-* Convert AST of Go code to C++ code
-*/
+ * Convert AST of Go code to C++ code
+ */
 class Translator(val root: SourceFileNode) {
     fun translate(): String {
         val resultText = StringBuilder()
         resultText.appendInstruction(instructionText = getIncludes())
 
-fun compile(root: SourceFileNode): String {
-    val program = Translator("")
-    program.addInstruction(getIncludes())
-    for (decl in root.topLevelDecls) {
-        val instruction= when (decl) {
-            is FunctionDeclarationNode -> {
-                decl.translateToCode()
+        for (decl in root.topLevelDecls) {
+            val instruction= when (decl) {
+                is FunctionDeclarationNode -> {
+                    decl.translateToCode()
+                }
+                is ConstDeclarationNode -> {
+                    decl.translateToCode()
+                }
+                is VarDeclarationNode -> {
+                    decl.translateToCode()
+                }
+                is StructDeclarationNode -> {
+                    decl.translateToCode()
+                }
             }
-            is ConstDeclarationNode -> {
-                decl.translateToCode()
-            }
-            is VarDeclarationNode -> {
-                decl.translateToCode()
-            }
-            is StructDeclarationNode -> {
-                decl.translateToCode()
-            }
+            resultText.appendInstruction(instructionText = instruction)
         }
-        program.addInstruction(instruction)
-    }
-    return program.text
-}
 
         return resultText.toString()
     }
