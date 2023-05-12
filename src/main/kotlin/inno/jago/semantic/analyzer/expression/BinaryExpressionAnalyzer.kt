@@ -1,5 +1,6 @@
 package inno.jago.semantic.analyzer.expression
 
+import inno.jago.ast.UnknownTypeException
 import inno.jago.ast.model.expression.binary_expression.AddOperator
 import inno.jago.ast.model.expression.binary_expression.AddOperators
 import inno.jago.ast.model.expression.binary_expression.BinaryExpression
@@ -23,8 +24,10 @@ fun BinaryExpression.toSemanticEntity(scope: ScopeNode): ExpressionEntity {
         is RelationOperator -> {
             listOf(left, right).forEach {
                 when (binaryOperator.operator) {
-                    RelationOperators.EQUALS, RelationOperators.NOT_EQUALS -> if (!it.type.isEquatable()) {
-                        throw WrongTypeException(Type.EquatableTypes, actualType = it.type, pos = pos)
+                    RelationOperators.EQUALS, RelationOperators.NOT_EQUALS -> {
+                        if (!it.type.isEquatable()) {
+                            throw WrongTypeException(Type.EquatableTypes, actualType = it.type, pos = pos)
+                        }
                     }
 
                     else -> if (!it.type.isComparable()) {
@@ -32,7 +35,12 @@ fun BinaryExpression.toSemanticEntity(scope: ScopeNode): ExpressionEntity {
                     }
                 }
             }
-
+            if (left.type is Type.NamedType && !scope.hasSuchType(left.type)) {
+                throw UnknownTypeException(pos = pos, entityName = left.type.name)
+            }
+            if (right.type is Type.NamedType && !scope.hasSuchType(right.type)) {
+                throw UnknownTypeException(pos = pos, entityName = right.type.name)
+            }
             if (left.type != right.type) {
                 throw WrongTypeException(left.type, actualType = right.type, pos = pos)
             }
@@ -115,6 +123,8 @@ fun Type.isEquatable(): Boolean = when(this) {
     is Type.StringType,
     is Type.BoolType,
     is Type.PointerType -> true
+    is Type.NamedType -> true
+    is Type.StructType -> true
     is Type.ArrayType -> elementType.isEquatable()
     else -> false
 }
