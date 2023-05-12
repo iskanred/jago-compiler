@@ -5,39 +5,20 @@
 #include <tuple>
 using namespace std;
 
-struct aa {
- int a;
+struct Node {
+ Node* next;
+ int val;
 };
 
-struct bb {
- int b;
-};
-
-struct cc {
- int c;
-};
-
-aa getA(){
-auto r = aa();
-r.a = 10;
-return r;
-;
-}
-bb updateB(bb in, int newNumber){
-in.b = newNumber;
-return in;
-;
-}
-void updateC(cc* in, int newNumber){
-(*in).c = newNumber;
-;
-}
 int main(){
-auto c = cc();
-c.c = 10;
-cout << (std::to_string((((getA().a) + (7)) + (updateB(bb(), -4).b)) + (c.c))) + (" ") << endl;
-updateC(&c, 4);
-auto bbb = updateB(bb(), 4);
-cout << (((getA().a) + (7)) + (bbb.b)) + (c.c) << endl;
+auto node1 = new Node();
+(*node1).val = 1;
+auto node2 = new Node();
+(*node2).val = 2;
+auto node3 = new Node();
+(*node3).val = 3;
+(*node1).next = node2;
+(*node2).next = node3;
+cout << (*(*(*node1).next).next).val << endl;
 ;
 }

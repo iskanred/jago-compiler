@@ -1,37 +1,22 @@
 package main
 
-type aa struct {
-	a int
-}
-
-type bb struct {
-	b int
-}
-
-type cc struct {
-	c int
-}
-
-func getA() aa {
-	r := aa{}
-	r.a = 10
-	return r
-}
-
-func updateB(in bb, newNumber int) bb {
-	in.b = newNumber
-	return in
-}
-
-func updateC(in *cc, newNumber int) {
-	(*in).c = newNumber
+type Node struct {
+ next *Node
+ val  int
 }
 
 func main() {
-	c := cc{}
-	c.c = 10
-	print(toString(getA().a+7+updateB(bb{}, -4).b+c.c) + " ")
-	updateC(&c, 4)
-	bbb := updateB(bb{}, 4)
-	print(getA().a + 7 + bbb.b + c.c)
+ node1 := &Node{}
+ (*node1).val = 1
+
+ node2 := &Node{}
+ (*node2).val = 2
+
+ node3 := &Node{}
+ (*node3).val = 3
+
+ (*node1).next = node2
+ (*node2).next = node3
+
+ print((*((*((*node1).next)).next)).val)
 }

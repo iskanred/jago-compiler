@@ -19,6 +19,6 @@ auto node3 = new Node();
 (*node3).val = 3;
 (*node1).next = node2;
 (*node2).next = node3;
-cout << (*node1).val << endl;
+cout << (*(*(*node1).next).next).val << endl;
 ;
 }
