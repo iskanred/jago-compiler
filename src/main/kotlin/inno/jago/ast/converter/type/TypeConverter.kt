@@ -26,20 +26,23 @@ import inno.jago.ast.model.type.TypeNameNode
 import inno.jago.common.EntityNotSupportedException
 import inno.jago.lexer.Pos
 
+@Suppress("ThrowsCount")
 fun GoParser.TypeContext.toTypeNode(): TypeNode {
     if (typeName() != null) {
-        return typeName().IDENTIFIER().text.toTypeNode(pos = toPos()) ?: throw UnknownTypeException(entityName = text, pos = toPos())
+        return typeName().IDENTIFIER()?.text?.toTypeNode(pos = toPos())
+            ?: throw UnknownTypeException(entityName = text, pos = toPos())
     }
 
     if (typeLit() != null) {
-       return typeLit().toTypeNode() ?: throw UnknownTypeException(entityName = text, pos = toPos())
+       return typeLit().toTypeNode()
+           ?: throw UnknownTypeException(entityName = text, pos = toPos())
     }
 
     throw UnknownTypeException(entityName = text, pos = toPos())
 }
 
 
-fun String?.toTypeNode(pos: Pos): TypeNode? = when {
+fun String?.toTypeNode(pos: Pos): TypeNode = when {
     this == INT_TYPE_NAME -> IntegerTypeNode(pos = pos)
     this == DOUBLE_TYPE_NAME -> DoubleTypeNode(pos = pos)
     this == STRING_TYPE_NAME -> StringTypeNode(pos = pos)

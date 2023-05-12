@@ -4,6 +4,7 @@ import inno.jago.ast.model.statement.ReturnStatementNode
 import inno.jago.cppgen.expression.translateToCode
 import java.lang.StringBuilder
 
+@Suppress("NestedBlockDepth")
 fun ReturnStatementNode.translateToCode(): String =
     if (expressions.isEmpty()) {
         "return"

@@ -32,7 +32,7 @@ fun LiteralNode.translateToCode(): String = when (this) {
             is StructTypeNode -> {
                 this.literal.toString()// TODO
             }
-            else -> throw EntityNotSupportedException("Composite literal node childs")
+            else -> throw EntityNotSupportedException("Composite literal node childred")
         }
     }
 
