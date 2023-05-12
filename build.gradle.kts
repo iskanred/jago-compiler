@@ -65,3 +65,8 @@ tasks {
         archiveVersion.set("")
     }
 }
+
+subprojects {
+    apply(plugin = "xcode")
+    apply(plugin = "visual-studio")
+}

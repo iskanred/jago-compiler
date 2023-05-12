@@ -8,7 +8,7 @@
 # Own
 ./idea/
 sample.go
-sample.cpp
+*.cpp
 
 # User-specific stuff
 .idea/**/workspace.xml
