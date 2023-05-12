@@ -52,7 +52,10 @@ private fun CompositeLiteralNode.toSemanticEntity(scope: ScopeNode): ExpressionE
         }
         is TypeNameNode -> {
             val struct = scope.findVisibleStructEntities(identifier = this.literal.identifier)
-            return ExpressionEntity(type = struct?.type ?: throw NoSuchEntityInCurrentScopeException(this.literal.identifier, pos))
+            if (struct == null) {
+                throw NoSuchEntityInCurrentScopeException(this.literal.identifier, pos)
+            }
+            return ExpressionEntity(type = Type.NamedType(name = this.literal.identifier))
         }
 
         else -> throw NotImplementedError()

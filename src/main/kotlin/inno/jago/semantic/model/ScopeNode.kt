@@ -1,5 +1,6 @@
 package inno.jago.semantic.model
 
+import inno.jago.ast.UnknownTypeException
 import inno.jago.lexer.Pos
 import inno.jago.semantic.FuncEntityAlreadyExistsException
 import inno.jago.semantic.NamedEntityAlreadyExistsException
@@ -71,7 +72,7 @@ sealed class ScopeNode(
             }
         }
 
-    private fun addUniqueStructEntity(structEntity: StructEntity, pos: Pos): StructEntity =
+    private fun addUniqueStructEntity(structEntity: StructEntity, pos: Pos): StructEntity {
         if (structEntity in structEntities) {
             throw StructEntityAlreadyExistsException(
                 structEntity.identifier,
@@ -79,10 +80,18 @@ sealed class ScopeNode(
                 pos = pos
             )
         } else {
-            structEntity.apply {
+            (structEntity.type as Type.StructType).fields
+                .filterValues { value -> value is Type.NamedType }
+                .forEach { (_, value) ->
+                    if (!hasSuchType(value as Type.NamedType)) {
+                        throw UnknownTypeException(pos = pos, entityName = value.name)
+                    }
+                }
+            return structEntity.apply {
                 structEntities.add(this)
             }
         }
+    }
 
     /**
      * Searches for visible entities by identifier
@@ -132,6 +141,10 @@ sealed class ScopeNode(
             return true
         }
         return parent?.hasLoopScope() ?: false
+    }
+
+    fun hasSuchType(type: Type.NamedType): Boolean {
+        return findVisibleStructEntities(type.name) != null
     }
 }
 

@@ -1,6 +1,7 @@
 @file:Suppress("ThrowsCount")
 package inno.jago.semantic.analyzer.expression
 
+import inno.jago.ast.UnknownTypeException
 import inno.jago.ast.model.expression.unary_expression.ApplicationExpressionNode
 import inno.jago.ast.model.expression.unary_expression.ConversionNode
 import inno.jago.ast.model.expression.unary_expression.IndexExpressionNode
@@ -120,15 +121,16 @@ fun IndexExpressionNode.toSemanticEntity(scope: ScopeNode): ExpressionEntity {
 fun SelectorExpressionNode.toSemanticEntity(scope: ScopeNode): ExpressionEntity {
     val exprEntity = primaryExpression.toSemanticEntity(scope)
 
-    if (exprEntity.type !is Type.StructType) {
-        throw WrongTypeException(Type.StructType(pos = pos, fields = emptyMap()), actualType = exprEntity.type, pos = pos)
+    if (exprEntity.type !is Type.NamedType) {
+        throw WrongTypeException(Type.NamedType(""), actualType = exprEntity.type, pos = pos)
+    }
+    val struct = scope.findVisibleStructEntities(exprEntity.type.name)
+        ?: throw UnknownTypeException(pos = pos, entityName = exprEntity.type.name)
+    if (!(struct.type as Type.StructType).fields.containsKey(selector)) {
+        throw SemanticException("Struct(${struct.identifier}) does not contain such field: $selector")
     }
 
-    if (!exprEntity.type.fields.containsKey(selector)) {
-        throw SemanticException("Struct(${exprEntity.type}) does not contain such field: $selector")
-    }
-
-    return ExpressionEntity(type = exprEntity.type.fields[selector]!!)
+    return ExpressionEntity(type = struct.type.fields[selector]!!)
 }
 
 fun ApplicationExpressionNode.toSemanticEntity(scope: ScopeNode): ExpressionEntity {

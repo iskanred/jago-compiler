@@ -22,7 +22,7 @@ import inno.jago.semantic.model.Type
 import inno.jago.semantic.model.VarEntity
 import inno.jago.semantic.model.toType
 
-fun TopLevelDeclNode.toSemanticEntity(scope: ScopeNode): NamedEntity = when(this) {
+fun TopLevelDeclNode.toSemanticEntity(scope: ScopeNode): NamedEntity = when (this) {
     is FunctionDeclarationNode -> toSemanticEntity(scope)
     is ConstDeclarationNode -> toSemanticEntity(scope)
     is VarDeclarationNode -> toSemanticEntity(scope)
@@ -122,6 +122,11 @@ fun StructDeclarationNode.toSemanticEntity(scope: ScopeNode) = StructEntity(
     identifier = identifier,
     type = type!!.toType() as Type.StructType
 ).also { entity ->
+    (entity.type as Type.StructType).fields.forEach { (_, value) ->
+        if (value is Type.NamedType && scope.findVisibleStructEntities(value.name) == null) {
+            throw UnknownTypeException(pos = pos, entityName = value.name)
+        }
+    }
     scope.addUniqueEntity(entity = entity, pos = pos)
 }
 
