@@ -14,6 +14,8 @@ struct dog {
 };
 
 int main(){
-auto d = &dog();
+auto b = 10;
+auto a = &b;
+(*a) = 5;b = 4;
 ;
 }

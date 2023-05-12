@@ -1,5 +1,6 @@
 package inno.jago.cppgen.type
 
+import inno.jago.ast.model.type.StructTypeNode
 import inno.jago.ast.model.type.TypeNode
 import inno.jago.semantic.model.Type
 import inno.jago.semantic.model.toType
@@ -13,7 +14,7 @@ fun Type.translateToCode(): String = when (this) {
     is Type.StringType -> "string"
     is Type.BoolType -> "bool"
     is Type.ArrayType -> "vector <${this.elementType.translateToCode()}>"
-    is Type.PointerType -> "*${this.baseType.translateToCode()}"
+    is Type.PointerType -> if (baseType is Type.NamedType) "${this.baseType.translateToCode()}*" else "*${this.baseType.translateToCode()}"
     is Type.TupleType -> {
         val types = StringBuilder()
         for (i in 0 until this.elementTypes.size) {

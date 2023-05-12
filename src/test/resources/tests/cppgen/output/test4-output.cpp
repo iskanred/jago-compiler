@@ -10,6 +10,6 @@ auto v1 = 1;
 auto ptr = &v1;
 auto pptr = &ptr;
 auto ppptr = &pptr;
-auto v2 = ***ppptr;
+auto v2 = (*(*(*ppptr)));
 ;
 }
