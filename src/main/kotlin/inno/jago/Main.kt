@@ -61,10 +61,9 @@ fun main(args: Array<String>) {
         val sourceFileNode = parser.sourceFile().toSourceFileNode()
         TypeChecker(sourceFileNode = sourceFileNode).startTypeCheck()
 
-//        val outputCppCode = Translator(root = sourceFileNode).translate()
-//        createCppFile(outputFilename, outputCppCode)
+        val outputCppCode = Translator(root = sourceFileNode).translate()
+        createCppFile(outputFilename, outputCppCode)
     }.onFailure {
-        throw it
-//        println(it.message!!.red())
+        println(it.message!!.red())
     }
 }
