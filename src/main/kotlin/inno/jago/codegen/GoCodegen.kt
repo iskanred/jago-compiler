@@ -29,24 +29,22 @@ class GoCodegen {
         mainMethodWriter.visitLabel(methodStart)
 
         mainMethodWriter.visitIntInsn(BIPUSH, 5);
-        mainMethodWriter.visitLocalVariable("x", "I", null, methodStart, methodEnd, 0)
-        mainMethodWriter.visitVarInsn(ISTORE, 0)
+        mainMethodWriter.visitLocalVariable("z", "I", null, methodStart, methodEnd, 1)
+        mainMethodWriter.visitVarInsn(ISTORE, 1)
 
 
 
         mainMethodWriter.visitIntInsn(BIPUSH, 7);
-        mainMethodWriter.visitLocalVariable("y", "I", null, methodStart, methodEnd, 1)
-        mainMethodWriter.visitVarInsn(ISTORE, 1)
+        mainMethodWriter.visitLocalVariable("y", "I", null, methodStart, methodEnd, 2)
+        mainMethodWriter.visitVarInsn(ISTORE, 2)
 
-        mainMethodWriter.visitInsn(IADD)
 
         mainMethodWriter.visitFieldInsn(GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;")
 
-        mainMethodWriter.visitVarInsn(ILOAD, 0)
         mainMethodWriter.visitVarInsn(ILOAD, 1)
+        mainMethodWriter.visitVarInsn(ILOAD, 2)
 
         mainMethodWriter.visitInsn(IADD)
-
         mainMethodWriter.visitMethodInsn(INVOKEVIRTUAL, "java/io/PrintStream", "println", "(I)V", false)
 
         mainMethodWriter.visitLabel(methodEnd)
