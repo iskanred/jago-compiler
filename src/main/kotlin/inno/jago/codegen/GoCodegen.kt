@@ -38,8 +38,6 @@ class GoCodegen {
         mainMethodWriter.visitLocalVariable("y", "I", null, methodStart, methodEnd, 1)
         mainMethodWriter.visitVarInsn(ISTORE, 1)
 
-        mainMethodWriter.visitInsn(IADD)
-
         mainMethodWriter.visitFieldInsn(GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;")
 
         mainMethodWriter.visitVarInsn(ILOAD, 0)
@@ -52,7 +50,7 @@ class GoCodegen {
         mainMethodWriter.visitLabel(methodEnd)
         mainMethodWriter.visitMaxs(-1, -1)
         cw.visitEnd()
-        
+
         return cw.toByteArray()
     }
 }
