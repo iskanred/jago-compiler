@@ -79,6 +79,7 @@ fun main(args: Array<String>) {
         val outputCppCode = Translator(root = sourceFileNode).translate()
         createTextFile(outputFilename, outputCppCode)
 
+        Runtime.getRuntime().exec("g++ $outputFilename -o $outputFilename-exe")
     }.onFailure {
         println(it.message!!.red())
     }
