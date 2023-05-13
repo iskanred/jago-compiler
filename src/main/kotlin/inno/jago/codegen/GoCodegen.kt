@@ -10,7 +10,9 @@ import org.objectweb.asm.Opcodes.ACC_STATIC
 import org.objectweb.asm.Opcodes.BIPUSH
 import org.objectweb.asm.Opcodes.GETSTATIC
 import org.objectweb.asm.Opcodes.IADD
+import org.objectweb.asm.Opcodes.ILOAD
 import org.objectweb.asm.Opcodes.INVOKEVIRTUAL
+import org.objectweb.asm.Opcodes.ISTORE
 import org.objectweb.asm.Opcodes.V1_8
 
 class GoCodegen {
@@ -26,18 +28,31 @@ class GoCodegen {
         val methodEnd = Label()
         mainMethodWriter.visitLabel(methodStart)
 
-        mainMethodWriter.visitIntInsn(BIPUSH, 5)
-        mainMethodWriter.visitIntInsn(BIPUSH, 7)
+        mainMethodWriter.visitIntInsn(BIPUSH, 5);
+        mainMethodWriter.visitLocalVariable("x", "I", null, methodStart, methodEnd, 0)
+        mainMethodWriter.visitVarInsn(ISTORE, 0)
+
+
+
+        mainMethodWriter.visitIntInsn(BIPUSH, 7);
+        mainMethodWriter.visitLocalVariable("y", "I", null, methodStart, methodEnd, 1)
+        mainMethodWriter.visitVarInsn(ISTORE, 1)
 
         mainMethodWriter.visitInsn(IADD)
 
         mainMethodWriter.visitFieldInsn(GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;")
+
+        mainMethodWriter.visitVarInsn(ILOAD, 0)
+        mainMethodWriter.visitVarInsn(ILOAD, 1)
+
+        mainMethodWriter.visitInsn(IADD)
+
         mainMethodWriter.visitMethodInsn(INVOKEVIRTUAL, "java/io/PrintStream", "println", "(I)V", false)
 
         mainMethodWriter.visitLabel(methodEnd)
         mainMethodWriter.visitMaxs(-1, -1)
         cw.visitEnd()
-
+        
         return cw.toByteArray()
     }
 }
