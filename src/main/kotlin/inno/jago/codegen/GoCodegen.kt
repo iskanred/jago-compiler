@@ -26,8 +26,8 @@ class GoCodegen {
         val methodEnd = Label()
         mainMethodWriter.visitLabel(methodStart)
 
-        mainMethodWriter.visitIntInsn(BIPUSH, 5);
-        mainMethodWriter.visitIntInsn(BIPUSH, 7);
+        mainMethodWriter.visitIntInsn(BIPUSH, 5)
+        mainMethodWriter.visitIntInsn(BIPUSH, 7)
 
         mainMethodWriter.visitInsn(IADD)
 
@@ -37,8 +37,6 @@ class GoCodegen {
         mainMethodWriter.visitLabel(methodEnd)
         mainMethodWriter.visitMaxs(-1, -1)
         cw.visitEnd()
-
-        println(String(cw.toByteArray()))
 
         return cw.toByteArray()
     }

@@ -40,12 +40,20 @@ private fun validateAndGetCliArguments(args: Array<String>): Pair<String, String
     return inputFilename to outputFilename
 }
 
-private fun createCppFile(fileName: String, text: String) = File(fileName).apply {
+private fun createTextFile(fileName: String, content: String) = File(fileName).apply {
     if (exists()) {
         delete()
     }
     createNewFile()
-    writeText(text)
+    writeText(content)
+}
+
+private fun createBinaryFile(fileName: String, content: ByteArray) = File(fileName).apply {
+    if (exists()) {
+        delete()
+    }
+    createNewFile()
+    writeBytes(content)
 }
 
 fun main(args: Array<String>) {
@@ -63,12 +71,14 @@ fun main(args: Array<String>) {
         TypeChecker(sourceFileNode = sourceFileNode).startTypeCheck()
 
         val compiler = GoCodegen()
-        createCppFile("class.class", compiler.compile(sourceFileNode, "Main").toString())
+        createBinaryFile(
+            fileName = "Main.class",
+            content = compiler.compile(sourceFileNode, "Main")
+        )
 
+        val outputCppCode = Translator(root = sourceFileNode).translate()
+        createTextFile(outputFilename, outputCppCode)
 
-
-//        val outputCppCode = Translator(root = sourceFileNode).translate()
-//        createCppFile(outputFilename, outputCppCode)
     }.onFailure {
         println(it.message!!.red())
     }
