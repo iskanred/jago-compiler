@@ -7,6 +7,10 @@ import org.objectweb.asm.ClassWriter
 import org.objectweb.asm.Label
 import org.objectweb.asm.Opcodes.ACC_PUBLIC
 import org.objectweb.asm.Opcodes.ACC_STATIC
+import org.objectweb.asm.Opcodes.BIPUSH
+import org.objectweb.asm.Opcodes.GETSTATIC
+import org.objectweb.asm.Opcodes.IADD
+import org.objectweb.asm.Opcodes.INVOKEVIRTUAL
 import org.objectweb.asm.Opcodes.V1_8
 
 class GoCodegen {
@@ -22,8 +26,20 @@ class GoCodegen {
         val methodEnd = Label()
         mainMethodWriter.visitLabel(methodStart)
 
-//        root.topLevelDecls
+        mainMethodWriter.visitIntInsn(BIPUSH, 5);
+        mainMethodWriter.visitIntInsn(BIPUSH, 7);
 
-        TODO()
+        mainMethodWriter.visitInsn(IADD)
+
+        mainMethodWriter.visitFieldInsn(GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;")
+        mainMethodWriter.visitMethodInsn(INVOKEVIRTUAL, "java/io/PrintStream", "println", "(I)V", false)
+
+        mainMethodWriter.visitLabel(methodEnd)
+        mainMethodWriter.visitMaxs(-1, -1)
+        cw.visitEnd()
+
+        println(String(cw.toByteArray()))
+
+        return cw.toByteArray()
     }
 }

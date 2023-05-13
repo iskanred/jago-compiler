@@ -4,6 +4,7 @@ import GoLexer
 import GoParser
 import com.andreapivetta.kolor.red
 import inno.jago.ast.converter.toSourceFileNode
+import inno.jago.codegen.GoCodegen
 import inno.jago.common.InputArgumentsException
 import inno.jago.cppgen.Translator
 import inno.jago.semantic.TypeChecker
@@ -61,8 +62,13 @@ fun main(args: Array<String>) {
         val sourceFileNode = parser.sourceFile().toSourceFileNode()
         TypeChecker(sourceFileNode = sourceFileNode).startTypeCheck()
 
-        val outputCppCode = Translator(root = sourceFileNode).translate()
-        createCppFile(outputFilename, outputCppCode)
+        val compiler = GoCodegen()
+        createCppFile("class.class", compiler.compile(sourceFileNode, "Main").toString())
+
+
+
+//        val outputCppCode = Translator(root = sourceFileNode).translate()
+//        createCppFile(outputFilename, outputCppCode)
     }.onFailure {
         println(it.message!!.red())
     }
